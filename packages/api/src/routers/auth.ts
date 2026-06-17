@@ -50,7 +50,7 @@ export const authRouter = router({
     }
 
     const session = await createSession(ctx.db, user.id);
-    ctx.res.header("Set-Cookie", createSessionCookie(session.id, session.expiresAt));
+    ctx.res.header("Set-Cookie", createSessionCookie(session.id));
 
     return {
       user: {

@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@hibi/db": "workspace:*",
-    "argon2": "^0.44.0"
+    "argon2": "^0.44.0",
+    "lucia": "^3.2.2"
   }
 }

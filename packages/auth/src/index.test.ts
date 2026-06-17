@@ -30,14 +30,36 @@ type SessionFindUniqueArgs = {
   where: {
     id: string;
   };
-  include: {
+  include?: {
     user: true;
   };
 };
 
 type SessionDeleteManyArgs = {
   where: {
+    id?: string;
+    userId?: string;
+    expiresAt?: {
+      lte: Date;
+    };
+  };
+};
+
+type SessionFindManyArgs = {
+  where: {
+    userId?: string;
+    expiresAt?: {
+      lte: Date;
+    };
+  };
+};
+
+type SessionUpdateArgs = {
+  where: {
     id: string;
+  };
+  data: {
+    expiresAt: Date;
   };
 };
 
@@ -58,8 +80,12 @@ function createFakeAuthDb() {
         }
 
         const user = users.get(session.userId);
-        if (!user) {
+        if (args.include?.user && !user) {
           return Promise.resolve(null);
+        }
+
+        if (!args.include?.user) {
+          return Promise.resolve(session);
         }
 
         return Promise.resolve({
@@ -67,9 +93,54 @@ function createFakeAuthDb() {
           user,
         });
       },
+      findMany(args: SessionFindManyArgs) {
+        const filteredSessions = [...sessions.values()].filter((session) => {
+          if (args.where.userId && session.userId !== args.where.userId) {
+            return false;
+          }
+
+          if (args.where.expiresAt && session.expiresAt > args.where.expiresAt.lte) {
+            return false;
+          }
+
+          return true;
+        });
+
+        return Promise.resolve(filteredSessions);
+      },
       deleteMany(args: SessionDeleteManyArgs) {
-        const deleted = sessions.delete(args.where.id);
-        return Promise.resolve({ count: deleted ? 1 : 0 });
+        let deletedCount = 0;
+        for (const [id, session] of sessions) {
+          const shouldDeleteById = args.where.id !== undefined && id === args.where.id;
+          const shouldDeleteByUserId =
+            args.where.userId !== undefined && session.userId === args.where.userId;
+          const shouldDeleteByExpiration =
+            args.where.expiresAt !== undefined &&
+            session.expiresAt <= args.where.expiresAt.lte;
+
+          if (shouldDeleteById || shouldDeleteByUserId || shouldDeleteByExpiration) {
+            sessions.delete(id);
+            deletedCount += 1;
+          }
+        }
+
+        return Promise.resolve({ count: deletedCount });
+      },
+      update(args: SessionUpdateArgs) {
+        const session = sessions.get(args.where.id);
+        if (!session) {
+          return Promise.reject(new Error("Session not found"));
+        }
+
+        sessions.set(args.where.id, {
+          ...session,
+          expiresAt: args.data.expiresAt,
+        });
+
+        return Promise.resolve({
+          ...session,
+          ...args.data,
+        });
       },
     },
   } as unknown as AuthDatabase;
@@ -107,13 +178,10 @@ describe("session cookies", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-01-01T00:00:00.000Z"));
 
-    const cookie = createSessionCookie(
-      "session:123",
-      new Date("2026-01-31T00:00:00.000Z"),
-    );
+    const cookie = createSessionCookie("session:123");
 
     expect(cookie).toBe(
-      `${SESSION_COOKIE_NAME}=session%3A123; Path=/; HttpOnly; Secure; SameSite=Lax; Expires=Sat, 31 Jan 2026 00:00:00 GMT; Max-Age=2592000`,
+      `${SESSION_COOKIE_NAME}=session%3A123; HttpOnly; Max-Age=2592000; Path=/; SameSite=Lax; Secure`,
     );
   });
 
@@ -121,7 +189,7 @@ describe("session cookies", () => {
     const cookie = createBlankSessionCookie();
 
     expect(cookie).toBe(
-      `${SESSION_COOKIE_NAME}=; Path=/; HttpOnly; Secure; SameSite=Lax; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0`,
+      `${SESSION_COOKIE_NAME}=; HttpOnly; Max-Age=0; Path=/; SameSite=Lax; Secure`,
     );
   });
 });
@@ -141,7 +209,7 @@ describe("session lifecycle", () => {
     const session = await createSession(db, "user-1");
     const result = await validateSession(db, session.id);
 
-    expect(session.id).toHaveLength(43);
+    expect(session.id).toHaveLength(40);
     expect(session.userId).toBe("user-1");
     expect(session.expiresAt).toEqual(new Date("2026-01-31T00:00:00.000Z"));
     expect(result).toEqual({

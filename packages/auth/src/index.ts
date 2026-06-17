@@ -1,15 +1,29 @@
-import { randomBytes } from "node:crypto";
 import { argon2id, hash, verify } from "argon2";
+import { Lucia, TimeSpan, type Adapter, type DatabaseSession, type DatabaseUser } from "lucia";
 import type { PrismaClient } from "@hibi/db";
 
 export const SESSION_COOKIE_NAME = "hibi_session";
 
-const SESSION_ID_BYTES = 32;
-const SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 30;
-const EXPIRED_COOKIE_DATE = new Date(0);
+declare module "lucia" {
+  interface Register {
+    Lucia: typeof Lucia;
+    DatabaseUserAttributes: {
+      email: string;
+      name: string;
+    };
+  }
+}
+
+const SESSION_DURATION_IN_DAYS = 30;
 const HASH_MEMORY_COST_KIB = 19_456;
 const HASH_TIME_COST = 2;
 const HASH_PARALLELISM = 1;
+const SESSION_COOKIE_ATTRIBUTES = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax" as const,
+  path: "/",
+};
 
 export type AuthSession = {
   id: string;
@@ -19,6 +33,11 @@ export type AuthSession = {
 
 export type AuthUser = {
   id: string;
+  email: string;
+  name: string;
+};
+
+type AuthUserAttributes = {
   email: string;
   name: string;
 };
@@ -34,6 +53,155 @@ export type SessionValidationResult =
     };
 
 export type AuthDatabase = Pick<PrismaClient, "session">;
+
+type AuthSessionRecord = {
+  id: string;
+  userId: string;
+  expiresAt: Date;
+  user?: AuthUserRecord | null;
+};
+
+type AuthUserRecord = {
+  id: string;
+  email: string;
+  name: string;
+};
+
+type AuthSessionFindUniqueArgs = Parameters<
+  AuthDatabase["session"]["findUnique"]
+>[0];
+type AuthSessionFindManyArgs = Parameters<
+  AuthDatabase["session"]["findMany"]
+>[0];
+type AuthSessionDeleteManyArgs = Parameters<
+  AuthDatabase["session"]["deleteMany"]
+>[0];
+type AuthSessionUpdateArgs = Parameters<AuthDatabase["session"]["update"]>[0];
+type AuthSessionCreateArgs = Parameters<
+  AuthDatabase["session"]["create"]
+>[0];
+
+const EXPIRES_IN = new TimeSpan(SESSION_DURATION_IN_DAYS, "d");
+
+class AuthSessionAdapter implements Adapter {
+  constructor(private readonly db: AuthDatabase) {}
+
+  async getSessionAndUser(sessionId: string): Promise<[DatabaseSession | null, DatabaseUser | null]> {
+    const rawSessionResult = await this.db.session.findUnique({
+      where: { id: sessionId },
+      include: { user: true },
+    } satisfies AuthSessionFindUniqueArgs);
+
+    if (!rawSessionResult) {
+      return [null, null];
+    }
+
+    const rawSession = rawSessionResult as AuthSessionRecord;
+    const { user: rawUser, ...rawSessionWithoutUser } = rawSession;
+
+    if (!rawUser) {
+      return [toDatabaseSession(rawSessionWithoutUser), null];
+    }
+
+    return [
+      toDatabaseSession(rawSessionWithoutUser),
+      toDatabaseUser(rawUser),
+    ];
+  }
+
+  async getUserSessions(userId: string): Promise<DatabaseSession[]> {
+    const rawSessions = await this.db.session.findMany({
+      where: {
+        userId,
+      },
+    } satisfies AuthSessionFindManyArgs);
+
+    return rawSessions.map((session) =>
+      toDatabaseSession(session as AuthSessionRecord),
+    );
+  }
+
+  async setSession(value: DatabaseSession): Promise<void> {
+    await this.db.session.create({
+      data: {
+        id: value.id,
+        userId: value.userId,
+        expiresAt: value.expiresAt,
+        ...value.attributes,
+      },
+    } satisfies AuthSessionCreateArgs);
+  }
+
+  async updateSessionExpiration(sessionId: string, expiresAt: Date): Promise<void> {
+    await this.db.session.update({
+      where: {
+        id: sessionId,
+      },
+      data: {
+        expiresAt,
+      },
+    } satisfies AuthSessionUpdateArgs);
+  }
+
+  async deleteSession(sessionId: string): Promise<void> {
+    await this.db.session.deleteMany({
+      where: {
+        id: sessionId,
+      },
+    } satisfies AuthSessionDeleteManyArgs);
+  }
+
+  async deleteUserSessions(userId: string): Promise<void> {
+    await this.db.session.deleteMany({
+      where: {
+        userId,
+      },
+    } satisfies AuthSessionDeleteManyArgs);
+  }
+
+  async deleteExpiredSessions(): Promise<void> {
+    await this.db.session.deleteMany({
+      where: {
+        expiresAt: {
+          lte: new Date(),
+        },
+      },
+    } satisfies AuthSessionDeleteManyArgs);
+  }
+}
+
+function createLuciaAuth(db: AuthDatabase): Lucia<{}, AuthUserAttributes> {
+  return new Lucia<{}, AuthUserAttributes>(new AuthSessionAdapter(db), {
+    sessionExpiresIn: EXPIRES_IN,
+    sessionCookie: {
+      name: SESSION_COOKIE_NAME,
+      attributes: SESSION_COOKIE_ATTRIBUTES,
+    },
+    getUserAttributes: (databaseUserAttributes) => {
+      return {
+        email: databaseUserAttributes.email,
+        name: databaseUserAttributes.name,
+      };
+    },
+  });
+}
+
+const cookieAuth = new Lucia<{}, AuthUserAttributes>(
+  {
+    getSessionAndUser: async () => [null, null],
+    getUserSessions: async () => [],
+    setSession: async () => {},
+    updateSessionExpiration: async () => {},
+    deleteSession: async () => {},
+    deleteUserSessions: async () => {},
+    deleteExpiredSessions: async () => {},
+  },
+  {
+    sessionCookie: {
+      name: SESSION_COOKIE_NAME,
+    },
+  },
+);
 
 export async function hashPassword(password: string): Promise<string> {
   return hash(password, {
@@ -55,15 +223,8 @@ export async function createSession(
   db: AuthDatabase,
   userId: string,
 ): Promise<AuthSession> {
-  const sessionId = generateSessionId();
-  const expiresAt = getSessionExpiresAt(new Date());
-  const session = await db.session.create({
-    data: {
-      id: sessionId,
-      userId,
-      expiresAt,
-    },
-  });
+  const lucia = createLuciaAuth(db);
+  const session = await lucia.createSession(userId, {});
 
   return {
     id: session.id,
@@ -120,23 +281,12 @@ export function getSessionIdFromCookieHeader(
   return null;
 }
 
-export function createSessionCookie(sessionId: string, expiresAt: Date): string {
-  const maxAgeSeconds = Math.max(
-    0,
-    Math.floor((expiresAt.getTime() - Date.now()) / 1000),
-  );
-
-  return serializeSessionCookie(encodeURIComponent(sessionId), {
-    expiresAt,
-    maxAgeSeconds,
-  });
+export function createSessionCookie(sessionId: string, _expiresAt?: Date): string {
+  return cookieAuth.createSessionCookie(sessionId).serialize();
 }
 
 export function createBlankSessionCookie(): string {
-  return serializeSessionCookie("", {
-    expiresAt: EXPIRED_COOKIE_DATE,
-    maxAgeSeconds: 0,
-  });
+  return cookieAuth.createBlankSessionCookie().serialize();
 }
 
 export async function validateSession(
@@ -147,16 +297,11 @@ export async function validateSession(
     return { session: null, user: null };
   }
 
-  const session = await db.session.findUnique({
-    where: { id: sessionId },
-    include: { user: true },
-  });
+  const lucia = createLuciaAuth(db);
+  const { user, session } = await lucia.validateSession(sessionId);
+  const authUser = user as AuthUser | null;
 
-  if (!session || session.expiresAt <= new Date()) {
-    if (session) {
-      await invalidateSession(db, session.id);
-    }
-
+  if (!session || !authUser) {
     return { session: null, user: null };
   }
 
@@ -167,35 +312,29 @@ export async function validateSession(
       expiresAt: session.expiresAt,
     },
     user: {
-      id: session.user.id,
-      email: session.user.email,
-      name: session.user.name,
+      id: authUser.id,
+      email: authUser.email,
+      name: authUser.name,
     },
   };
 }
 
-function generateSessionId(): string {
-  return randomBytes(SESSION_ID_BYTES).toString("base64url");
+function toDatabaseSession(session: Omit<AuthSessionRecord, "user">): DatabaseSession {
+  return {
+    id: session.id,
+    userId: session.userId,
+    expiresAt: session.expiresAt,
+    attributes: {},
+  };
 }
 
-function getSessionExpiresAt(createdAt: Date): Date {
-  return new Date(createdAt.getTime() + SESSION_DURATION_MS);
-}
+function toDatabaseUser(
+  user: { id: string; email: string; name: string },
+): DatabaseUser {
+  const { id, ...attributes } = user;
 
-function serializeSessionCookie(
-  value: string,
-  options: {
-    expiresAt: Date;
-    maxAgeSeconds: number;
-  },
-): string {
-  return [
-    `${SESSION_COOKIE_NAME}=${value}`,
-    "Path=/",
-    "HttpOnly",
-    "Secure",
-    "SameSite=Lax",
-    `Expires=${options.expiresAt.toUTCString()}`,
-    `Max-Age=${options.maxAgeSeconds}`,
-  ].join("; ");
+  return {
+    id,
+    attributes,
+  };
 }
