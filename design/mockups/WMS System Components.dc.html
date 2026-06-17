@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { font-family: Inter, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+    .cr { display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:7px;cursor:pointer; }
+    .cr.active-l { background:#eeeefb; }
+    .cr:hover { background:#f4f4f6; }
+    .cr-d { display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:7px;cursor:pointer; }
+    .cr-d.active-d { background:#1f1f31; }
+    .cr-d:hover { background:#1c1c1f; }
+    .inp-l { font:400 13px Inter,sans-serif;color:#16161a;padding:8px 11px;border:1px solid #e0e0e4;border-radius:7px;background:#fff;outline:none;width:100%; }
+    .inp-l:focus { border-color:#5b5bd6;box-shadow:0 0 0 3px rgba(91,91,214,0.16); }
+    .inp-d { font:400 13px Inter,sans-serif;color:#ededef;padding:8px 11px;border:1px solid #2e2e33;border-radius:7px;background:#1a1a1c;outline:none;width:100%; }
+    .inp-d:focus { border-color:#8181e6;box-shadow:0 0 0 3px rgba(129,129,230,0.22); }
+    @keyframes palIn { from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes loginIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+  </style>
+</helmet>
+
+<div style="background:#e7e7ea;min-height:100vh;padding:48px 40px 80px;display:flex;flex-direction:column;align-items:center;gap:56px">
+
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:11px">
+      <div style="width:26px;height:26px;border-radius:7px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">W</div>
+      <span style="font-size:13px;font-weight:600;letter-spacing:0.04em;color:#62626b">WMS · SYSTEM COMPONENTS</span>
+    </div>
+    <h1 style="margin:0;font-size:28px;font-weight:600;letter-spacing:-0.02em">Command palette &amp; Login</h1>
+  </div>
+
+  <!-- ======= COMMAND PALETTE ======= -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">⌘K Command palette</span>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+
+      <!-- PALETTE LIGHT -->
+      <div data-screen-label="Command Palette — Light" style="height:540px;border:1px solid #dcdce0;border-radius:12px;overflow:hidden;background:#f7f7f8;display:flex;align-items:flex-start;justify-content:center;padding-top:80px;position:relative">
+        <!-- faint app rows behind -->
+        <div style="position:absolute;inset:0;pointer-events:none;opacity:0.18">
+          <div style="height:46px;border-bottom:1px solid #ebebee;background:#f7f7f8;display:flex;align-items:center;padding:0 16px;gap:8px">
+            <div style="width:60px;height:10px;background:#d4d4d8;border-radius:4px"></div><div style="width:6px;height:8px;background:#cfcfd5;border-radius:1px"></div><div style="width:80px;height:10px;background:#d4d4d8;border-radius:4px"></div>
+          </div>
+          <div style="padding:20px 16px;display:flex;flex-direction:column;gap:8px">
+            <div style="height:34px;border-bottom:1px solid #f4f4f6;display:flex;align-items:center;gap:10px;padding:0 0 8px"><div style="width:54px;height:9px;background:#e6e6ea;border-radius:3px"></div><div style="flex:1;height:10px;background:#e6e6ea;border-radius:3px"></div><div style="width:80px;height:9px;background:#e6e6ea;border-radius:3px"></div></div>
+            <div style="height:34px;border-bottom:1px solid #f4f4f6;display:flex;align-items:center;gap:10px;padding:0 0 8px"><div style="width:54px;height:9px;background:#eeeef2;border-radius:3px"></div><div style="flex:1;height:10px;background:#eeeef2;border-radius:3px"></div><div style="width:80px;height:9px;background:#eeeef2;border-radius:3px"></div></div>
+            <div style="height:34px;display:flex;align-items:center;gap:10px;padding:0 0 8px"><div style="width:54px;height:9px;background:#eeeef2;border-radius:3px"></div><div style="flex:1;height:10px;background:#eeeef2;border-radius:3px"></div><div style="width:80px;height:9px;background:#eeeef2;border-radius:3px"></div></div>
+          </div>
+        </div>
+        <!-- scrim -->
+        <div style="position:absolute;inset:0;background:rgba(14,14,20,0.28);pointer-events:none"></div>
+
+        <!-- modal -->
+        <div style="position:relative;width:524px;background:#fff;border:1px solid #e0e0e4;border-radius:11px;box-shadow:0 20px 60px rgba(20,20,40,0.24);overflow:hidden;animation:palIn 0.15s ease;z-index:10">
+
+          <!-- search input -->
+          <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:1px solid #f0f0f2">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:14px;color:#16161a;flex:1">new t<span style="display:inline-block;width:1px;height:14px;background:#5b5bd6;vertical-align:middle;margin-left:1px;animation:palIn 0.8s step-end infinite"></span></span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:19px;padding:0 6px;font:500 11px/1 ui-monospace,monospace;color:#97979f;background:#f1f1f3;border:1px solid #e2e2e6;border-radius:4px">esc</span>
+          </div>
+
+          <!-- results -->
+          <div style="padding:6px 6px">
+
+            <!-- group: navigate -->
+            <div style="padding:5px 10px 4px;font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Navigate</div>
+            <div class="cr"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg><span style="font-size:13px;color:#16161a;flex:1">Backlog</span><span style="font-size:11.5px;color:#b4b4bc">31 tasks</span></div>
+            <div class="cr"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg><span style="font-size:13px;color:#16161a;flex:1">Approvals</span><span style="font-size:11.5px;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4;border-radius:4px;padding:1px 6px">4 pending</span></div>
+            <div class="cr"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg><span style="font-size:13px;color:#16161a;flex:1">Finance</span></div>
+
+            <!-- group: create -->
+            <div style="padding:9px 10px 4px;font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Create</div>
+            <div class="cr"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M7 2v10M2 7h10"/></svg><span style="font-size:13px;color:#16161a;flex:1">New task</span><span style="display:inline-flex;align-items:center;justify-content:center;height:18px;width:18px;font:600 11px/1 ui-monospace,monospace;color:#62626b;background:#f1f1f3;border:1px solid #e2e2e6;border-radius:4px">C</span></div>
+            <div class="cr active-l"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#5b5bd6" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/><path d="M9.5 9h3"/></svg><span style="font-size:13px;color:#16161a;font-weight:500;flex:1">New transaction</span><span style="display:inline-flex;align-items:center;justify-content:center;height:18px;width:18px;font:600 11px/1 ui-monospace,monospace;color:#4a4ac0;background:#eeeefb;border:1px solid #dcdcf5;border-radius:4px">N</span></div>
+            <div class="cr"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M7 2v10M2 7h10"/></svg><span style="font-size:13px;color:#16161a;flex:1">New approval request</span></div>
+
+            <!-- group: recent -->
+            <div style="padding:9px 10px 4px;font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Recent</div>
+            <div class="cr"><span style="font-size:11.5px;color:#b4b4bc;font-variant-numeric:tabular-nums;flex-shrink:0;width:56px">WMS-142</span><span style="font-size:13px;color:#16161a;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Reconcile Q2 vendor invoices</span></div>
+            <div class="cr"><svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="#97979f" stroke-width="1.3"><path d="M3 2h4.5L9.5 4.5v6H3z"/><path d="M7 2v3h2.5"/></svg><span style="font-size:13px;color:#16161a;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Q3 Finance — Operating Plan</span></div>
+
+          </div>
+
+          <!-- footer -->
+          <div style="padding:8px 14px;border-top:1px solid #f4f4f6;background:#fbfbfc;display:flex;align-items:center;gap:14px">
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#97979f"><span style="display:inline-flex;align-items:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;font:500 11px/1 ui-monospace,monospace;color:#62626b;background:#f1f1f3;border:1px solid #e2e2e6;border-radius:4px">↑</span><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;font:500 11px/1 ui-monospace,monospace;color:#62626b;background:#f1f1f3;border:1px solid #e2e2e6;border-radius:4px">↓</span></span>navigate</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#97979f"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 4px;font:500 11px/1 ui-monospace,monospace;color:#62626b;background:#f1f1f3;border:1px solid #e2e2e6;border-radius:4px">↵</span>open</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#97979f"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:18px;padding:0 5px;font:500 11px/1 ui-monospace,monospace;color:#62626b;background:#f1f1f3;border:1px solid #e2e2e6;border-radius:4px">esc</span>close</span>
+            <span style="margin-left:auto;display:flex;align-items:center;gap:5px">
+              <span style="width:16px;height:16px;border-radius:4px;background:#5b5bd6;display:flex;align-items:center;justify-content:center"><svg width="8" height="8" viewBox="0 0 10 10" fill="none"><path d="M3 5h4M5 3v4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+              <span style="font-size:11px;color:#97979f">WMS</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PALETTE DARK -->
+      <div data-screen-label="Command Palette — Dark" style="height:540px;border:1px solid #2a2a2e;border-radius:12px;overflow:hidden;background:#0d0d0f;display:flex;align-items:flex-start;justify-content:center;padding-top:80px;position:relative">
+        <div style="position:absolute;inset:0;pointer-events:none;opacity:0.14">
+          <div style="height:46px;border-bottom:1px solid #222226;background:#0d0d0f;display:flex;align-items:center;padding:0 16px;gap:8px">
+            <div style="width:60px;height:10px;background:#2a2a30;border-radius:4px"></div><div style="width:6px;height:8px;background:#222228;border-radius:1px"></div><div style="width:80px;height:10px;background:#2a2a30;border-radius:4px"></div>
+          </div>
+          <div style="padding:20px 16px;display:flex;flex-direction:column;gap:8px">
+            <div style="height:34px;border-bottom:1px solid #1a1a1c;display:flex;align-items:center;gap:10px;padding:0 0 8px"><div style="width:54px;height:9px;background:#202024;border-radius:3px"></div><div style="flex:1;height:10px;background:#202024;border-radius:3px"></div></div>
+            <div style="height:34px;border-bottom:1px solid #1a1a1c;display:flex;align-items:center;gap:10px;padding:0 0 8px"><div style="width:54px;height:9px;background:#1c1c20;border-radius:3px"></div><div style="flex:1;height:10px;background:#1c1c20;border-radius:3px"></div></div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(4,4,8,0.48);pointer-events:none"></div>
+
+        <div style="position:relative;width:524px;background:#161618;border:1px solid #2e2e33;border-radius:11px;box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;animation:palIn 0.15s ease;z-index:10">
+
+          <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:1px solid #222226">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#66666e" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:14px;color:#ededef;flex:1">new t<span style="display:inline-block;width:1px;height:14px;background:#8181e6;vertical-align:middle;margin-left:1px"></span></span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:19px;padding:0 6px;font:500 11px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #34343a;border-radius:4px">esc</span>
+          </div>
+
+          <div style="padding:6px 6px">
+            <div style="padding:5px 10px 4px;font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#55555d">Navigate</div>
+            <div class="cr-d"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg><span style="font-size:13px;color:#ededef;flex:1">Backlog</span><span style="font-size:11.5px;color:#66666e">31 tasks</span></div>
+            <div class="cr-d"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg><span style="font-size:13px;color:#ededef;flex:1">Approvals</span><span style="font-size:11.5px;color:#d9a23c;background:#2a2114;border:1px solid #3d3018;border-radius:4px;padding:1px 6px">4 pending</span></div>
+            <div class="cr-d"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg><span style="font-size:13px;color:#ededef;flex:1">Finance</span></div>
+
+            <div style="padding:9px 10px 4px;font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#55555d">Create</div>
+            <div class="cr-d"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M7 2v10M2 7h10"/></svg><span style="font-size:13px;color:#ededef;flex:1">New task</span><span style="display:inline-flex;align-items:center;justify-content:center;height:18px;width:18px;font:600 11px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #34343a;border-radius:4px">C</span></div>
+            <div class="cr-d active-d"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#8181e6" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/><path d="M9.5 9h3"/></svg><span style="font-size:13px;color:#ededef;font-weight:500;flex:1">New transaction</span><span style="display:inline-flex;align-items:center;justify-content:center;height:18px;width:18px;font:600 11px/1 ui-monospace,monospace;color:#9d9df0;background:#1f1f31;border:1px solid #30304d;border-radius:4px">N</span></div>
+            <div class="cr-d"><svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M7 2v10M2 7h10"/></svg><span style="font-size:13px;color:#ededef;flex:1">New approval request</span></div>
+
+            <div style="padding:9px 10px 4px;font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#55555d">Recent</div>
+            <div class="cr-d"><span style="font-size:11.5px;color:#55555d;font-variant-numeric:tabular-nums;flex-shrink:0;width:56px">WMS-142</span><span style="font-size:13px;color:#ededef;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Reconcile Q2 vendor invoices</span></div>
+            <div class="cr-d"><svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="#66666e" stroke-width="1.3"><path d="M3 2h4.5L9.5 4.5v6H3z"/><path d="M7 2v3h2.5"/></svg><span style="font-size:13px;color:#ededef;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Q3 Finance — Operating Plan</span></div>
+          </div>
+
+          <div style="padding:8px 14px;border-top:1px solid #222226;background:#121214;display:flex;align-items:center;gap:14px">
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#66666e"><span style="display:inline-flex;align-items:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;font:500 11px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #34343a;border-radius:4px">↑</span><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;font:500 11px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #34343a;border-radius:4px">↓</span></span>navigate</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#66666e"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 4px;font:500 11px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #34343a;border-radius:4px">↵</span>open</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#66666e"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:18px;padding:0 5px;font:500 11px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #34343a;border-radius:4px">esc</span>close</span>
+            <span style="margin-left:auto;display:flex;align-items:center;gap:5px">
+              <span style="width:16px;height:16px;border-radius:4px;background:#7575df;display:flex;align-items:center;justify-content:center"><svg width="8" height="8" viewBox="0 0 10 10" fill="none"><path d="M3 5h4M5 3v4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+              <span style="font-size:11px;color:#66666e">WMS</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======= LOGIN ======= -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Login</span>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+
+      <!-- LOGIN LIGHT -->
+      <div data-screen-label="Login — Light" style="height:480px;border:1px solid #dcdce0;border-radius:12px;overflow:hidden;background:#f7f7f8;display:flex;align-items:center;justify-content:center">
+        <div style="width:360px;animation:loginIn 0.2s ease">
+
+          <!-- logo -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:32px">
+            <div style="width:40px;height:40px;border-radius:11px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(91,91,214,0.28)">
+              <span style="font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.02em">W</span>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:16px;font-weight:700;letter-spacing:-0.01em;color:#16161a">Wexley Partners</div>
+              <div style="font-size:12.5px;color:#97979f;margin-top:2px">Work management · Private</div>
+            </div>
+          </div>
+
+          <!-- form -->
+          <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 1px 3px rgba(20,20,40,0.06)">
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <label style="font-size:12px;font-weight:600;color:#44444c">Email</label>
+              <input class="inp-l" type="email" value="aria@wexleypartners.com">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <label style="font-size:12px;font-weight:600;color:#44444c">Password</label>
+                <a style="font-size:12px;color:#5b5bd6;text-decoration:none" style-hover="color:#4a4ac0">Forgot password?</a>
+              </div>
+              <input class="inp-l" type="password" value="••••••••••••">
+            </div>
+            <button style="appearance:none;cursor:pointer;width:100%;border:1px solid #5151c4;background:#5b5bd6;color:#fff;font:600 13.5px Inter,sans-serif;padding:9px;border-radius:7px;margin-top:2px" style-hover="background:#5151c4">Sign in</button>
+          </div>
+
+          <p style="text-align:center;font-size:12px;color:#b4b4bc;margin:16px 0 0">Access is by invitation only.</p>
+        </div>
+      </div>
+
+      <!-- LOGIN DARK -->
+      <div data-screen-label="Login — Dark" style="height:480px;border:1px solid #2a2a2e;border-radius:12px;overflow:hidden;background:#0d0d0f;display:flex;align-items:center;justify-content:center">
+        <div style="width:360px;animation:loginIn 0.2s ease">
+
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:32px">
+            <div style="width:40px;height:40px;border-radius:11px;background:#7575df;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(117,117,223,0.32)">
+              <span style="font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.02em">W</span>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:16px;font-weight:700;letter-spacing:-0.01em;color:#ededef">Wexley Partners</div>
+              <div style="font-size:12.5px;color:#66666e;margin-top:2px">Work management · Private</div>
+            </div>
+          </div>
+
+          <div style="background:#161618;border:1px solid #2a2a2e;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 2px 16px rgba(0,0,0,0.4)">
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <label style="font-size:12px;font-weight:600;color:#9a9aa2">Email</label>
+              <input class="inp-d" type="email" value="aria@wexleypartners.com" style="border-color:#8181e6;box-shadow:0 0 0 3px rgba(129,129,230,0.22)">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <label style="font-size:12px;font-weight:600;color:#9a9aa2">Password</label>
+                <a style="font-size:12px;color:#8181e6;text-decoration:none" style-hover="color:#9d9df0">Forgot password?</a>
+              </div>
+              <input class="inp-d" type="password" value="••••••••••••">
+            </div>
+            <button style="appearance:none;cursor:pointer;width:100%;border:1px solid #7474da;background:#7575df;color:#fff;font:600 13.5px Inter,sans-serif;padding:9px;border-radius:7px;margin-top:2px" style-hover="background:#8181e6">Sign in</button>
+          </div>
+
+          <p style="text-align:center;font-size:12px;color:#55555d;margin:16px 0 0">Access is by invitation only.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="height:8px"></div>
+</div>
+</x-dc>
+</body>
+</html>

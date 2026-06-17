@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "dev:postgres": "docker compose up -d postgres",
+    "tokens:extract": "node scripts/extract-tokens.js",
+    "tokens:build": "node scripts/build-tokens.js",
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "turbo run lint",

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { font-family: Inter, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+    ::selection { background: rgba(91,91,214,0.22); }
+    .wms-row:hover { background: #fafafb; }
+    .wms-row:hover .wms-actions { opacity: 1; }
+    .wms-row:hover .wms-check0 { opacity: 1; }
+    .wms-actions { opacity: 0; transition: opacity 0.12s ease; }
+    .wms-check0 { opacity: 0; transition: opacity 0.12s ease; }
+    .wms-rowd:hover { background: #141416; }
+    .wms-rowd:hover .wms-actions { opacity: 1; }
+  </style>
+</helmet>
+
+<div style="background:#e7e7ea;min-height:100vh;padding:48px 40px 80px;display:flex;flex-direction:column;align-items:center;gap:56px;color:#16161a">
+
+  <div style="width:100%;max-width:1240px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;gap:11px">
+      <div style="width:26px;height:26px;border-radius:7px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;letter-spacing:-0.02em">W</div>
+      <span style="font-size:13px;font-weight:600;letter-spacing:0.04em;color:#62626b">WMS · BACKLOG</span>
+    </div>
+    <h1 style="margin:0;font-size:28px;font-weight:600;letter-spacing:-0.02em;line-height:1.1">List view</h1>
+    <p style="margin:0;font-size:13px;color:#62626b">Light is interactive — select rows with the checkboxes and click any status pill to change it inline.</p>
+  </div>
+
+  <!-- ============ LIGHT ============ -->
+  <div style="width:100%;max-width:1240px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Light</span>
+    <div data-screen-label="Backlog List — Light" style="position:relative;height:494px;border:1px solid #dcdce0;border-radius:12px;overflow:hidden;display:flex;background:#f7f7f8;font-size:13px">
+
+      <!-- SIDEBAR -->
+      <div style="width:228px;flex-shrink:0;background:#fbfbfc;border-right:1px solid #ebebee;display:flex;flex-direction:column">
+        <div style="padding:14px 14px 10px;display:flex;align-items:center;gap:9px">
+          <div style="width:22px;height:22px;border-radius:6px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">W</div>
+          <span style="font-size:13.5px;font-weight:600;color:#16161a">Wexley Partners</span>
+          <span style="margin-left:auto;color:#b4b4bc;font-size:13px">⌄</span>
+        </div>
+        <div style="padding:4px 10px 10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #e6e6ea;border-radius:7px;background:#fff">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:13px;color:#97979f;flex:1">Search</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#97979f;background:#f1f1f3;border:1px solid #e6e6ea;border-radius:4px">⌘K</span>
+          </div>
+        </div>
+        <nav style="padding:2px 10px;display:flex;flex-direction:column;gap:1px">
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;background:#eeeefb;color:#4a4ac0;font-weight:600;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#5b5bd6" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg>
+            Backlog<span style="margin-left:auto;font-size:11px;font-weight:600;color:#7676d8;font-variant-numeric:tabular-nums">31</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+            Approvals<span style="margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:16px;padding:0 5px;font:600 10.5px/1 Inter,sans-serif;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4;border-radius:5px">4</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+            Finance
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M4 2.5h6l2.5 2.5v9H4z"/><path d="M9.5 2.5V5H12"/></svg>
+            Docs
+          </a>
+        </nav>
+        <div style="margin-top:auto;border-top:1px solid #ebebee;padding:10px;display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+          <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:12.5px;font-weight:600;color:#16161a">Aria Kessler</span><span style="font-size:11px;color:#97979f">Partner</span></div>
+          <span style="margin-left:auto;color:#b4b4bc;font-size:13px">⋯</span>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+        <!-- topbar -->
+        <div style="height:46px;flex-shrink:0;border-bottom:1px solid #ebebee;background:#f7f7f8;display:flex;align-items:center;padding:0 16px;gap:10px">
+          <span style="font-size:13px;color:#97979f">Backlog</span>
+          <span style="color:#cfcfd5;font-size:12px">/</span>
+          <span style="font-size:13px;color:#16161a;font-weight:600">List</span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+            <button style="appearance:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:5px 9px;border:1px solid #e6e6ea;border-radius:7px;background:#fff;color:#97979f;font:400 12.5px Inter,sans-serif" style-hover="background:#f6f6f7">Jump to…<span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#97979f;background:#f1f1f3;border:1px solid #e6e6ea;border-radius:4px">⌘K</span></button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #5151c4;background:#5b5bd6;color:#fff;font:600 12.5px Inter,sans-serif;padding:6px 11px;border-radius:7px;display:flex;align-items:center;gap:7px" style-hover="background:#5151c4">New task<span style="display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;font:600 10.5px/1 ui-monospace,monospace;color:#dcdcfa;background:rgba(255,255,255,0.16);border-radius:3px">C</span></button>
+          </div>
+        </div>
+
+        <!-- filter bar OR selection bar -->
+        <sc-if value="{{ noSelection }}" hint-placeholder-val="{{ true }}">
+          <div style="height:40px;flex-shrink:0;border-bottom:1px solid #ebebee;background:#fff;display:flex;align-items:center;padding:0 16px;gap:9px">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:4px 9px;border:1px solid #e6e6ea;border-radius:7px" style-hover="background:#f6f6f7"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M2 3.5h12M4 8h8M6 12.5h4"/></svg>Filter</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:4px 9px;border:1px solid #e6e6ea;border-radius:7px" style-hover="background:#f6f6f7">Assignee<span style="color:#b4b4bc">·</span><span style="color:#16161a;font-weight:500">All</span></span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:4px 9px;border:1px solid #e6e6ea;border-radius:7px" style-hover="background:#f6f6f7"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M5 3v10M5 13l-2.2-2.4M11 13V3M11 3l2.2 2.4"/></svg>Sort</span>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:9px">
+              <div style="display:flex;align-items:center;padding:2px;background:#f1f1f3;border:1px solid #e6e6ea;border-radius:7px;gap:2px">
+                <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#97979f;padding:3px 9px;border-radius:5px"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><rect x="2" y="2.5" width="3.6" height="11" rx="1"/><rect x="6.4" y="2.5" width="3.6" height="11" rx="1"/><rect x="10.8" y="2.5" width="3.2" height="11" rx="1"/></svg>Board</span>
+                <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#16161a;padding:3px 9px;background:#fff;border:1px solid #e2e2e6;border-radius:5px;box-shadow:0 1px 1px rgba(0,0,0,0.03)"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#5b5bd6" stroke-width="1.6"><path d="M2.5 4h11M2.5 8h11M2.5 12h11"/></svg>List</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+          <div style="height:40px;flex-shrink:0;border-bottom:1px solid #dcdcf2;background:#f3f3fb;display:flex;align-items:center;padding:0 16px;gap:12px">
+            <span style="width:15px;height:15px;border-radius:4px;background:#5b5bd6;border:1px solid #5151c4;display:flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="1.8"><path d="M2 5l2 2 4-4.5"/></svg></span>
+            <span style="font-size:12.5px;font-weight:600;color:#4a4ac0;font-variant-numeric:tabular-nums">{{ selCount }} selected</span>
+            <div style="width:1px;height:16px;background:#d9d9ee"></div>
+            <span style="font-size:12.5px;color:#44444c;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#e9e9f8">Status</span>
+            <span style="font-size:12.5px;color:#44444c;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#e9e9f8">Assignee</span>
+            <span style="font-size:12.5px;color:#44444c;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#e9e9f8">Priority</span>
+            <span style="font-size:12.5px;color:#2f7544;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#e8f4eb">Mark done</span>
+            <span style="font-size:12.5px;color:#b53b35;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#fbeae9">Delete</span>
+            <button onClick="{{ clearSel }}" style="appearance:none;cursor:pointer;margin-left:auto;border:none;background:none;font:500 12.5px Inter,sans-serif;color:#97979f" style-hover="color:#16161a">Clear</button>
+          </div>
+        </sc-if>
+
+        <!-- column header -->
+        <div style="height:30px;flex-shrink:0;display:flex;align-items:center;padding:0 12px 0 10px;background:#fbfbfc;border-bottom:1px solid #ebebee;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#b4b4bc">
+          <span style="width:26px"></span>
+          <span style="flex:1">Task</span>
+          <span style="width:128px">Status</span>
+          <span style="width:104px">Priority</span>
+          <span style="width:80px">Assignee</span>
+          <span style="width:64px">Updated</span>
+          <span style="width:28px"></span>
+        </div>
+
+        <!-- rows -->
+        <div style="flex:1;background:#fff;position:relative">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <div class="wms-row" style="{{ r.rowStyle }}">
+              <!-- checkbox -->
+              <div style="width:26px;display:flex;align-items:center;cursor:pointer" onClick="{{ r.toggle }}">
+                <sc-if value="{{ r.selected }}" hint-placeholder-val="{{ false }}"><span style="width:15px;height:15px;border-radius:4px;background:#5b5bd6;border:1px solid #5151c4;display:flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="1.8"><path d="M2 5l2 2 4-4.5"/></svg></span></sc-if>
+                <sc-if value="{{ r.unselected }}" hint-placeholder-val="{{ true }}"><span class="wms-check0" style="width:15px;height:15px;border-radius:4px;border:1.4px solid #d0d0d6;background:#fff"></span></sc-if>
+              </div>
+              <!-- title -->
+              <span style="flex:1;display:flex;align-items:center;gap:9px;min-width:0">
+                <span style="font-size:11.5px;color:#b4b4bc;font-variant-numeric:tabular-nums;flex-shrink:0">{{ r.id }}</span>
+                <span style="font-size:13px;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.title }}</span>
+              </span>
+              <!-- status (interactive) -->
+              <span style="width:128px;position:relative">
+                <span onClick="{{ r.openStatus }}" style="{{ r.pillStyle }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.dotColor }}"></span>{{ r.statusLabel }}</span>
+                <sc-if value="{{ r.menuOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;top:26px;left:0;z-index:30;width:160px;background:#fff;border:1px solid #e0e0e4;border-radius:9px;box-shadow:0 10px 30px rgba(20,20,40,0.16);padding:5px;animation:none">
+                    <div style="padding:3px 8px 5px;font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#b4b4bc">Set status</div>
+                    <sc-for list="{{ r.statusOptions }}" as="o" hint-placeholder-count="6">
+                      <div onClick="{{ o.onSelect }}" style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:12.5px;color:#16161a" style-hover="background:#f4f4f6"><span style="width:7px;height:7px;border-radius:50%;background:{{ o.dot }}"></span>{{ o.label }}</div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </span>
+              <!-- priority -->
+              <span style="width:104px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#62626b"><span style="width:7px;height:7px;border-radius:50%;background:{{ r.prioColor }}"></span>{{ r.priority }}</span>
+              <!-- assignee -->
+              <span style="width:80px;display:flex;align-items:center;gap:7px"><span style="{{ r.avatarStyle }}">{{ r.who }}</span></span>
+              <!-- updated -->
+              <span style="width:64px;font-size:12px;color:#a4a4ac">{{ r.updated }}</span>
+              <!-- actions -->
+              <span class="wms-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end;gap:2px">
+                <span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#97979f;cursor:pointer" style-hover="background:#f1f1f3;color:#16161a">⋯</span>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DARK (static — showing selected state) ============ -->
+  <div style="width:100%;max-width:1240px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Dark · multi-select state</span>
+    <div data-screen-label="Backlog List — Dark" style="position:relative;height:494px;border:1px solid #2a2a2e;border-radius:12px;overflow:hidden;display:flex;background:#0d0d0f;font-size:13px">
+
+      <!-- SIDEBAR -->
+      <div style="width:228px;flex-shrink:0;background:#121214;border-right:1px solid #222226;display:flex;flex-direction:column">
+        <div style="padding:14px 14px 10px;display:flex;align-items:center;gap:9px">
+          <div style="width:22px;height:22px;border-radius:6px;background:#7575df;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">W</div>
+          <span style="font-size:13.5px;font-weight:600;color:#ededef">Wexley Partners</span>
+          <span style="margin-left:auto;color:#55555d;font-size:13px">⌄</span>
+        </div>
+        <div style="padding:4px 10px 10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #2a2a2e;border-radius:7px;background:#1a1a1c">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#66666e" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:13px;color:#66666e;flex:1">Search</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #303036;border-radius:4px">⌘K</span>
+          </div>
+        </div>
+        <nav style="padding:2px 10px;display:flex;flex-direction:column;gap:1px">
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;background:#1f1f31;color:#9d9df0;font-weight:600;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#8181e6" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg>
+            Backlog<span style="margin-left:auto;font-size:11px;font-weight:600;color:#8181e6;font-variant-numeric:tabular-nums">31</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+            Approvals<span style="margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:16px;padding:0 5px;font:600 10.5px/1 Inter,sans-serif;color:#d9a23c;background:#2a2114;border:1px solid #3d3018;border-radius:5px">4</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+            Finance
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M4 2.5h6l2.5 2.5v9H4z"/><path d="M9.5 2.5V5H12"/></svg>
+            Docs
+          </a>
+        </nav>
+        <div style="margin-top:auto;border-top:1px solid #222226;padding:10px;display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+          <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:12.5px;font-weight:600;color:#ededef">Aria Kessler</span><span style="font-size:11px;color:#66666e">Partner</span></div>
+          <span style="margin-left:auto;color:#55555d;font-size:13px">⋯</span>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+        <div style="height:46px;flex-shrink:0;border-bottom:1px solid #222226;background:#0d0d0f;display:flex;align-items:center;padding:0 16px;gap:10px">
+          <span style="font-size:13px;color:#66666e">Backlog</span>
+          <span style="color:#3a3a40;font-size:12px">/</span>
+          <span style="font-size:13px;color:#ededef;font-weight:600">List</span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+            <button style="appearance:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:5px 9px;border:1px solid #2a2a2e;border-radius:7px;background:#1a1a1c;color:#66666e;font:400 12.5px Inter,sans-serif">Jump to…<span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #303036;border-radius:4px">⌘K</span></button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #7474da;background:#7575df;color:#fff;font:600 12.5px Inter,sans-serif;padding:6px 11px;border-radius:7px;display:flex;align-items:center;gap:7px">New task<span style="display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;font:600 10.5px/1 ui-monospace,monospace;color:#e3e3fb;background:rgba(255,255,255,0.18);border-radius:3px">C</span></button>
+          </div>
+        </div>
+
+        <!-- selection bar (static demo) -->
+        <div style="height:40px;flex-shrink:0;border-bottom:1px solid #2a2a3e;background:#191926;display:flex;align-items:center;padding:0 16px;gap:12px">
+          <span style="width:15px;height:15px;border-radius:4px;background:#7575df;border:1px solid #8181e6;display:flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="1.8"><path d="M2 5l2 2 4-4.5"/></svg></span>
+          <span style="font-size:12.5px;font-weight:600;color:#9d9df0;font-variant-numeric:tabular-nums">2 selected</span>
+          <div style="width:1px;height:16px;background:#34344a"></div>
+          <span style="font-size:12.5px;color:#c4c4cc;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#23233a">Status</span>
+          <span style="font-size:12.5px;color:#c4c4cc;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#23233a">Assignee</span>
+          <span style="font-size:12.5px;color:#c4c4cc;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#23233a">Priority</span>
+          <span style="font-size:12.5px;color:#5cbd78;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#15241a">Mark done</span>
+          <span style="font-size:12.5px;color:#e87b76;padding:4px 8px;border-radius:6px;cursor:pointer" style-hover="background:#2a1817">Delete</span>
+          <span style="margin-left:auto;font-size:12.5px;color:#66666e;cursor:pointer" style-hover="color:#ededef">Clear</span>
+        </div>
+
+        <!-- column header -->
+        <div style="height:30px;flex-shrink:0;display:flex;align-items:center;padding:0 12px 0 10px;background:#121214;border-bottom:1px solid #222226;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#55555d">
+          <span style="width:26px"></span><span style="flex:1">Task</span><span style="width:128px">Status</span><span style="width:104px">Priority</span><span style="width:80px">Assignee</span><span style="width:64px">Updated</span><span style="width:28px"></span>
+        </div>
+
+        <!-- rows -->
+        <div style="flex:1;background:#0d0d0f">
+          <!-- selected row -->
+          <div class="wms-rowd" style="position:relative;display:flex;align-items:center;height:34px;padding:0 12px 0 10px;border-bottom:1px solid #161618;background:#16162a;box-shadow:inset 2px 0 0 #8181e6">
+            <div style="width:26px;display:flex;align-items:center"><span style="width:15px;height:15px;border-radius:4px;background:#7575df;border:1px solid #8181e6;display:flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="1.8"><path d="M2 5l2 2 4-4.5"/></svg></span></div>
+            <span style="flex:1;display:flex;align-items:center;gap:9px;min-width:0"><span style="font-size:11.5px;color:#55555d;font-variant-numeric:tabular-nums">WMS-142</span><span style="font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Reconcile Q2 vendor invoices</span></span>
+            <span style="width:128px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#d9a23c;background:#2a2114;border:1px solid #3d3018"><span style="width:6px;height:6px;border-radius:50%;background:#d9a23c"></span>In Progress</span></span>
+            <span style="width:104px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9a9aa2"><span style="width:7px;height:7px;border-radius:50%;background:#e0605a"></span>Urgent</span>
+            <span style="width:80px;display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;background:#17301f;color:#5cbd78;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></span>
+            <span style="width:64px;font-size:12px;color:#55555d">2h</span>
+            <span style="width:28px"></span>
+          </div>
+          <!-- selected row 2 -->
+          <div class="wms-rowd" style="position:relative;display:flex;align-items:center;height:34px;padding:0 12px 0 10px;border-bottom:1px solid #161618;background:#16162a;box-shadow:inset 2px 0 0 #8181e6">
+            <div style="width:26px;display:flex;align-items:center"><span style="width:15px;height:15px;border-radius:4px;background:#7575df;border:1px solid #8181e6;display:flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="1.8"><path d="M2 5l2 2 4-4.5"/></svg></span></div>
+            <span style="flex:1;display:flex;align-items:center;gap:9px;min-width:0"><span style="font-size:11.5px;color:#55555d;font-variant-numeric:tabular-nums">WMS-141</span><span style="font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Draft partnership budget memo</span></span>
+            <span style="width:128px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9d9df0;background:#1f1f31;border:1px solid #30304d"><span style="width:6px;height:6px;border-radius:50%;background:#8181e6"></span>In Review</span></span>
+            <span style="width:104px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9a9aa2"><span style="width:7px;height:7px;border-radius:50%;background:#d9a23c"></span>High</span>
+            <span style="width:80px;display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span></span>
+            <span style="width:64px;font-size:12px;color:#55555d">5h</span>
+            <span style="width:28px"></span>
+          </div>
+          <!-- normal rows -->
+          <div class="wms-rowd" style="position:relative;display:flex;align-items:center;height:34px;padding:0 12px 0 10px;border-bottom:1px solid #161618">
+            <div style="width:26px;display:flex;align-items:center"><span style="width:15px;height:15px;border-radius:4px;border:1.4px solid #34343a;background:#161618"></span></div>
+            <span style="flex:1;display:flex;align-items:center;gap:9px;min-width:0"><span style="font-size:11.5px;color:#55555d;font-variant-numeric:tabular-nums">WMS-140</span><span style="font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Migrate docs to new wiki space</span></span>
+            <span style="width:128px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#d9a23c;background:#2a2114;border:1px solid #3d3018"><span style="width:6px;height:6px;border-radius:50%;background:#d9a23c"></span>In Progress</span></span>
+            <span style="width:104px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9a9aa2"><span style="width:7px;height:7px;border-radius:50%;background:#8181e6"></span>Medium</span>
+            <span style="width:80px;display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;background:#17301f;color:#5cbd78;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></span>
+            <span style="width:64px;font-size:12px;color:#55555d">1d</span>
+            <span class="wms-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end"><span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#66666e">⋯</span></span>
+          </div>
+          <div class="wms-rowd" style="position:relative;display:flex;align-items:center;height:34px;padding:0 12px 0 10px;border-bottom:1px solid #161618">
+            <div style="width:26px;display:flex;align-items:center"><span style="width:15px;height:15px;border-radius:4px;border:1.4px solid #34343a;background:#161618"></span></div>
+            <span style="flex:1;display:flex;align-items:center;gap:9px;min-width:0"><span style="font-size:11.5px;color:#55555d;font-variant-numeric:tabular-nums">WMS-137</span><span style="font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Set up recurring tax reserve transfer</span></span>
+            <span style="width:128px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9a9aa2;background:#1c1c1f;border:1px solid #2e2e33"><span style="width:6px;height:6px;border-radius:50%;background:#8a8a92"></span>Todo</span></span>
+            <span style="width:104px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9a9aa2"><span style="width:7px;height:7px;border-radius:50%;background:#8181e6"></span>Medium</span>
+            <span style="width:80px;display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span></span>
+            <span style="width:64px;font-size:12px;color:#55555d">2d</span>
+            <span class="wms-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end"><span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#66666e">⋯</span></span>
+          </div>
+          <div class="wms-rowd" style="position:relative;display:flex;align-items:center;height:34px;padding:0 12px 0 10px;border-bottom:1px solid #161618">
+            <div style="width:26px;display:flex;align-items:center"><span style="width:15px;height:15px;border-radius:4px;border:1.4px solid #34343a;background:#161618"></span></div>
+            <span style="flex:1;display:flex;align-items:center;gap:9px;min-width:0"><span style="font-size:11.5px;color:#55555d;font-variant-numeric:tabular-nums">WMS-135</span><span style="font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Renew domain &amp; SSL certificates</span></span>
+            <span style="width:128px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9a9aa2;background:#1c1c1f;border:1px solid #2e2e33"><span style="width:6px;height:6px;border-radius:50%;background:#8a8a92"></span>Todo</span></span>
+            <span style="width:104px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9a9aa2"><span style="width:7px;height:7px;border-radius:50%;background:#d9a23c"></span>High</span>
+            <span style="width:80px;display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;background:#17301f;color:#5cbd78;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></span>
+            <span style="width:64px;font-size:12px;color:#55555d">2d</span>
+            <span class="wms-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end"><span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#66666e">⋯</span></span>
+          </div>
+          <div class="wms-rowd" style="position:relative;display:flex;align-items:center;height:34px;padding:0 12px 0 10px;border-bottom:1px solid #161618">
+            <div style="width:26px;display:flex;align-items:center"><span style="width:15px;height:15px;border-radius:4px;border:1.4px solid #34343a;background:#161618"></span></div>
+            <span style="flex:1;display:flex;align-items:center;gap:9px;min-width:0"><span style="font-size:11.5px;color:#55555d;font-variant-numeric:tabular-nums">WMS-134</span><span style="font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Review insurance renewal quote</span></span>
+            <span style="width:128px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#e87b76;background:#2a1817;border:1px solid #422020"><span style="width:6px;height:6px;border-radius:50%;background:#e0605a"></span>Blocked</span></span>
+            <span style="width:104px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9a9aa2"><span style="width:7px;height:7px;border-radius:50%;background:#d9a23c"></span>High</span>
+            <span style="width:80px;display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;background:#17301f;color:#5cbd78;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></span>
+            <span style="width:64px;font-size:12px;color:#55555d">3d</span>
+            <span class="wms-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end"><span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#66666e">⋯</span></span>
+          </div>
+          <div class="wms-rowd" style="position:relative;display:flex;align-items:center;height:34px;padding:0 12px 0 10px">
+            <div style="width:26px;display:flex;align-items:center"><span style="width:15px;height:15px;border-radius:4px;border:1.4px solid #34343a;background:#161618"></span></div>
+            <span style="flex:1;display:flex;align-items:center;gap:9px;min-width:0"><span style="font-size:11.5px;color:#55555d;font-variant-numeric:tabular-nums">WMS-131</span><span style="font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Write Q3 partnership goals doc</span></span>
+            <span style="width:128px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9a9aa2;background:#1c1c1f;border:1px solid #2e2e33"><span style="width:6px;height:6px;border-radius:50%;background:#8a8a92"></span>Todo</span></span>
+            <span style="width:104px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9a9aa2"><span style="width:7px;height:7px;border-radius:50%;background:#8181e6"></span>Medium</span>
+            <span style="width:80px;display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span></span>
+            <span style="width:64px;font-size:12px;color:#55555d">3d</span>
+            <span class="wms-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end"><span style="width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#66666e">⋯</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:8px"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { selected: [], menuId: null, statusMap: {} };
+
+  baseRows() {
+    return [
+      { id: 'WMS-142', title: 'Reconcile Q2 vendor invoices', status: 'In Progress', priority: 'Urgent', who: 'DM', updated: '2h' },
+      { id: 'WMS-141', title: 'Draft partnership budget memo', status: 'In Review', priority: 'High', who: 'AK', updated: '5h' },
+      { id: 'WMS-140', title: 'Migrate docs to new wiki space', status: 'In Progress', priority: 'Medium', who: 'DM', updated: '1d' },
+      { id: 'WMS-137', title: 'Set up recurring tax reserve transfer', status: 'Todo', priority: 'Medium', who: 'AK', updated: '2d' },
+      { id: 'WMS-135', title: 'Renew domain & SSL certificates', status: 'Todo', priority: 'High', who: 'DM', updated: '2d' },
+      { id: 'WMS-134', title: 'Review insurance renewal quote', status: 'Blocked', priority: 'High', who: 'DM', updated: '3d' },
+      { id: 'WMS-131', title: 'Write Q3 partnership goals doc', status: 'Todo', priority: 'Medium', who: 'AK', updated: '3d' },
+      { id: 'WMS-129', title: 'Annual entity compliance filing', status: 'Backlog', priority: 'Low', who: 'AK', updated: '4d' },
+    ];
+  }
+
+  meta(label) {
+    const m = {
+      'Backlog':     { dot: '#cfcfd5', text: '#62626b', bg: '#f2f2f4', border: '#e8e8eb' },
+      'Todo':        { dot: '#9a9aa2', text: '#62626b', bg: '#f2f2f4', border: '#e8e8eb' },
+      'In Progress': { dot: '#c8881f', text: '#9a6a12', bg: '#fbf2e0', border: '#f0e2c4' },
+      'In Review':   { dot: '#5b5bd6', text: '#4a4ac0', bg: '#eeeefb', border: '#dcdcf5' },
+      'Blocked':     { dot: '#cf4d47', text: '#b53b35', bg: '#fbeae9', border: '#f3d4d2' },
+      'Done':        { dot: '#3f9b54', text: '#2f7544', bg: '#e8f4eb', border: '#cfe7d5' },
+    };
+    return m[label] || m['Todo'];
+  }
+  prio(label) {
+    return { Urgent: '#cf4d47', High: '#c8881f', Medium: '#5b5bd6', Low: '#b4b4bc' }[label] || '#b4b4bc';
+  }
+  avatar(who) {
+    return who === 'AK' ? { bg: '#e3e0fa', color: '#5b5bd6' } : { bg: '#dceee2', color: '#2f7544' };
+  }
+
+  renderVals() {
+    const sel = this.state.selected;
+    const statusList = ['Backlog', 'Todo', 'In Progress', 'In Review', 'Blocked', 'Done'];
+    const self = this;
+    const rows = this.baseRows().map(function (r) {
+      const status = self.state.statusMap[r.id] || r.status;
+      const m = self.meta(status);
+      const a = self.avatar(r.who);
+      const selected = sel.includes(r.id);
+      const rowBase = 'position:relative;display:flex;align-items:center;height:34px;padding:0 12px 0 10px;border-bottom:1px solid #f4f4f6';
+      return {
+        id: r.id,
+        title: r.title,
+        updated: r.updated,
+        statusLabel: status,
+        dotColor: m.dot,
+        pillStyle: 'display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:' + m.text + ';background:' + m.bg + ';border:1px solid ' + m.border + ';cursor:pointer;user-select:none',
+        priority: r.priority,
+        prioColor: self.prio(r.priority),
+        who: r.who,
+        avatarStyle: 'width:20px;height:20px;border-radius:50%;background:' + a.bg + ';color:' + a.color + ';font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center',
+        selected: selected,
+        unselected: !selected,
+        menuOpen: self.state.menuId === r.id,
+        rowStyle: rowBase + (selected ? ';background:#f3f3fb;box-shadow:inset 2px 0 0 #5b5bd6' : ''),
+        toggle: function () {
+          self.setState(function (s) {
+            return { selected: s.selected.includes(r.id) ? s.selected.filter(function (x) { return x !== r.id; }) : s.selected.concat([r.id]) };
+          });
+        },
+        openStatus: function (e) {
+          if (e && e.stopPropagation) e.stopPropagation();
+          self.setState(function (s) { return { menuId: s.menuId === r.id ? null : r.id }; });
+        },
+        statusOptions: statusList.map(function (l) {
+          const mm = self.meta(l);
+          return {
+            label: l,
+            dot: mm.dot,
+            onSelect: function (e) {
+              if (e && e.stopPropagation) e.stopPropagation();
+              self.setState(function (s) {
+                const sm = Object.assign({}, s.statusMap);
+                sm[r.id] = l;
+                return { statusMap: sm, menuId: null };
+              });
+            },
+          };
+        }),
+      };
+    });
+    return {
+      rows: rows,
+      hasSelection: sel.length > 0,
+      noSelection: sel.length === 0,
+      selCount: sel.length,
+      clearSel: function () { self.setState({ selected: [] }); },
+    };
+  }
+}
+</script>
+</body>
+</html>

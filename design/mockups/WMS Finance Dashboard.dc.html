@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { font-family: Inter, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+
+<div style="background:#e7e7ea;min-height:100vh;padding:48px 40px 80px;display:flex;flex-direction:column;align-items:center;gap:56px">
+
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:11px">
+      <div style="width:26px;height:26px;border-radius:7px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">W</div>
+      <span style="font-size:13px;font-weight:600;letter-spacing:0.04em;color:#62626b">WMS · FINANCE</span>
+    </div>
+    <h1 style="margin:0;font-size:28px;font-weight:600;letter-spacing:-0.02em">Dashboard</h1>
+  </div>
+
+  <!-- ======= LIGHT ======= -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:14px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Light</span>
+    <div data-screen-label="Finance Dashboard — Light" style="height:648px;border:1px solid #dcdce0;border-radius:12px;overflow:hidden;display:flex;background:#f7f7f8;font-size:13px">
+
+      <!-- Sidebar -->
+      <div style="width:228px;flex-shrink:0;background:#fbfbfc;border-right:1px solid #ebebee;display:flex;flex-direction:column">
+        <div style="padding:14px 14px 10px;display:flex;align-items:center;gap:9px">
+          <div style="width:22px;height:22px;border-radius:6px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">W</div>
+          <span style="font-size:13.5px;font-weight:600;color:#16161a">Wexley Partners</span>
+          <span style="margin-left:auto;color:#b4b4bc">⌄</span>
+        </div>
+        <div style="padding:4px 10px 10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #e6e6ea;border-radius:7px;background:#fff">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:13px;color:#97979f;flex:1">Search</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#97979f;background:#f1f1f3;border:1px solid #e6e6ea;border-radius:4px">⌘K</span>
+          </div>
+        </div>
+        <nav style="padding:2px 10px;display:flex;flex-direction:column;gap:1px">
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg>
+            Backlog<span style="margin-left:auto;font-size:11px;color:#97979f">31</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+            Approvals<span style="margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:16px;padding:0 5px;font:600 10.5px/1 Inter,sans-serif;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4;border-radius:5px">4</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;background:#eeeefb;color:#4a4ac0;font-weight:600;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#5b5bd6" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+            Finance
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M4 2.5h6l2.5 2.5v9H4z"/><path d="M9.5 2.5V5H12"/></svg>
+            Docs
+          </a>
+        </nav>
+        <div style="margin-top:auto;border-top:1px solid #ebebee;padding:10px;display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+          <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:12.5px;font-weight:600;color:#16161a">Aria Kessler</span><span style="font-size:11px;color:#97979f">Partner</span></div>
+          <span style="margin-left:auto;color:#b4b4bc">⋯</span>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden">
+        <!-- topbar -->
+        <div style="height:46px;flex-shrink:0;border-bottom:1px solid #ebebee;background:#f7f7f8;display:flex;align-items:center;padding:0 16px;gap:8px">
+          <span style="font-size:13px;color:#97979f">Finance</span>
+          <span style="color:#cfcfd5;font-size:12px">/</span>
+          <span style="font-size:13px;color:#16161a;font-weight:600">Dashboard</span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:4px 9px;border:1px solid #e6e6ea;border-radius:7px;background:#fff"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#97979f" stroke-width="1.4"><rect x="1" y="1.5" width="10" height="9" rx="1.2"/><path d="M1 4.5h10"/><path d="M4 1.5v3"/><path d="M8 1.5v3"/></svg>Jun 2026</span>
+          </div>
+        </div>
+        <!-- sub-tabs -->
+        <div style="height:38px;flex-shrink:0;border-bottom:1px solid #ebebee;background:#fff;display:flex;align-items:center;padding:0 16px;gap:20px">
+          <span style="height:38px;display:flex;align-items:center;font-size:13px;font-weight:600;color:#16161a;border-bottom:2px solid #5b5bd6;margin-bottom:-1px">Overview</span>
+          <span style="height:38px;display:flex;align-items:center;font-size:13px;font-weight:500;color:#97979f;cursor:pointer" style-hover="color:#44444c">Transactions</span>
+          <span style="height:38px;display:flex;align-items:center;font-size:13px;font-weight:500;color:#97979f;cursor:pointer" style-hover="color:#44444c">Budgets</span>
+        </div>
+
+        <!-- scrollable content -->
+        <div style="flex:1;overflow-y:auto">
+
+          <!-- KPI TILES -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #ebebee;background:#fff">
+            <div style="padding:14px 16px;border-right:1px solid #f0f0f2;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#97979f">Total balance</span>
+              <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#16161a;font-variant-numeric:tabular-nums;line-height:1.1">$2,133,102</span>
+              <span style="font-size:11.5px;color:#3f9b54;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#3f9b54" stroke-width="1.5"><path d="M5 8V2M2 5l3-3 3 3"/></svg>+$62,540 this month</span>
+            </div>
+            <div style="padding:14px 16px;border-right:1px solid #f0f0f2;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#97979f">Income · Jun</span>
+              <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#3f9b54;font-variant-numeric:tabular-nums;line-height:1.1">$74,300</span>
+              <span style="font-size:11.5px;color:#62626b;font-variant-numeric:tabular-nums">vs $68,200 last mo.</span>
+            </div>
+            <div style="padding:14px 16px;border-right:1px solid #f0f0f2;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#97979f">Expenses · Jun</span>
+              <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#b53b35;font-variant-numeric:tabular-nums;line-height:1.1">$83,172</span>
+              <span style="font-size:11.5px;color:#62626b;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#b53b35" stroke-width="1.5"><path d="M5 2v6M2 5l3 3 3-3"/></svg>$11,244 over budget</span>
+            </div>
+            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#97979f">Pending approval</span>
+              <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#c8881f;font-variant-numeric:tabular-nums;line-height:1.1">$70,750</span>
+              <span style="font-size:11.5px;color:#62626b;font-variant-numeric:tabular-nums">2 items awaiting sign-off</span>
+            </div>
+          </div>
+
+          <!-- CHART SECTION -->
+          <div style="padding:18px 18px 0;background:#fff;border-bottom:1px solid #ebebee">
+            <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+              <span style="font-size:12px;font-weight:600;color:#16161a">Total balance</span>
+              <span style="font-size:12px;color:#97979f">Jan 2026 – Jun 2026</span>
+              <span style="margin-left:auto;font-size:12px;font-weight:500;color:#3f9b54;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#3f9b54" stroke-width="1.5"><path d="M5 8V2M2 5l3-3 3 3"/></svg>+$455,602  +27.2%</span>
+            </div>
+            <svg width="100%" height="170" viewBox="0 0 860 170" preserveAspectRatio="none" style="display:block;overflow:visible">
+              <defs>
+                <linearGradient id="aFillL" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#5b5bd6" stop-opacity="0.12"/>
+                  <stop offset="100%" stop-color="#5b5bd6" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- grid lines -->
+              <line x1="55" y1="115" x2="820" y2="115" stroke="#f0f0f2" stroke-width="1"/>
+              <line x1="55" y1="65" x2="820" y2="65" stroke="#f0f0f2" stroke-width="1"/>
+              <!-- Y labels -->
+              <text x="48" y="118" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="#b4b4bc">$1.8M</text>
+              <text x="48" y="68" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="#b4b4bc">$2.0M</text>
+              <!-- area fill -->
+              <path d="M 55,165 L 55,146 C 80,143 157,132 208,126 C 259,120 310,117 361,110 C 412,103 463,94 514,85 C 565,76 616,64 667,55 C 718,46 795,36 820,32 L 820,165 Z" fill="url(#aFillL)"/>
+              <!-- line -->
+              <path d="M 55,146 C 80,143 157,132 208,126 C 259,120 310,117 361,110 C 412,103 463,94 514,85 C 565,76 616,64 667,55 C 718,46 795,36 820,32" fill="none" stroke="#5b5bd6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+              <!-- dots -->
+              <circle cx="55" cy="146" r="3" fill="#fff" stroke="#5b5bd6" stroke-width="1.5"/>
+              <circle cx="208" cy="126" r="3" fill="#fff" stroke="#5b5bd6" stroke-width="1.5"/>
+              <circle cx="361" cy="110" r="3" fill="#fff" stroke="#5b5bd6" stroke-width="1.5"/>
+              <circle cx="514" cy="85" r="3" fill="#fff" stroke="#5b5bd6" stroke-width="1.5"/>
+              <circle cx="667" cy="55" r="3" fill="#fff" stroke="#5b5bd6" stroke-width="1.5"/>
+              <circle cx="820" cy="32" r="4" fill="#5b5bd6" stroke="#fff" stroke-width="2"/>
+              <!-- latest label -->
+              <rect x="779" y="10" width="74" height="18" rx="5" fill="#eeeefb" stroke="#dcdcf5" stroke-width="1"/>
+              <text x="816" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#4a4ac0">$2.13M</text>
+              <!-- month labels -->
+              <text x="55" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#b4b4bc">Jan</text>
+              <text x="208" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#b4b4bc">Feb</text>
+              <text x="361" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#b4b4bc">Mar</text>
+              <text x="514" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#b4b4bc">Apr</text>
+              <text x="667" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#b4b4bc">May</text>
+              <text x="820" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#5b5bd6">Jun</text>
+            </svg>
+          </div>
+
+          <!-- BUDGET VS ACTUAL -->
+          <div style="padding:16px 18px;background:#fff">
+            <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+              <span style="font-size:12px;font-weight:600;color:#16161a">Budget vs actual</span>
+              <span style="font-size:12px;color:#97979f">June 2026</span>
+            </div>
+
+            <!-- header labels -->
+            <div style="display:flex;align-items:center;padding:0 0 8px;border-bottom:1px solid #f4f4f6;margin-bottom:6px">
+              <span style="width:106px;font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#b4b4bc">Category</span>
+              <span style="flex:1"></span>
+              <span style="width:78px;text-align:right;font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#b4b4bc">Actual</span>
+              <span style="width:78px;text-align:right;font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#b4b4bc">Budget</span>
+              <span style="width:48px;text-align:right;font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#b4b4bc">Δ</span>
+            </div>
+
+            <!-- Revenue -->
+            <div style="display:flex;align-items:center;height:32px;gap:0">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#3f9b54;flex-shrink:0"></span><span style="font-size:12.5px;color:#16161a">Revenue</span></div>
+              <div style="flex:1;padding:0 14px">
+                <div style="position:relative;height:5px;border-radius:3px;background:#f0f0f2">
+                  <div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:91.9%;background:#3f9b54"></div>
+                </div>
+              </div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#3f9b54;font-variant-numeric:tabular-nums">$110,300</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#97979f;font-variant-numeric:tabular-nums">$120,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#62626b;font-variant-numeric:tabular-nums">−8.1%</span>
+            </div>
+
+            <!-- Contractors — OVER BUDGET -->
+            <div style="display:flex;align-items:center;height:32px;gap:0">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#cf4d47;flex-shrink:0"></span><span style="font-size:12.5px;color:#16161a">Contractors</span></div>
+              <div style="flex:1;padding:0 14px">
+                <div style="position:relative;height:5px;border-radius:3px;background:#f0f0f2">
+                  <div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:100%;background:#cf4d47;box-shadow:2px 0 0 0 #cf4d47"></div>
+                  <div style="position:absolute;right:-4px;top:-1.5px;width:2px;height:8px;background:#cf4d47;border-radius:1px"></div>
+                </div>
+              </div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#b53b35;font-variant-numeric:tabular-nums">$26,200</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#97979f;font-variant-numeric:tabular-nums">$25,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#b53b35;font-variant-numeric:tabular-nums;font-weight:500">+4.8%</span>
+            </div>
+
+            <!-- Infrastructure -->
+            <div style="display:flex;align-items:center;height:32px;gap:0">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#5b5bd6;flex-shrink:0"></span><span style="font-size:12.5px;color:#16161a">Infrastructure</span></div>
+              <div style="flex:1;padding:0 14px">
+                <div style="position:relative;height:5px;border-radius:3px;background:#f0f0f2">
+                  <div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:82.7%;background:#5b5bd6"></div>
+                </div>
+              </div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#62626b;font-variant-numeric:tabular-nums">$12,400</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#97979f;font-variant-numeric:tabular-nums">$15,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#3f9b54;font-variant-numeric:tabular-nums">−17.3%</span>
+            </div>
+
+            <!-- Facilities -->
+            <div style="display:flex;align-items:center;height:32px;gap:0">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#c8881f;flex-shrink:0"></span><span style="font-size:12.5px;color:#16161a">Facilities</span></div>
+              <div style="flex:1;padding:0 14px">
+                <div style="position:relative;height:5px;border-radius:3px;background:#f0f0f2">
+                  <div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:100%;background:#c8881f"></div>
+                </div>
+              </div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#62626b;font-variant-numeric:tabular-nums">$8,000</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#97979f;font-variant-numeric:tabular-nums">$8,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">0%</span>
+            </div>
+
+            <!-- Software -->
+            <div style="display:flex;align-items:center;height:32px;gap:0">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#9a9aa2;flex-shrink:0"></span><span style="font-size:12.5px;color:#16161a">Software</span></div>
+              <div style="flex:1;padding:0 14px">
+                <div style="position:relative;height:5px;border-radius:3px;background:#f0f0f2">
+                  <div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:88%;background:#9a9aa2"></div>
+                </div>
+              </div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#62626b;font-variant-numeric:tabular-nums">$4,400</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#97979f;font-variant-numeric:tabular-nums">$5,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#3f9b54;font-variant-numeric:tabular-nums">−12%</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= DARK ======= -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:14px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Dark</span>
+    <div data-screen-label="Finance Dashboard — Dark" style="height:648px;border:1px solid #2a2a2e;border-radius:12px;overflow:hidden;display:flex;background:#0d0d0f;font-size:13px">
+
+      <!-- Sidebar dark -->
+      <div style="width:228px;flex-shrink:0;background:#121214;border-right:1px solid #222226;display:flex;flex-direction:column">
+        <div style="padding:14px 14px 10px;display:flex;align-items:center;gap:9px">
+          <div style="width:22px;height:22px;border-radius:6px;background:#7575df;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">W</div>
+          <span style="font-size:13.5px;font-weight:600;color:#ededef">Wexley Partners</span>
+          <span style="margin-left:auto;color:#55555d">⌄</span>
+        </div>
+        <div style="padding:4px 10px 10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #2a2a2e;border-radius:7px;background:#1a1a1c">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#66666e" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:13px;color:#66666e;flex:1">Search</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #303036;border-radius:4px">⌘K</span>
+          </div>
+        </div>
+        <nav style="padding:2px 10px;display:flex;flex-direction:column;gap:1px">
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg>
+            Backlog<span style="margin-left:auto;font-size:11px;color:#66666e">31</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+            Approvals<span style="margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:16px;padding:0 5px;font:600 10.5px/1 Inter,sans-serif;color:#d9a23c;background:#2a2114;border:1px solid #3d3018;border-radius:5px">4</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;background:#1f1f31;color:#9d9df0;font-weight:600;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#8181e6" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+            Finance
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M4 2.5h6l2.5 2.5v9H4z"/><path d="M9.5 2.5V5H12"/></svg>
+            Docs
+          </a>
+        </nav>
+        <div style="margin-top:auto;border-top:1px solid #222226;padding:10px;display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+          <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:12.5px;font-weight:600;color:#ededef">Aria Kessler</span><span style="font-size:11px;color:#66666e">Partner</span></div>
+          <span style="margin-left:auto;color:#55555d">⋯</span>
+        </div>
+      </div>
+
+      <!-- Main dark -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden">
+        <div style="height:46px;flex-shrink:0;border-bottom:1px solid #222226;background:#0d0d0f;display:flex;align-items:center;padding:0 16px;gap:8px">
+          <span style="font-size:13px;color:#66666e">Finance</span>
+          <span style="color:#3a3a40;font-size:12px">/</span>
+          <span style="font-size:13px;color:#ededef;font-weight:600">Dashboard</span>
+          <div style="margin-left:auto">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#9a9aa2;padding:4px 9px;border:1px solid #2a2a2e;border-radius:7px"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#66666e" stroke-width="1.4"><rect x="1" y="1.5" width="10" height="9" rx="1.2"/><path d="M1 4.5h10"/><path d="M4 1.5v3"/><path d="M8 1.5v3"/></svg>Jun 2026</span>
+          </div>
+        </div>
+        <div style="height:38px;flex-shrink:0;border-bottom:1px solid #222226;background:#0d0d0f;display:flex;align-items:center;padding:0 16px;gap:20px">
+          <span style="height:38px;display:flex;align-items:center;font-size:13px;font-weight:600;color:#ededef;border-bottom:2px solid #8181e6;margin-bottom:-1px">Overview</span>
+          <span style="height:38px;display:flex;align-items:center;font-size:13px;font-weight:500;color:#66666e;cursor:pointer">Transactions</span>
+          <span style="height:38px;display:flex;align-items:center;font-size:13px;font-weight:500;color:#66666e;cursor:pointer">Budgets</span>
+        </div>
+
+        <div style="flex:1;overflow-y:auto">
+          <!-- KPI dark -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #222226;background:#0d0d0f">
+            <div style="padding:14px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#66666e">Total balance</span>
+              <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#ededef;font-variant-numeric:tabular-nums;line-height:1.1">$2,133,102</span>
+              <span style="font-size:11.5px;color:#4cae68;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#4cae68" stroke-width="1.5"><path d="M5 8V2M2 5l3-3 3 3"/></svg>+$62,540 this month</span>
+            </div>
+            <div style="padding:14px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#66666e">Income · Jun</span>
+              <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#5cbd78;font-variant-numeric:tabular-nums;line-height:1.1">$74,300</span>
+              <span style="font-size:11.5px;color:#9a9aa2;font-variant-numeric:tabular-nums">vs $68,200 last mo.</span>
+            </div>
+            <div style="padding:14px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#66666e">Expenses · Jun</span>
+              <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#e87b76;font-variant-numeric:tabular-nums;line-height:1.1">$83,172</span>
+              <span style="font-size:11.5px;color:#9a9aa2;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#e87b76" stroke-width="1.5"><path d="M5 2v6M2 5l3 3 3-3"/></svg>$11,244 over budget</span>
+            </div>
+            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#66666e">Pending approval</span>
+              <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#d9a23c;font-variant-numeric:tabular-nums;line-height:1.1">$70,750</span>
+              <span style="font-size:11.5px;color:#9a9aa2;font-variant-numeric:tabular-nums">2 items awaiting sign-off</span>
+            </div>
+          </div>
+
+          <!-- Chart dark -->
+          <div style="padding:18px 18px 0;background:#0d0d0f;border-bottom:1px solid #222226">
+            <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+              <span style="font-size:12px;font-weight:600;color:#ededef">Total balance</span>
+              <span style="font-size:12px;color:#66666e">Jan 2026 – Jun 2026</span>
+              <span style="margin-left:auto;font-size:12px;font-weight:500;color:#5cbd78;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#5cbd78" stroke-width="1.5"><path d="M5 8V2M2 5l3-3 3 3"/></svg>+$455,602  +27.2%</span>
+            </div>
+            <svg width="100%" height="170" viewBox="0 0 860 170" preserveAspectRatio="none" style="display:block;overflow:visible">
+              <defs>
+                <linearGradient id="aFillD" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#8181e6" stop-opacity="0.18"/>
+                  <stop offset="100%" stop-color="#8181e6" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <line x1="55" y1="115" x2="820" y2="115" stroke="#1c1c1f" stroke-width="1"/>
+              <line x1="55" y1="65" x2="820" y2="65" stroke="#1c1c1f" stroke-width="1"/>
+              <text x="48" y="118" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="#55555d">$1.8M</text>
+              <text x="48" y="68" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="#55555d">$2.0M</text>
+              <path d="M 55,165 L 55,146 C 80,143 157,132 208,126 C 259,120 310,117 361,110 C 412,103 463,94 514,85 C 565,76 616,64 667,55 C 718,46 795,36 820,32 L 820,165 Z" fill="url(#aFillD)"/>
+              <path d="M 55,146 C 80,143 157,132 208,126 C 259,120 310,117 361,110 C 412,103 463,94 514,85 C 565,76 616,64 667,55 C 718,46 795,36 820,32" fill="none" stroke="#8181e6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+              <circle cx="55" cy="146" r="3" fill="#0d0d0f" stroke="#8181e6" stroke-width="1.5"/>
+              <circle cx="208" cy="126" r="3" fill="#0d0d0f" stroke="#8181e6" stroke-width="1.5"/>
+              <circle cx="361" cy="110" r="3" fill="#0d0d0f" stroke="#8181e6" stroke-width="1.5"/>
+              <circle cx="514" cy="85" r="3" fill="#0d0d0f" stroke="#8181e6" stroke-width="1.5"/>
+              <circle cx="667" cy="55" r="3" fill="#0d0d0f" stroke="#8181e6" stroke-width="1.5"/>
+              <circle cx="820" cy="32" r="4" fill="#8181e6" stroke="#0d0d0f" stroke-width="2"/>
+              <rect x="779" y="10" width="74" height="18" rx="5" fill="#1f1f31" stroke="#30304d" stroke-width="1"/>
+              <text x="816" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#9d9df0">$2.13M</text>
+              <text x="55" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#55555d">Jan</text>
+              <text x="208" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#55555d">Feb</text>
+              <text x="361" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#55555d">Mar</text>
+              <text x="514" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#55555d">Apr</text>
+              <text x="667" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#55555d">May</text>
+              <text x="820" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8181e6">Jun</text>
+            </svg>
+          </div>
+
+          <!-- Budget vs actual dark -->
+          <div style="padding:16px 18px;background:#0d0d0f">
+            <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+              <span style="font-size:12px;font-weight:600;color:#ededef">Budget vs actual</span>
+              <span style="font-size:12px;color:#66666e">June 2026</span>
+            </div>
+            <div style="display:flex;align-items:center;padding:0 0 8px;border-bottom:1px solid #1a1a1c;margin-bottom:6px">
+              <span style="width:106px;font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#55555d">Category</span>
+              <span style="flex:1"></span>
+              <span style="width:78px;text-align:right;font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#55555d">Actual</span>
+              <span style="width:78px;text-align:right;font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#55555d">Budget</span>
+              <span style="width:48px;text-align:right;font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#55555d">Δ</span>
+            </div>
+
+            <div style="display:flex;align-items:center;height:32px">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#4cae68;flex-shrink:0"></span><span style="font-size:12.5px;color:#ededef">Revenue</span></div>
+              <div style="flex:1;padding:0 14px"><div style="position:relative;height:5px;border-radius:3px;background:#1f1f22"><div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:91.9%;background:#4cae68"></div></div></div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#5cbd78;font-variant-numeric:tabular-nums">$110,300</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#66666e;font-variant-numeric:tabular-nums">$120,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#9a9aa2;font-variant-numeric:tabular-nums">−8.1%</span>
+            </div>
+
+            <div style="display:flex;align-items:center;height:32px">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#e0605a;flex-shrink:0"></span><span style="font-size:12.5px;color:#ededef">Contractors</span></div>
+              <div style="flex:1;padding:0 14px"><div style="position:relative;height:5px;border-radius:3px;background:#1f1f22"><div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:100%;background:#e0605a"></div><div style="position:absolute;right:-4px;top:-1.5px;width:2px;height:8px;background:#e0605a;border-radius:1px"></div></div></div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#e87b76;font-variant-numeric:tabular-nums">$26,200</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#66666e;font-variant-numeric:tabular-nums">$25,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#e87b76;font-variant-numeric:tabular-nums;font-weight:500">+4.8%</span>
+            </div>
+
+            <div style="display:flex;align-items:center;height:32px">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#8181e6;flex-shrink:0"></span><span style="font-size:12.5px;color:#ededef">Infrastructure</span></div>
+              <div style="flex:1;padding:0 14px"><div style="position:relative;height:5px;border-radius:3px;background:#1f1f22"><div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:82.7%;background:#8181e6"></div></div></div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#9a9aa2;font-variant-numeric:tabular-nums">$12,400</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#66666e;font-variant-numeric:tabular-nums">$15,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#5cbd78;font-variant-numeric:tabular-nums">−17.3%</span>
+            </div>
+
+            <div style="display:flex;align-items:center;height:32px">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#d9a23c;flex-shrink:0"></span><span style="font-size:12.5px;color:#ededef">Facilities</span></div>
+              <div style="flex:1;padding:0 14px"><div style="position:relative;height:5px;border-radius:3px;background:#1f1f22"><div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:100%;background:#d9a23c"></div></div></div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#9a9aa2;font-variant-numeric:tabular-nums">$8,000</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#66666e;font-variant-numeric:tabular-nums">$8,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">0%</span>
+            </div>
+
+            <div style="display:flex;align-items:center;height:32px">
+              <div style="width:106px;display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:#66666e;flex-shrink:0"></span><span style="font-size:12.5px;color:#ededef">Software</span></div>
+              <div style="flex:1;padding:0 14px"><div style="position:relative;height:5px;border-radius:3px;background:#1f1f22"><div style="position:absolute;left:0;top:0;height:5px;border-radius:3px;width:88%;background:#66666e"></div></div></div>
+              <span style="width:78px;text-align:right;font-size:12.5px;font-weight:500;color:#9a9aa2;font-variant-numeric:tabular-nums">$4,400</span>
+              <span style="width:78px;text-align:right;font-size:12.5px;color:#66666e;font-variant-numeric:tabular-nums">$5,000</span>
+              <span style="width:48px;text-align:right;font-size:12px;color:#5cbd78;font-variant-numeric:tabular-nums">−12%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:8px"></div>
+</div>
+</x-dc>
+</body>
+</html>

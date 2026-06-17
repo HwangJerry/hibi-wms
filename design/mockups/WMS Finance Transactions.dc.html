@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { font-family: Inter, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+    .txn-row { cursor: pointer; }
+    .txn-row:hover { background: #fafafb !important; }
+    .txn-row:hover .txn-actions { opacity: 1; }
+    .txn-actions { opacity: 0; transition: opacity 0.12s; }
+    .txn-row-d:hover { background: #141416 !important; }
+    .txn-row-d:hover .txn-actions-d { opacity: 1; }
+    .txn-actions-d { opacity: 0; transition: opacity 0.12s; }
+    .txn-row-pending:hover { background: #fdf7e8 !important; }
+    .txn-row-pending-d:hover { background: #201c0f !important; }
+  </style>
+</helmet>
+
+<div style="background:#e7e7ea;min-height:100vh;padding:48px 40px 80px;display:flex;flex-direction:column;align-items:center;gap:56px">
+
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:11px">
+      <div style="width:26px;height:26px;border-radius:7px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">W</div>
+      <span style="font-size:13px;font-weight:600;letter-spacing:0.04em;color:#62626b">WMS · FINANCE</span>
+    </div>
+    <h1 style="margin:0;font-size:28px;font-weight:600;letter-spacing:-0.02em">Transactions</h1>
+  </div>
+
+  <!-- ======= LIGHT ======= -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:14px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Light</span>
+    <div data-screen-label="Finance Transactions — Light" style="height:640px;border:1px solid #dcdce0;border-radius:12px;overflow:hidden;display:flex;background:#f7f7f8;font-size:13px">
+
+      <!-- Sidebar -->
+      <div style="width:228px;flex-shrink:0;background:#fbfbfc;border-right:1px solid #ebebee;display:flex;flex-direction:column">
+        <div style="padding:14px 14px 10px;display:flex;align-items:center;gap:9px">
+          <div style="width:22px;height:22px;border-radius:6px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">W</div>
+          <span style="font-size:13.5px;font-weight:600;color:#16161a">Wexley Partners</span>
+          <span style="margin-left:auto;color:#b4b4bc">⌄</span>
+        </div>
+        <div style="padding:4px 10px 10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #e6e6ea;border-radius:7px;background:#fff">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:13px;color:#97979f;flex:1">Search</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#97979f;background:#f1f1f3;border:1px solid #e6e6ea;border-radius:4px">⌘K</span>
+          </div>
+        </div>
+        <nav style="padding:2px 10px;display:flex;flex-direction:column;gap:1px">
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg>
+            Backlog<span style="margin-left:auto;font-size:11px;color:#97979f">31</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+            Approvals<span style="margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:16px;padding:0 5px;font:600 10.5px/1 Inter,sans-serif;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4;border-radius:5px">4</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;background:#eeeefb;color:#4a4ac0;font-weight:600;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#5b5bd6" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+            Finance
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M4 2.5h6l2.5 2.5v9H4z"/><path d="M9.5 2.5V5H12"/></svg>
+            Docs
+          </a>
+        </nav>
+        <div style="margin-top:auto;border-top:1px solid #ebebee;padding:10px;display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+          <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:12.5px;font-weight:600;color:#16161a">Aria Kessler</span><span style="font-size:11px;color:#97979f">Partner</span></div>
+          <span style="margin-left:auto;color:#b4b4bc">⋯</span>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden">
+
+        <!-- topbar -->
+        <div style="height:46px;flex-shrink:0;border-bottom:1px solid #ebebee;background:#f7f7f8;display:flex;align-items:center;padding:0 16px;gap:8px">
+          <span style="font-size:13px;color:#97979f">Finance</span>
+          <span style="color:#cfcfd5;font-size:12px">/</span>
+          <span style="font-size:13px;color:#16161a;font-weight:600">Transactions</span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+            <button style="appearance:none;cursor:pointer;border:1px solid #5151c4;background:#5b5bd6;color:#fff;font:600 12.5px Inter,sans-serif;padding:6px 11px;border-radius:7px;display:flex;align-items:center;gap:7px" style-hover="background:#5151c4">New transaction<span style="display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;font:600 10.5px/1 ui-monospace,monospace;color:#dcdcfa;background:rgba(255,255,255,0.16);border-radius:3px">N</span></button>
+          </div>
+        </div>
+
+        <!-- account balance tiles -->
+        <div style="flex-shrink:0;border-bottom:1px solid #ebebee;background:#fff;display:grid;grid-template-columns:repeat(4,1fr)">
+          <div style="padding:13px 16px;border-right:1px solid #f0f0f2;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#97979f">Operating</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em;color:#16161a;font-variant-numeric:tabular-nums">$1,284,902</span>
+            <span style="font-size:11px;color:#3f9b54;font-variant-numeric:tabular-nums">+$24,500 today</span>
+          </div>
+          <div style="padding:13px 16px;border-right:1px solid #f0f0f2;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#97979f">Tax Reserve</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em;color:#16161a;font-variant-numeric:tabular-nums">$312,500</span>
+            <span style="font-size:11px;color:#c8881f;font-variant-numeric:tabular-nums">−$62,000 pending</span>
+          </div>
+          <div style="padding:13px 16px;border-right:1px solid #f0f0f2;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#97979f">Receivable</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em;color:#16161a;font-variant-numeric:tabular-nums">$55,700</span>
+            <span style="font-size:11px;color:#97979f;font-variant-numeric:tabular-nums">2 open invoices</span>
+          </div>
+          <div style="padding:13px 16px;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#97979f">Savings</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em;color:#16161a;font-variant-numeric:tabular-nums">$480,000</span>
+            <span style="font-size:11px;color:#97979f">No activity</span>
+          </div>
+        </div>
+
+        <!-- filter bar -->
+        <div style="height:38px;flex-shrink:0;border-bottom:1px solid #ebebee;background:#fbfbfc;display:flex;align-items:center;padding:0 16px;gap:9px">
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:3px 9px;border:1px solid #e6e6ea;border-radius:6px;background:#fff" style-hover="background:#f6f6f7"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#97979f" stroke-width="1.4"><rect x="1" y="1.5" width="10" height="9" rx="1.2"/><path d="M1 4.5h10"/><path d="M4 1.5v3"/><path d="M8 1.5v3"/></svg>Jun 1 – Jun 17</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:3px 9px;border:1px solid #e6e6ea;border-radius:6px;background:#fff" style-hover="background:#f6f6f7">Account<span style="color:#b4b4bc">·</span><span style="font-weight:500;color:#16161a">All</span></span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:3px 9px;border:1px solid #e6e6ea;border-radius:6px;background:#fff" style-hover="background:#f6f6f7">Category<span style="color:#b4b4bc">·</span><span style="font-weight:500;color:#16161a">All</span></span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:9px">
+            <span style="font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">9 transactions</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:#62626b;padding:3px 9px;border:1px solid #e6e6ea;border-radius:6px;background:#fff"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#97979f" stroke-width="1.4"><path d="M1.5 2h9M3 5.5h6M4.5 9h3"/></svg>Sort</span>
+          </div>
+        </div>
+
+        <!-- column header -->
+        <div style="height:28px;flex-shrink:0;display:flex;align-items:center;padding:0 14px;background:#fbfbfc;border-bottom:1px solid #ebebee;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#b4b4bc">
+          <span style="width:76px">Date</span>
+          <span style="flex:1">Description</span>
+          <span style="width:108px">Category</span>
+          <span style="width:108px">Account</span>
+          <span style="width:116px;text-align:right">Amount</span>
+          <span style="width:96px;padding-left:14px">Status</span>
+          <span style="width:28px"></span>
+        </div>
+
+        <!-- rows -->
+        <div style="flex:1;overflow-y:auto;background:#fff">
+
+          <!-- PENDING row — amber tint, clearly distinct -->
+          <div class="txn-row txn-row-pending" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #faf1dc;background:#fffcf2;position:relative">
+            <span style="width:76px;font-size:12px;color:#8a6a22;font-variant-numeric:tabular-nums">Jun 15</span>
+            <span style="flex:1;display:flex;align-items:center;gap:8px;padding-right:12px;min-width:0">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#c8881f" stroke-width="1.4" style="flex-shrink:0"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v3l1.5 1.5"/></svg>
+              <span style="font-size:13px;color:#7a5a10;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Quarterly tax reserve transfer</span>
+            </span>
+            <span style="width:108px;font-size:12px;color:#8a6a22">Internal</span>
+            <span style="width:108px;font-size:12px;color:#8a6a22">→ Tax Reserve</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#8a6a22;font-variant-numeric:tabular-nums">−$62,000.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:0.04em;color:#9a6a12;background:#fbf2e0;border:1.5px solid #f0e2c4;border-radius:5px;padding:2px 7px">PENDING</span></span>
+            <span class="txn-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:11px;color:#97979f;cursor:pointer;padding:3px 4px;border-radius:4px" style-hover="background:#f1f1f3">⋯</span>
+            </span>
+          </div>
+
+          <!-- PENDING row 2 -->
+          <div class="txn-row txn-row-pending" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #faf1dc;background:#fffcf2;position:relative">
+            <span style="width:76px;font-size:12px;color:#8a6a22;font-variant-numeric:tabular-nums">Jun 14</span>
+            <span style="flex:1;display:flex;align-items:center;gap:8px;padding-right:12px;min-width:0">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#c8881f" stroke-width="1.4" style="flex-shrink:0"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v3l1.5 1.5"/></svg>
+              <span style="font-size:13px;color:#7a5a10;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Contractor — Lena Voss · APV-0031</span>
+            </span>
+            <span style="width:108px;font-size:12px;color:#8a6a22">Contractors</span>
+            <span style="width:108px;font-size:12px;color:#8a6a22">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#8a6a22;font-variant-numeric:tabular-nums">−$8,750.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:0.04em;color:#9a6a12;background:#fbf2e0;border:1.5px solid #f0e2c4;border-radius:5px;padding:2px 7px">PENDING</span></span>
+            <span class="txn-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:11px;color:#97979f;cursor:pointer;padding:3px 4px;border-radius:4px" style-hover="background:#f1f1f3">⋯</span>
+            </span>
+          </div>
+
+          <!-- separator -->
+          <div style="height:24px;display:flex;align-items:center;padding:0 14px;background:#fbfbfc;border-bottom:1px solid #f4f4f6;border-top:1px solid #f4f4f6">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#b4b4bc">Posted</span>
+          </div>
+
+          <!-- POSTED rows -->
+          <div class="txn-row" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #f4f4f6;background:#fff;position:relative">
+            <span style="width:76px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">Jun 16</span>
+            <span style="flex:1;font-size:13px;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">Stripe payout — Acme Corp</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Revenue</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#2f7544;font-variant-numeric:tabular-nums">+$24,500.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#2f7544;background:#e8f4eb;border:1px solid #cfe7d5;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#97979f;cursor:pointer;padding:2px 4px;border-radius:4px;white-space:nowrap" title="Reverse" style-hover="background:#f1f1f3;color:#44444c">↩</span>
+            </span>
+          </div>
+
+          <div class="txn-row" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #f4f4f6;background:#fff;position:relative">
+            <span style="width:76px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">Jun 15</span>
+            <span style="flex:1;font-size:13px;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">AWS — infrastructure</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Infrastructure</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#b53b35;font-variant-numeric:tabular-nums">−$4,182.66</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#2f7544;background:#e8f4eb;border:1px solid #cfe7d5;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#97979f;cursor:pointer;padding:2px 4px;border-radius:4px" title="Reverse" style-hover="background:#f1f1f3;color:#44444c">↩</span>
+            </span>
+          </div>
+
+          <div class="txn-row" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #f4f4f6;background:#fff;position:relative">
+            <span style="width:76px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">Jun 13</span>
+            <span style="flex:1;font-size:13px;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">Invoice — Halcyon Labs</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Revenue</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Receivable</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#2f7544;font-variant-numeric:tabular-nums">+$31,200.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#2f7544;background:#e8f4eb;border:1px solid #cfe7d5;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#97979f;cursor:pointer;padding:2px 4px;border-radius:4px" title="Reverse" style-hover="background:#f1f1f3;color:#44444c">↩</span>
+            </span>
+          </div>
+
+          <div class="txn-row" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #f4f4f6;background:#fff;position:relative">
+            <span style="width:76px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">Jun 12</span>
+            <span style="flex:1;font-size:13px;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">Office lease — June 2026</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Facilities</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#b53b35;font-variant-numeric:tabular-nums">−$6,400.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#2f7544;background:#e8f4eb;border:1px solid #cfe7d5;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#97979f;cursor:pointer;padding:2px 4px;border-radius:4px" title="Reverse" style-hover="background:#f1f1f3;color:#44444c">↩</span>
+            </span>
+          </div>
+
+          <div class="txn-row" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #f4f4f6;background:#fff;position:relative">
+            <span style="width:76px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">Jun 11</span>
+            <span style="flex:1;font-size:13px;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">Figma Teams — annual renewal</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Software</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#b53b35;font-variant-numeric:tabular-nums">−$1,440.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#2f7544;background:#e8f4eb;border:1px solid #cfe7d5;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#97979f;cursor:pointer;padding:2px 4px;border-radius:4px" title="Reverse" style-hover="background:#f1f1f3;color:#44444c">↩</span>
+            </span>
+          </div>
+
+          <div class="txn-row" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #f4f4f6;background:#fff;position:relative">
+            <span style="width:76px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">Jun 10</span>
+            <span style="flex:1;font-size:13px;color:#16161a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">Stripe payout — Beta Corp</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Revenue</span>
+            <span style="width:108px;font-size:12px;color:#62626b">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#2f7544;font-variant-numeric:tabular-nums">+$18,600.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#2f7544;background:#e8f4eb;border:1px solid #cfe7d5;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#97979f;cursor:pointer;padding:2px 4px;border-radius:4px" title="Reverse" style-hover="background:#f1f1f3;color:#44444c">↩</span>
+            </span>
+          </div>
+
+          <!-- REVERSED row — dimmed, strikethrough -->
+          <div class="txn-row" style="display:flex;align-items:center;height:36px;padding:0 14px;background:#fff;position:relative;opacity:0.55">
+            <span style="width:76px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">Jun 08</span>
+            <span style="flex:1;display:flex;align-items:center;gap:8px;padding-right:12px;min-width:0">
+              <span style="font-size:13px;color:#97979f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:line-through;text-decoration-color:#cfcfd5">AWS — infrastructure</span>
+            </span>
+            <span style="width:108px;font-size:12px;color:#97979f">Infrastructure</span>
+            <span style="width:108px;font-size:12px;color:#97979f">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;color:#97979f;font-variant-numeric:tabular-nums;text-decoration:line-through;text-decoration-color:#cfcfd5">+$4,182.66</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#62626b;background:#f2f2f4;border:1px solid #e8e8eb;border-radius:5px;padding:2px 7px">REVERSED</span></span>
+            <span style="width:28px"></span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= DARK ======= -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:14px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Dark</span>
+    <div data-screen-label="Finance Transactions — Dark" style="height:640px;border:1px solid #2a2a2e;border-radius:12px;overflow:hidden;display:flex;background:#0d0d0f;font-size:13px">
+
+      <!-- Sidebar dark -->
+      <div style="width:228px;flex-shrink:0;background:#121214;border-right:1px solid #222226;display:flex;flex-direction:column">
+        <div style="padding:14px 14px 10px;display:flex;align-items:center;gap:9px">
+          <div style="width:22px;height:22px;border-radius:6px;background:#7575df;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">W</div>
+          <span style="font-size:13.5px;font-weight:600;color:#ededef">Wexley Partners</span>
+          <span style="margin-left:auto;color:#55555d">⌄</span>
+        </div>
+        <div style="padding:4px 10px 10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #2a2a2e;border-radius:7px;background:#1a1a1c">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#66666e" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:13px;color:#66666e;flex:1">Search</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #303036;border-radius:4px">⌘K</span>
+          </div>
+        </div>
+        <nav style="padding:2px 10px;display:flex;flex-direction:column;gap:1px">
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg>
+            Backlog<span style="margin-left:auto;font-size:11px;color:#66666e">31</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+            Approvals<span style="margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:16px;padding:0 5px;font:600 10.5px/1 Inter,sans-serif;color:#d9a23c;background:#2a2114;border:1px solid #3d3018;border-radius:5px">4</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;background:#1f1f31;color:#9d9df0;font-weight:600;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#8181e6" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+            Finance
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M4 2.5h6l2.5 2.5v9H4z"/><path d="M9.5 2.5V5H12"/></svg>
+            Docs
+          </a>
+        </nav>
+        <div style="margin-top:auto;border-top:1px solid #222226;padding:10px;display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+          <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:12.5px;font-weight:600;color:#ededef">Aria Kessler</span><span style="font-size:11px;color:#66666e">Partner</span></div>
+          <span style="margin-left:auto;color:#55555d">⋯</span>
+        </div>
+      </div>
+
+      <!-- Main dark -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden">
+
+        <div style="height:46px;flex-shrink:0;border-bottom:1px solid #222226;background:#0d0d0f;display:flex;align-items:center;padding:0 16px;gap:8px">
+          <span style="font-size:13px;color:#66666e">Finance</span>
+          <span style="color:#3a3a40;font-size:12px">/</span>
+          <span style="font-size:13px;color:#ededef;font-weight:600">Transactions</span>
+          <div style="margin-left:auto">
+            <button style="appearance:none;cursor:pointer;border:1px solid #7474da;background:#7575df;color:#fff;font:600 12.5px Inter,sans-serif;padding:6px 11px;border-radius:7px;display:flex;align-items:center;gap:7px" style-hover="background:#8181e6">New transaction<span style="display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;font:600 10.5px/1 ui-monospace,monospace;color:#e3e3fb;background:rgba(255,255,255,0.18);border-radius:3px">N</span></button>
+          </div>
+        </div>
+
+        <!-- account tiles dark -->
+        <div style="flex-shrink:0;border-bottom:1px solid #222226;background:#0d0d0f;display:grid;grid-template-columns:repeat(4,1fr)">
+          <div style="padding:13px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#66666e">Operating</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em;color:#ededef;font-variant-numeric:tabular-nums">$1,284,902</span>
+            <span style="font-size:11px;color:#4cae68;font-variant-numeric:tabular-nums">+$24,500 today</span>
+          </div>
+          <div style="padding:13px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#66666e">Tax Reserve</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em;color:#ededef;font-variant-numeric:tabular-nums">$312,500</span>
+            <span style="font-size:11px;color:#d9a23c;font-variant-numeric:tabular-nums">−$62,000 pending</span>
+          </div>
+          <div style="padding:13px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#66666e">Receivable</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em;color:#ededef;font-variant-numeric:tabular-nums">$55,700</span>
+            <span style="font-size:11px;color:#66666e;font-variant-numeric:tabular-nums">2 open invoices</span>
+          </div>
+          <div style="padding:13px 16px;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#66666e">Savings</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em;color:#ededef;font-variant-numeric:tabular-nums">$480,000</span>
+            <span style="font-size:11px;color:#66666e">No activity</span>
+          </div>
+        </div>
+
+        <!-- filter dark -->
+        <div style="height:38px;flex-shrink:0;border-bottom:1px solid #222226;background:#0d0d0f;display:flex;align-items:center;padding:0 16px;gap:9px">
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#9a9aa2;padding:3px 9px;border:1px solid #2a2a2e;border-radius:6px" style-hover="background:#1a1a1c"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#66666e" stroke-width="1.4"><rect x="1" y="1.5" width="10" height="9" rx="1.2"/><path d="M1 4.5h10"/><path d="M4 1.5v3"/><path d="M8 1.5v3"/></svg>Jun 1 – Jun 17</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#9a9aa2;padding:3px 9px;border:1px solid #2a2a2e;border-radius:6px" style-hover="background:#1a1a1c">Account<span style="color:#55555d">·</span><span style="font-weight:500;color:#ededef">All</span></span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#9a9aa2;padding:3px 9px;border:1px solid #2a2a2e;border-radius:6px" style-hover="background:#1a1a1c">Category<span style="color:#55555d">·</span><span style="font-weight:500;color:#ededef">All</span></span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:9px">
+            <span style="font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">9 transactions</span>
+          </div>
+        </div>
+
+        <!-- column header dark -->
+        <div style="height:28px;flex-shrink:0;display:flex;align-items:center;padding:0 14px;background:#121214;border-bottom:1px solid #222226;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#55555d">
+          <span style="width:76px">Date</span>
+          <span style="flex:1">Description</span>
+          <span style="width:108px">Category</span>
+          <span style="width:108px">Account</span>
+          <span style="width:116px;text-align:right">Amount</span>
+          <span style="width:96px;padding-left:14px">Status</span>
+          <span style="width:28px"></span>
+        </div>
+
+        <!-- rows dark -->
+        <div style="flex:1;overflow-y:auto;background:#0d0d0f">
+
+          <!-- PENDING dark — warm amber tint -->
+          <div class="txn-row-pending-d" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #261e0a;background:#1a1508;position:relative">
+            <span style="width:76px;font-size:12px;color:#a07828;font-variant-numeric:tabular-nums">Jun 15</span>
+            <span style="flex:1;display:flex;align-items:center;gap:8px;padding-right:12px;min-width:0">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#d9a23c" stroke-width="1.4" style="flex-shrink:0"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v3l1.5 1.5"/></svg>
+              <span style="font-size:13px;color:#c8901e;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Quarterly tax reserve transfer</span>
+            </span>
+            <span style="width:108px;font-size:12px;color:#a07828">Internal</span>
+            <span style="width:108px;font-size:12px;color:#a07828">→ Tax Reserve</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#c8901e;font-variant-numeric:tabular-nums">−$62,000.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:0.04em;color:#d9a23c;background:#2a2114;border:1.5px solid #4a3518;border-radius:5px;padding:2px 7px">PENDING</span></span>
+            <span class="txn-actions-d" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:11px;color:#66666e;cursor:pointer;padding:3px 4px;border-radius:4px" style-hover="background:#1c1c1f;color:#9a9aa2">⋯</span>
+            </span>
+          </div>
+
+          <div class="txn-row-pending-d" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #261e0a;background:#1a1508;position:relative">
+            <span style="width:76px;font-size:12px;color:#a07828;font-variant-numeric:tabular-nums">Jun 14</span>
+            <span style="flex:1;display:flex;align-items:center;gap:8px;padding-right:12px;min-width:0">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#d9a23c" stroke-width="1.4" style="flex-shrink:0"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v3l1.5 1.5"/></svg>
+              <span style="font-size:13px;color:#c8901e;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Contractor — Lena Voss · APV-0031</span>
+            </span>
+            <span style="width:108px;font-size:12px;color:#a07828">Contractors</span>
+            <span style="width:108px;font-size:12px;color:#a07828">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#c8901e;font-variant-numeric:tabular-nums">−$8,750.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:0.04em;color:#d9a23c;background:#2a2114;border:1.5px solid #4a3518;border-radius:5px;padding:2px 7px">PENDING</span></span>
+            <span class="txn-actions-d" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:11px;color:#66666e;cursor:pointer;padding:3px 4px;border-radius:4px" style-hover="background:#1c1c1f;color:#9a9aa2">⋯</span>
+            </span>
+          </div>
+
+          <div style="height:24px;display:flex;align-items:center;padding:0 14px;background:#121214;border-bottom:1px solid #1a1a1c;border-top:1px solid #1a1a1c">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#55555d">Posted</span>
+          </div>
+
+          <div class="txn-row-d" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #161618;background:#0d0d0f;position:relative">
+            <span style="width:76px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 16</span>
+            <span style="flex:1;font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">Stripe payout — Acme Corp</span>
+            <span style="width:108px;font-size:12px;color:#9a9aa2">Revenue</span>
+            <span style="width:108px;font-size:12px;color:#9a9aa2">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#5cbd78;font-variant-numeric:tabular-nums">+$24,500.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#5cbd78;background:#15241a;border:1px solid #1f3a28;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions-d" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#66666e;cursor:pointer;padding:2px 4px;border-radius:4px" style-hover="background:#1c1c1f;color:#9a9aa2">↩</span>
+            </span>
+          </div>
+
+          <div class="txn-row-d" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #161618;background:#0d0d0f;position:relative">
+            <span style="width:76px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 15</span>
+            <span style="flex:1;font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">AWS — infrastructure</span>
+            <span style="width:108px;font-size:12px;color:#9a9aa2">Infrastructure</span>
+            <span style="width:108px;font-size:12px;color:#9a9aa2">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#e87b76;font-variant-numeric:tabular-nums">−$4,182.66</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#5cbd78;background:#15241a;border:1px solid #1f3a28;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions-d" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#66666e;cursor:pointer;padding:2px 4px;border-radius:4px" style-hover="background:#1c1c1f;color:#9a9aa2">↩</span>
+            </span>
+          </div>
+
+          <div class="txn-row-d" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #161618;background:#0d0d0f;position:relative">
+            <span style="width:76px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 13</span>
+            <span style="flex:1;font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">Invoice — Halcyon Labs</span>
+            <span style="width:108px;font-size:12px;color:#9a9aa2">Revenue</span>
+            <span style="width:108px;font-size:12px;color:#9a9aa2">Receivable</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#5cbd78;font-variant-numeric:tabular-nums">+$31,200.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#5cbd78;background:#15241a;border:1px solid #1f3a28;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions-d" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#66666e;cursor:pointer;padding:2px 4px;border-radius:4px" style-hover="background:#1c1c1f;color:#9a9aa2">↩</span>
+            </span>
+          </div>
+
+          <div class="txn-row-d" style="display:flex;align-items:center;height:36px;padding:0 14px;border-bottom:1px solid #161618;background:#0d0d0f;position:relative">
+            <span style="width:76px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 12</span>
+            <span style="flex:1;font-size:13px;color:#ededef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px">Office lease — June 2026</span>
+            <span style="width:108px;font-size:12px;color:#9a9aa2">Facilities</span>
+            <span style="width:108px;font-size:12px;color:#9a9aa2">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;font-weight:500;color:#e87b76;font-variant-numeric:tabular-nums">−$6,400.00</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#5cbd78;background:#15241a;border:1px solid #1f3a28;border-radius:5px;padding:2px 7px">POSTED</span></span>
+            <span class="txn-actions-d" style="width:28px;display:flex;align-items:center;justify-content:flex-end">
+              <span style="font-size:10.5px;color:#66666e;cursor:pointer;padding:2px 4px;border-radius:4px" style-hover="background:#1c1c1f;color:#9a9aa2">↩</span>
+            </span>
+          </div>
+
+          <!-- reversed dark -->
+          <div class="txn-row-d" style="display:flex;align-items:center;height:36px;padding:0 14px;background:#0d0d0f;position:relative;opacity:0.45">
+            <span style="width:76px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 08</span>
+            <span style="flex:1;font-size:13px;color:#9a9aa2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px;text-decoration:line-through;text-decoration-color:#3a3a40">AWS — infrastructure</span>
+            <span style="width:108px;font-size:12px;color:#66666e">Infrastructure</span>
+            <span style="width:108px;font-size:12px;color:#66666e">Operating</span>
+            <span style="width:116px;text-align:right;font-size:13px;color:#66666e;font-variant-numeric:tabular-nums;text-decoration:line-through;text-decoration-color:#3a3a40">+$4,182.66</span>
+            <span style="width:96px;padding-left:14px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#9a9aa2;background:#1c1c1f;border:1px solid #2e2e33;border-radius:5px;padding:2px 7px">REVERSED</span></span>
+            <span style="width:28px"></span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:8px"></div>
+</div>
+</x-dc>
+</body>
+</html>

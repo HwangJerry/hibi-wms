@@ -12,7 +12,8 @@ Reference docs for building **WMS**, an internal work-management app for two bus
 6. `modules/` — one spec per feature module.
 7. `api-conventions.md`, `realtime.md` — implementation patterns.
 8. `infrastructure.md`, `deployment.md` — how it runs and ships.
-9. `coding-standards.md` — style, testing, commits.
+9. `design-system.md` — how Claude Design mockups become real, token-driven UI.
+10. `coding-standards.md` — style, testing, commits.
 
 ## Conventions for these docs
 - Specs describe **intent and contracts**, not line-by-line code.

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { font-family: Inter, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+    ::selection { background: rgba(91,91,214,0.22); }
+    @keyframes wmsFade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes wmsRise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes wmsSlide { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  </style>
+</helmet>
+
+<div style="background:#e7e7ea;min-height:100vh;padding:48px 40px 80px;display:flex;flex-direction:column;align-items:center;gap:56px;color:#16161a">
+
+  <!-- ============ HEADER ============ -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;gap:11px">
+      <div style="width:26px;height:26px;border-radius:7px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;letter-spacing:-0.02em">W</div>
+      <span style="font-size:13px;font-weight:600;letter-spacing:0.04em;color:#62626b">WMS DESIGN SYSTEM</span>
+    </div>
+    <h1 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-0.02em;line-height:1.1">Foundation &amp; App Shell</h1>
+    <p style="margin:0;max-width:620px;font-size:14px;line-height:1.55;color:#62626b">A dense, keyboard-first work-management interface. Low-chroma surfaces, hairline borders, one restrained indigo accent, tabular numerals throughout. Designed for light and dark.</p>
+  </div>
+
+  <!-- ============ COLOR TOKENS ============ -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Color tokens</span>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+
+      <!-- LIGHT -->
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid #e8e8eb;display:flex;align-items:center;gap:8px">
+          <span style="font-size:13px;font-weight:600">Light</span>
+          <span style="font-size:11px;color:#97979f">off-white surfaces · soft gray borders</span>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Surfaces</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 18px">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#f7f7f8;border:1px solid #e8e8eb"></span><span style="font-size:12.5px">App base</span><span style="margin-left:auto;font-size:11.5px;color:#97979f">#F7F7F8</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#ffffff;border:1px solid #e8e8eb"></span><span style="font-size:12.5px">Surface</span><span style="margin-left:auto;font-size:11.5px;color:#97979f">#FFFFFF</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#fbfbfc;border:1px solid #e8e8eb"></span><span style="font-size:12.5px">Subtle</span><span style="margin-left:auto;font-size:11.5px;color:#97979f">#FBFBFC</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#e8e8eb;border:1px solid #dcdce0"></span><span style="font-size:12.5px">Border</span><span style="margin-left:auto;font-size:11.5px;color:#97979f">#E8E8EB</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Text</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 18px">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#16161a"></span><span style="font-size:12.5px">Primary</span><span style="margin-left:auto;font-size:11.5px;color:#97979f">#16161A</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#62626b"></span><span style="font-size:12.5px">Secondary</span><span style="margin-left:auto;font-size:11.5px;color:#97979f">#62626B</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#97979f"></span><span style="font-size:12.5px">Tertiary</span><span style="margin-left:auto;font-size:11.5px;color:#97979f">#97979F</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#5b5bd6"></span><span style="font-size:12.5px">Accent</span><span style="margin-left:auto;font-size:11.5px;color:#97979f">#5B5BD6</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Status</span>
+            <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#9a9aa2"></span><span style="font-size:12px;color:#62626b">Neutral</span></div>
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#c8881f"></span><span style="font-size:12px;color:#62626b">Active</span></div>
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#5b5bd6"></span><span style="font-size:12px;color:#62626b">Review</span></div>
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#3f9b54"></span><span style="font-size:12px;color:#62626b">Done</span></div>
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#cf4d47"></span><span style="font-size:12px;color:#62626b">Blocked</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DARK -->
+      <div style="background:#161618;border:1px solid #242428;border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid #242428;display:flex;align-items:center;gap:8px">
+          <span style="font-size:13px;font-weight:600;color:#ededef">Dark</span>
+          <span style="font-size:11px;color:#66666e">layered near-blacks · hairline borders</span>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#55555d">Surfaces</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 18px">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#0d0d0f;border:1px solid #242428"></span><span style="font-size:12.5px;color:#ededef">App base</span><span style="margin-left:auto;font-size:11.5px;color:#66666e">#0D0D0F</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#161618;border:1px solid #2e2e33"></span><span style="font-size:12.5px;color:#ededef">Surface</span><span style="margin-left:auto;font-size:11.5px;color:#66666e">#161618</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#1c1c1f;border:1px solid #2e2e33"></span><span style="font-size:12.5px;color:#ededef">Raised</span><span style="margin-left:auto;font-size:11.5px;color:#66666e">#1C1C1F</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#242428;border:1px solid #2e2e33"></span><span style="font-size:12.5px;color:#ededef">Border</span><span style="margin-left:auto;font-size:11.5px;color:#66666e">#242428</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#55555d">Text</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 18px">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#ededef"></span><span style="font-size:12.5px;color:#ededef">Primary</span><span style="margin-left:auto;font-size:11.5px;color:#66666e">#EDEDEF</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#9a9aa2"></span><span style="font-size:12.5px;color:#ededef">Secondary</span><span style="margin-left:auto;font-size:11.5px;color:#66666e">#9A9AA2</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#66666e"></span><span style="font-size:12.5px;color:#ededef">Tertiary</span><span style="margin-left:auto;font-size:11.5px;color:#66666e">#66666E</span></div>
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:5px;background:#8181e6"></span><span style="font-size:12.5px;color:#ededef">Accent</span><span style="margin-left:auto;font-size:11.5px;color:#66666e">#8181E6</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#55555d">Status</span>
+            <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#8a8a92"></span><span style="font-size:12px;color:#9a9aa2">Neutral</span></div>
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#d9a23c"></span><span style="font-size:12px;color:#9a9aa2">Active</span></div>
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#8181e6"></span><span style="font-size:12px;color:#9a9aa2">Review</span></div>
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#4cae68"></span><span style="font-size:12px;color:#9a9aa2">Done</span></div>
+              <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#e0605a"></span><span style="font-size:12px;color:#9a9aa2">Blocked</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ TYPE + SPACING ============ -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Type &amp; space</span>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px">
+
+      <!-- TYPE SCALE -->
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;padding:8px 22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:15px 0;border-bottom:1px solid #f0f0f2"><span style="font-size:28px;font-weight:600;letter-spacing:-0.02em;line-height:1">Display</span><span style="font-size:11px;color:#97979f">28 / 600 · -0.02em</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:15px 0;border-bottom:1px solid #f0f0f2"><span style="font-size:20px;font-weight:600;letter-spacing:-0.015em;line-height:1">Title</span><span style="font-size:11px;color:#97979f">20 / 600</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:15px 0;border-bottom:1px solid #f0f0f2"><span style="font-size:16px;font-weight:600;line-height:1">Heading</span><span style="font-size:11px;color:#97979f">16 / 600</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:15px 0;border-bottom:1px solid #f0f0f2"><span style="font-size:14px;font-weight:500;line-height:1">Body — the quick brown fox</span><span style="font-size:11px;color:#97979f">14 / 500</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:15px 0;border-bottom:1px solid #f0f0f2"><span style="font-size:13px;font-weight:400;line-height:1;color:#62626b">Body small — dense table text</span><span style="font-size:11px;color:#97979f">13 / 400</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:15px 0;border-bottom:1px solid #f0f0f2"><span style="font-size:12px;font-weight:400;line-height:1;color:#62626b">Caption · metadata · counts</span><span style="font-size:11px;color:#97979f">12 / 400</span></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:15px 0"><span style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;line-height:1;color:#97979f">Overline label</span><span style="font-size:11px;color:#97979f">11 / 600 · caps</span></div>
+      </div>
+
+      <!-- SPACING + RADIUS + NUMERALS -->
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Spacing · 4px base</span>
+          <div style="display:flex;align-items:flex-end;gap:9px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:4px;height:4px;background:#5b5bd6;border-radius:1px"></span><span style="font-size:10px;color:#97979f">4</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#5b5bd6;border-radius:1px"></span><span style="font-size:10px;color:#97979f">8</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:12px;height:12px;background:#5b5bd6;border-radius:2px"></span><span style="font-size:10px;color:#97979f">12</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:16px;height:16px;background:#7a7adf;border-radius:2px"></span><span style="font-size:10px;color:#97979f">16</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:24px;height:24px;background:#9a9ae8;border-radius:3px"></span><span style="font-size:10px;color:#97979f">24</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px"><span style="width:32px;height:32px;background:#b9b9f0;border-radius:3px"></span><span style="font-size:10px;color:#97979f">32</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Radius</span>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:36px;height:30px;background:#f3f3f8;border:1px solid #e0e0ea;border-radius:5px"></span><span style="font-size:10px;color:#97979f">5</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:36px;height:30px;background:#f3f3f8;border:1px solid #e0e0ea;border-radius:7px"></span><span style="font-size:10px;color:#97979f">7</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:36px;height:30px;background:#f3f3f8;border:1px solid #e0e0ea;border-radius:10px"></span><span style="font-size:10px;color:#97979f">10</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:30px;height:30px;background:#f3f3f8;border:1px solid #e0e0ea;border-radius:50%"></span><span style="font-size:10px;color:#97979f">full</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <span style="font-size:10.5px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#b4b4bc">Tabular numerals</span>
+          <div style="display:flex;flex-direction:column;font-variant-numeric:tabular-nums;font-size:14px;color:#16161a;font-weight:500;gap:2px">
+            <span>$ 1,284,902.00</span>
+            <span>$&nbsp;&nbsp;&nbsp;&nbsp;39,118.50</span>
+            <span style="color:#3f9b54">+ 12,640.75</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ COMPONENTS ============ -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">Components</span>
+
+    <!-- Buttons + Inputs -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+
+      <!-- BUTTONS -->
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;overflow:hidden">
+        <div style="padding:13px 18px;border-bottom:1px solid #e8e8eb;font-size:12px;font-weight:600;color:#62626b">Buttons</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr">
+          <div style="padding:20px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:9px;background:#fff;border-right:1px solid #f0f0f2">
+            <button style="appearance:none;cursor:pointer;border:1px solid #5151c4;background:#5b5bd6;color:#fff;font:600 13px Inter,sans-serif;padding:7px 13px;border-radius:7px" style-hover="background:#5151c4">Primary</button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #e0e0e4;background:#fff;color:#16161a;font:600 13px Inter,sans-serif;padding:7px 13px;border-radius:7px" style-hover="background:#f6f6f7">Secondary</button>
+            <button style="appearance:none;cursor:pointer;border:1px solid transparent;background:none;color:#62626b;font:600 13px Inter,sans-serif;padding:7px 11px;border-radius:7px" style-hover="background:#f1f1f3;color:#16161a">Ghost</button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #5151c4;background:#5b5bd6;color:#fff;font:600 13px Inter,sans-serif;padding:7px 11px;border-radius:7px;display:inline-flex;align-items:center;gap:7px">New<span style="display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;font:600 10.5px/1 ui-monospace,monospace;color:#dcdcfa;background:rgba(255,255,255,0.16);border-radius:3px">C</span></button>
+          </div>
+          <div style="padding:20px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:9px;background:#0d0d0f">
+            <button style="appearance:none;cursor:pointer;border:1px solid #7474da;background:#7575df;color:#fff;font:600 13px Inter,sans-serif;padding:7px 13px;border-radius:7px" style-hover="background:#8181e6">Primary</button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #34343a;background:#1c1c1f;color:#ededef;font:600 13px Inter,sans-serif;padding:7px 13px;border-radius:7px" style-hover="background:#242428">Secondary</button>
+            <button style="appearance:none;cursor:pointer;border:1px solid transparent;background:none;color:#9a9aa2;font:600 13px Inter,sans-serif;padding:7px 11px;border-radius:7px" style-hover="background:#1c1c1f;color:#ededef">Ghost</button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #7474da;background:#7575df;color:#fff;font:600 13px Inter,sans-serif;padding:7px 11px;border-radius:7px;display:inline-flex;align-items:center;gap:7px">New<span style="display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;font:600 10.5px/1 ui-monospace,monospace;color:#e3e3fb;background:rgba(255,255,255,0.18);border-radius:3px">C</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- INPUTS -->
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;overflow:hidden">
+        <div style="padding:13px 18px;border-bottom:1px solid #e8e8eb;font-size:12px;font-weight:600;color:#62626b">Inputs</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr">
+          <div style="padding:20px 18px;display:flex;flex-direction:column;gap:11px;background:#fff;border-right:1px solid #f0f0f2">
+            <input placeholder="Search tasks…" style="font:400 13px Inter,sans-serif;color:#16161a;padding:7px 11px;border:1px solid #e0e0e4;border-radius:7px;background:#fff;outline:none" style-focus="border-color:#5b5bd6;box-shadow:0 0 0 3px rgba(91,91,214,0.16)">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 11px;border:1px solid #e0e0e4;border-radius:7px;background:#fbfbfc"><span style="font-size:13px;color:#97979f;flex:1">Filter by assignee</span><span style="display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;font:500 11px/1 ui-monospace,monospace;color:#62626b;background:#f1f1f3;border:1px solid #e2e2e6;border-radius:4px">F</span></div>
+            <input value="Has focus ring" style="font:400 13px Inter,sans-serif;color:#16161a;padding:7px 11px;border:1px solid #5b5bd6;border-radius:7px;background:#fff;outline:none;box-shadow:0 0 0 3px rgba(91,91,214,0.16)">
+          </div>
+          <div style="padding:20px 18px;display:flex;flex-direction:column;gap:11px;background:#0d0d0f">
+            <input placeholder="Search tasks…" style="font:400 13px Inter,sans-serif;color:#ededef;padding:7px 11px;border:1px solid #2e2e33;border-radius:7px;background:#161618;outline:none" style-focus="border-color:#8181e6;box-shadow:0 0 0 3px rgba(129,129,230,0.22)">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 11px;border:1px solid #2e2e33;border-radius:7px;background:#1c1c1f"><span style="font-size:13px;color:#66666e;flex:1">Filter by assignee</span><span style="display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;font:500 11px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #34343a;border-radius:4px">F</span></div>
+            <input value="Has focus ring" style="font:400 13px Inter,sans-serif;color:#ededef;padding:7px 11px;border:1px solid #8181e6;border-radius:7px;background:#161618;outline:none;box-shadow:0 0 0 3px rgba(129,129,230,0.22)">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Status pills + Avatars -->
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:18px">
+
+      <!-- STATUS PILLS -->
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;overflow:hidden">
+        <div style="padding:13px 18px;border-bottom:1px solid #e8e8eb;font-size:12px;font-weight:600;color:#62626b">Status pills &amp; dots</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr">
+          <div style="padding:18px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;background:#fff;border-right:1px solid #f0f0f2">
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#62626b;background:#f2f2f4;border:1px solid #e8e8eb"><span style="width:7px;height:7px;border-radius:50%;background:#9a9aa2"></span>Todo</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4"><span style="width:7px;height:7px;border-radius:50%;background:#c8881f"></span>In Progress</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#4a4ac0;background:#eeeefb;border:1px solid #dcdcf5"><span style="width:7px;height:7px;border-radius:50%;background:#5b5bd6"></span>In Review</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#2f7544;background:#e8f4eb;border:1px solid #cfe7d5"><span style="width:7px;height:7px;border-radius:50%;background:#3f9b54"></span>Done</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#b53b35;background:#fbeae9;border:1px solid #f3d4d2"><span style="width:7px;height:7px;border-radius:50%;background:#cf4d47"></span>Blocked</span>
+          </div>
+          <div style="padding:18px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;background:#0d0d0f">
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9a9aa2;background:#1c1c1f;border:1px solid #2e2e33"><span style="width:7px;height:7px;border-radius:50%;background:#8a8a92"></span>Todo</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#d9a23c;background:#2a2114;border:1px solid #3d3018"><span style="width:7px;height:7px;border-radius:50%;background:#d9a23c"></span>In Progress</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9d9df0;background:#1f1f31;border:1px solid #30304d"><span style="width:7px;height:7px;border-radius:50%;background:#8181e6"></span>In Review</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#5cbd78;background:#15241a;border:1px solid #1f3a28"><span style="width:7px;height:7px;border-radius:50%;background:#4cae68"></span>Done</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:6px;font:500 12px Inter,sans-serif;color:#e87b76;background:#2a1817;border:1px solid #422020"><span style="width:7px;height:7px;border-radius:50%;background:#e0605a"></span>Blocked</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AVATARS -->
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;overflow:hidden">
+        <div style="padding:13px 18px;border-bottom:1px solid #e8e8eb;font-size:12px;font-weight:600;color:#62626b">Avatars</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr">
+          <div style="padding:20px 18px;display:flex;align-items:center;gap:12px;background:#fff;border-right:1px solid #f0f0f2">
+            <span style="width:20px;height:20px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+            <span style="width:26px;height:26px;border-radius:50%;background:#dceee2;color:#2f7544;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span>
+            <div style="display:flex;align-items:center">
+              <span style="width:24px;height:24px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 10px Inter,sans-serif;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #fff">AK</span>
+              <span style="width:24px;height:24px;border-radius:50%;background:#dceee2;color:#2f7544;font:600 10px Inter,sans-serif;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #fff;margin-left:-7px">DM</span>
+            </div>
+          </div>
+          <div style="padding:20px 18px;display:flex;align-items:center;gap:12px;background:#0d0d0f">
+            <span style="width:20px;height:20px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+            <span style="width:26px;height:26px;border-radius:50%;background:#17301f;color:#5cbd78;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span>
+            <div style="display:flex;align-items:center">
+              <span style="width:24px;height:24px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 10px Inter,sans-serif;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #0d0d0f">AK</span>
+              <span style="width:24px;height:24px;border-radius:50%;background:#17301f;color:#5cbd78;font:600 10px Inter,sans-serif;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #0d0d0f;margin-left:-7px">DM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Table rows -->
+    <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;overflow:hidden">
+      <div style="padding:13px 18px;border-bottom:1px solid #e8e8eb;font-size:12px;font-weight:600;color:#62626b">Table rows · 36px height</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr">
+        <!-- light table -->
+        <div style="background:#fff;border-right:1px solid #f0f0f2">
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:30px;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#b4b4bc;border-bottom:1px solid #f0f0f2"><span style="width:46px">ID</span><span style="flex:1">Task</span><span style="width:90px">Status</span><span style="width:26px"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:36px;border-bottom:1px solid #f4f4f6" style-hover="background:#fafafb"><span style="width:46px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">WMS-142</span><span style="flex:1;font-size:13px;color:#16161a">Reconcile Q2 vendor invoices</span><span style="width:90px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#9a6a12"><span style="width:7px;height:7px;border-radius:50%;background:#c8881f"></span>Active</span></span><span style="width:26px;height:20px;border-radius:50%;background:#dceee2;color:#2f7544;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:36px;border-bottom:1px solid #f4f4f6;background:#f7f7fb" style-hover="background:#f3f3fb"><span style="width:46px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">WMS-141</span><span style="flex:1;font-size:13px;color:#16161a;font-weight:500">Draft partnership budget memo</span><span style="width:90px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#4a4ac0"><span style="width:7px;height:7px;border-radius:50%;background:#5b5bd6"></span>Review</span></span><span style="width:26px;height:20px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:36px" style-hover="background:#fafafb"><span style="width:46px;font-size:12px;color:#97979f;font-variant-numeric:tabular-nums">WMS-138</span><span style="flex:1;font-size:13px;color:#62626b">Close out hosting contract</span><span style="width:90px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#2f7544"><span style="width:7px;height:7px;border-radius:50%;background:#3f9b54"></span>Done</span></span><span style="width:26px;height:20px;border-radius:50%;background:#dceee2;color:#2f7544;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></div>
+        </div>
+        <!-- dark table -->
+        <div style="background:#0d0d0f">
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:30px;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#55555d;border-bottom:1px solid #1c1c1f"><span style="width:46px">ID</span><span style="flex:1">Task</span><span style="width:90px">Status</span><span style="width:26px"></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:36px;border-bottom:1px solid #161618"><span style="width:46px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">WMS-142</span><span style="flex:1;font-size:13px;color:#ededef">Reconcile Q2 vendor invoices</span><span style="width:90px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#d9a23c"><span style="width:7px;height:7px;border-radius:50%;background:#d9a23c"></span>Active</span></span><span style="width:26px;height:20px;border-radius:50%;background:#17301f;color:#5cbd78;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:36px;border-bottom:1px solid #161618;background:#15152099" style-hover="background:#1a1a2a"><span style="width:46px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">WMS-141</span><span style="flex:1;font-size:13px;color:#ededef;font-weight:500">Draft partnership budget memo</span><span style="width:90px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#9d9df0"><span style="width:7px;height:7px;border-radius:50%;background:#8181e6"></span>Review</span></span><span style="width:26px;height:20px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 18px;height:36px"><span style="width:46px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">WMS-138</span><span style="flex:1;font-size:13px;color:#9a9aa2">Close out hosting contract</span><span style="width:90px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5cbd78"><span style="width:7px;height:7px;border-radius:50%;background:#4cae68"></span>Done</span></span><span style="width:26px;height:20px;border-radius:50%;background:#17301f;color:#5cbd78;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs (interactive) + slide-over trigger -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;overflow:hidden">
+        <div style="padding:13px 18px;border-bottom:1px solid #e8e8eb;font-size:12px;font-weight:600;color:#62626b">Tabs · interactive</div>
+        <div style="padding:18px">
+          <div style="display:flex;align-items:center;gap:20px;border-bottom:1px solid #e8e8eb">
+            <button onClick="{{ setTabActive }}" style="{{ styleTabActive }}">Active</button>
+            <button onClick="{{ setTabBacklog }}" style="{{ styleTabBacklog }}">Backlog</button>
+            <button onClick="{{ setTabDone }}" style="{{ styleTabDone }}">Done</button>
+          </div>
+          <div style="padding-top:15px;min-height:42px;font-size:13px;color:#62626b">
+            <sc-if value="{{ tabActiveShown }}" hint-placeholder-val="{{ true }}"><span>8 tasks in progress across both partners.</span></sc-if>
+            <sc-if value="{{ tabBacklogShown }}"><span>23 unstarted tasks waiting in the backlog.</span></sc-if>
+            <sc-if value="{{ tabDoneShown }}"><span>147 tasks completed all-time.</span></sc-if>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #e8e8eb;border-radius:10px;overflow:hidden">
+        <div style="padding:13px 18px;border-bottom:1px solid #e8e8eb;font-size:12px;font-weight:600;color:#62626b">Slide-over panel · interactive</div>
+        <div style="padding:18px;display:flex;flex-direction:column;gap:11px">
+          <p style="margin:0;font-size:13px;line-height:1.5;color:#62626b">A right-anchored detail panel over a scrim — used for task detail, approval review, and transaction inspection.</p>
+          <button onClick="{{ openSlide }}" style="appearance:none;cursor:pointer;align-self:flex-start;border:1px solid #e0e0e4;background:#fff;color:#16161a;font:600 13px Inter,sans-serif;padding:7px 13px;border-radius:7px" style-hover="background:#f6f6f7">Open panel →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ APP SHELL — LIGHT ============ -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">App shell — Light</span>
+    <div data-screen-label="App Shell — Light" style="position:relative;height:620px;border:1px solid #dcdce0;border-radius:12px;overflow:hidden;display:flex;background:#f7f7f8;font-size:13px">
+
+      <!-- SIDEBAR -->
+      <div style="width:228px;flex-shrink:0;background:#fbfbfc;border-right:1px solid #ebebee;display:flex;flex-direction:column">
+        <div style="padding:14px 14px 10px;display:flex;align-items:center;gap:9px">
+          <div style="width:22px;height:22px;border-radius:6px;background:#5b5bd6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">W</div>
+          <span style="font-size:13.5px;font-weight:600;color:#16161a">Wexley Partners</span>
+          <span style="margin-left:auto;color:#b4b4bc;font-size:13px">⌄</span>
+        </div>
+        <div style="padding:4px 10px 10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #e6e6ea;border-radius:7px;background:#fff">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:13px;color:#97979f;flex:1">Search</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#97979f;background:#f1f1f3;border:1px solid #e6e6ea;border-radius:4px">⌘K</span>
+          </div>
+        </div>
+        <nav style="padding:2px 10px;display:flex;flex-direction:column;gap:1px">
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;background:#eeeefb;color:#4a4ac0;font-weight:600;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#5b5bd6" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg>
+            Backlog<span style="margin-left:auto;font-size:11px;font-weight:600;color:#7676d8;font-variant-numeric:tabular-nums">31</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px" style-hover="background:#f1f1f3">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+            Approvals<span style="margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:16px;padding:0 5px;font:600 10.5px/1 Inter,sans-serif;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4;border-radius:5px">4</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px" style-hover="background:#f1f1f3">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+            Finance
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#44444c;font-weight:500;font-size:13px" style-hover="background:#f1f1f3">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M4 2.5h6l2.5 2.5v9H4z"/><path d="M9.5 2.5V5H12"/></svg>
+            Docs
+          </a>
+        </nav>
+        <div style="margin-top:auto;border-top:1px solid #ebebee;padding:10px;display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+          <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:12.5px;font-weight:600;color:#16161a">Aria Kessler</span><span style="font-size:11px;color:#97979f">Partner</span></div>
+          <span style="margin-left:auto;color:#b4b4bc;font-size:13px">⋯</span>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+        <!-- topbar -->
+        <div style="height:46px;flex-shrink:0;border-bottom:1px solid #ebebee;background:#f7f7f8;display:flex;align-items:center;padding:0 16px;gap:10px">
+          <span style="font-size:13px;color:#97979f">Backlog</span>
+          <span style="color:#cfcfd5;font-size:12px">/</span>
+          <span style="font-size:13px;color:#16161a;font-weight:600">Active</span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+            <button onClick="{{ openPalette }}" style="appearance:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:5px 9px;border:1px solid #e6e6ea;border-radius:7px;background:#fff;color:#97979f;font:400 12.5px Inter,sans-serif" style-hover="background:#f6f6f7">Jump to…<span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#97979f;background:#f1f1f3;border:1px solid #e6e6ea;border-radius:4px">⌘K</span></button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #5151c4;background:#5b5bd6;color:#fff;font:600 12.5px Inter,sans-serif;padding:6px 11px;border-radius:7px;display:flex;align-items:center;gap:7px" style-hover="background:#5151c4">New task<span style="display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;font:600 10.5px/1 ui-monospace,monospace;color:#dcdcfa;background:rgba(255,255,255,0.16);border-radius:3px">C</span></button>
+          </div>
+        </div>
+        <!-- toolbar -->
+        <div style="height:38px;flex-shrink:0;border-bottom:1px solid #ebebee;background:#fff;display:flex;align-items:center;padding:0 16px;gap:18px">
+          <span style="font-size:13px;font-weight:600;color:#16161a;border-bottom:2px solid #5b5bd6;height:38px;display:flex;align-items:center">Active <span style="margin-left:6px;font-size:11px;color:#97979f;font-variant-numeric:tabular-nums">8</span></span>
+          <span style="font-size:13px;color:#97979f;height:38px;display:flex;align-items:center">Backlog <span style="margin-left:6px;font-size:11px;color:#c0c0c6;font-variant-numeric:tabular-nums">23</span></span>
+          <span style="font-size:13px;color:#97979f;height:38px;display:flex;align-items:center">Done</span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:9px">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:4px 9px;border:1px solid #e6e6ea;border-radius:7px"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.5"><path d="M2 3.5h12M4 8h8M6 12.5h4"/></svg>Filter</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#62626b;padding:4px 9px;border:1px solid #e6e6ea;border-radius:7px">Group: Status</span>
+          </div>
+        </div>
+        <!-- column header -->
+        <div style="height:28px;flex-shrink:0;display:flex;align-items:center;gap:12px;padding:0 16px;background:#fbfbfc;border-bottom:1px solid #ebebee;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#b4b4bc"><span style="width:54px">ID</span><span style="flex:1">Task</span><span style="width:108px">Status</span><span style="width:84px">Priority</span><span style="width:64px">Updated</span><span style="width:30px"></span></div>
+        <!-- rows -->
+        <div style="flex:1;overflow:hidden;background:#fff">
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #f4f4f6" style-hover="background:#fafafb"><span style="width:54px;font-size:12px;color:#a4a4ac;font-variant-numeric:tabular-nums">WMS-142</span><span style="flex:1;font-size:13px;color:#16161a">Reconcile Q2 vendor invoices</span><span style="width:108px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4"><span style="width:6px;height:6px;border-radius:50%;background:#c8881f"></span>In Progress</span></span><span style="width:84px;font-size:12.5px;color:#b53b35;display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 12 12"><rect x="1" y="6.5" width="2.4" height="4" rx="0.6" fill="#cf4d47"/><rect x="4.8" y="3.5" width="2.4" height="7" rx="0.6" fill="#cf4d47"/><rect x="8.6" y="1" width="2.4" height="9.5" rx="0.6" fill="#cf4d47"/></svg>Urgent</span><span style="width:64px;font-size:12px;color:#a4a4ac">2h ago</span><span style="width:30px;display:flex"><span style="width:22px;height:22px;border-radius:50%;background:#dceee2;color:#2f7544;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #f4f4f6;background:#f7f7fb" style-hover="background:#f3f3fb"><span style="width:54px;font-size:12px;color:#a4a4ac;font-variant-numeric:tabular-nums">WMS-141</span><span style="flex:1;font-size:13px;color:#16161a;font-weight:500">Draft partnership budget memo</span><span style="width:108px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#4a4ac0;background:#eeeefb;border:1px solid #dcdcf5"><span style="width:6px;height:6px;border-radius:50%;background:#5b5bd6"></span>In Review</span></span><span style="width:84px;font-size:12.5px;color:#62626b;display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 12 12"><rect x="1" y="6.5" width="2.4" height="4" rx="0.6" fill="#c8881f"/><rect x="4.8" y="3.5" width="2.4" height="7" rx="0.6" fill="#c8881f"/><rect x="8.6" y="1" width="2.4" height="9.5" rx="0.6" fill="#d8d8dc"/></svg>High</span><span style="width:64px;font-size:12px;color:#a4a4ac">5h ago</span><span style="width:30px;display:flex"><span style="width:22px;height:22px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #f4f4f6" style-hover="background:#fafafb"><span style="width:54px;font-size:12px;color:#a4a4ac;font-variant-numeric:tabular-nums">WMS-140</span><span style="flex:1;font-size:13px;color:#16161a">Migrate docs to new wiki space</span><span style="width:108px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4"><span style="width:6px;height:6px;border-radius:50%;background:#c8881f"></span>In Progress</span></span><span style="width:84px;font-size:12.5px;color:#62626b;display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 12 12"><rect x="1" y="6.5" width="2.4" height="4" rx="0.6" fill="#a4a4ac"/><rect x="4.8" y="3.5" width="2.4" height="7" rx="0.6" fill="#d8d8dc"/><rect x="8.6" y="1" width="2.4" height="9.5" rx="0.6" fill="#d8d8dc"/></svg>Medium</span><span style="width:64px;font-size:12px;color:#a4a4ac">1d ago</span><span style="width:30px;display:flex"><span style="width:22px;height:22px;border-radius:50%;background:#dceee2;color:#2f7544;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #f4f4f6" style-hover="background:#fafafb"><span style="width:54px;font-size:12px;color:#a4a4ac;font-variant-numeric:tabular-nums">WMS-137</span><span style="flex:1;font-size:13px;color:#62626b">Set up recurring tax reserve transfer</span><span style="width:108px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#62626b;background:#f2f2f4;border:1px solid #e8e8eb"><span style="width:6px;height:6px;border-radius:50%;background:#9a9aa2"></span>Todo</span></span><span style="width:84px;font-size:12.5px;color:#62626b;display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 12 12"><rect x="1" y="6.5" width="2.4" height="4" rx="0.6" fill="#a4a4ac"/><rect x="4.8" y="3.5" width="2.4" height="7" rx="0.6" fill="#d8d8dc"/><rect x="8.6" y="1" width="2.4" height="9.5" rx="0.6" fill="#d8d8dc"/></svg>Medium</span><span style="width:64px;font-size:12px;color:#a4a4ac">2d ago</span><span style="width:30px;display:flex"><span style="width:22px;height:22px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #f4f4f6" style-hover="background:#fafafb"><span style="width:54px;font-size:12px;color:#a4a4ac;font-variant-numeric:tabular-nums">WMS-134</span><span style="flex:1;font-size:13px;color:#62626b">Review insurance renewal quote</span><span style="width:108px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#b53b35;background:#fbeae9;border:1px solid #f3d4d2"><span style="width:6px;height:6px;border-radius:50%;background:#cf4d47"></span>Blocked</span></span><span style="width:84px;font-size:12.5px;color:#62626b;display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 12 12"><rect x="1" y="6.5" width="2.4" height="4" rx="0.6" fill="#c8881f"/><rect x="4.8" y="3.5" width="2.4" height="7" rx="0.6" fill="#c8881f"/><rect x="8.6" y="1" width="2.4" height="9.5" rx="0.6" fill="#d8d8dc"/></svg>High</span><span style="width:64px;font-size:12px;color:#a4a4ac">3d ago</span><span style="width:30px;display:flex"><span style="width:22px;height:22px;border-radius:50%;background:#dceee2;color:#2f7544;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #f4f4f6" style-hover="background:#fafafb"><span style="width:54px;font-size:12px;color:#a4a4ac;font-variant-numeric:tabular-nums">WMS-129</span><span style="flex:1;font-size:13px;color:#62626b">Annual entity compliance filing</span><span style="width:108px"><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#62626b;background:#f2f2f4;border:1px solid #e8e8eb"><span style="width:6px;height:6px;border-radius:50%;background:#9a9aa2"></span>Todo</span></span><span style="width:84px;font-size:12.5px;color:#a4a4ac;display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 12 12"><rect x="1" y="6.5" width="2.4" height="4" rx="0.6" fill="#d8d8dc"/><rect x="4.8" y="3.5" width="2.4" height="7" rx="0.6" fill="#e6e6ea"/><rect x="8.6" y="1" width="2.4" height="9.5" rx="0.6" fill="#e6e6ea"/></svg>Low</span><span style="width:64px;font-size:12px;color:#a4a4ac">4d ago</span><span style="width:30px;display:flex"><span style="width:22px;height:22px;border-radius:50%;background:#e3e0fa;color:#5b5bd6;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span></span></div>
+        </div>
+      </div>
+
+      <!-- Command palette overlay (light) -->
+      <sc-if value="{{ paletteOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closePalette }}" style="position:absolute;inset:0;background:rgba(20,20,28,0.28);display:flex;align-items:flex-start;justify-content:center;padding-top:96px;animation:wmsFade 0.12s ease">
+          <div style="width:520px;background:#fff;border:1px solid #e0e0e4;border-radius:11px;box-shadow:0 16px 48px rgba(20,20,40,0.22);overflow:hidden;animation:wmsRise 0.14s ease">
+            <div style="display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid #f0f0f2">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+              <span style="font-size:14px;color:#b4b4bc;flex:1">Type a command or search…</span>
+              <span style="display:inline-flex;align-items:center;justify-content:center;height:18px;padding:0 6px;font:500 11px/1 ui-monospace,monospace;color:#97979f;background:#f1f1f3;border:1px solid #e6e6ea;border-radius:4px">esc</span>
+            </div>
+            <div style="padding:6px">
+              <div style="padding:4px 9px 5px;font-size:10.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#b4b4bc">Actions</div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:7px;background:#eeeefb">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#5b5bd6" stroke-width="1.6"><path d="M8 3v10M3 8h10"/></svg>
+                <span style="font-size:13px;color:#16161a;flex:1">Create new task</span>
+                <span style="display:inline-flex;align-items:center;justify-content:center;height:18px;padding:0 6px;font:500 11px/1 ui-monospace,monospace;color:#62626b;background:#fff;border:1px solid #e6e6ea;border-radius:4px">C</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:7px" style-hover="background:#f6f6f7">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+                <span style="font-size:13px;color:#16161a;flex:1">Go to Approvals</span>
+                <span style="font-size:12px;color:#b4b4bc">4 pending</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:7px" style-hover="background:#f6f6f7">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#97979f" stroke-width="1.6"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+                <span style="font-size:13px;color:#16161a;flex:1">Record a transaction</span>
+              </div>
+              <div style="padding:8px 9px 5px;font-size:10.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#b4b4bc">Recent</div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:7px" style-hover="background:#f6f6f7">
+                <span style="font-size:12px;color:#a4a4ac;font-variant-numeric:tabular-nums">WMS-141</span>
+                <span style="font-size:13px;color:#16161a;flex:1">Draft partnership budget memo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Slide-over (light) -->
+      <sc-if value="{{ slideOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeSlide }}" style="position:absolute;inset:0;background:rgba(20,20,28,0.28);animation:wmsFade 0.12s ease"></div>
+        <div style="position:absolute;top:0;right:0;bottom:0;width:380px;background:#fff;border-left:1px solid #e0e0e4;box-shadow:-12px 0 36px rgba(20,20,40,0.12);display:flex;flex-direction:column;animation:wmsSlide 0.18s cubic-bezier(0.32,0.72,0,1)">
+          <div style="height:46px;flex-shrink:0;border-bottom:1px solid #ebebee;display:flex;align-items:center;padding:0 14px;gap:10px">
+            <span style="font-size:12px;color:#a4a4ac;font-variant-numeric:tabular-nums">WMS-142</span>
+            <span style="margin-left:auto;display:flex;align-items:center;gap:6px">
+              <button style="appearance:none;cursor:pointer;border:1px solid #e6e6ea;background:#fff;border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:#97979f" style-hover="background:#f6f6f7">↗</button>
+              <button onClick="{{ closeSlide }}" style="appearance:none;cursor:pointer;border:1px solid #e6e6ea;background:#fff;border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:#97979f" style-hover="background:#f6f6f7">✕</button>
+            </span>
+          </div>
+          <div style="padding:18px 16px;display:flex;flex-direction:column;gap:16px;overflow:auto">
+            <h2 style="margin:0;font-size:17px;font-weight:600;letter-spacing:-0.01em;line-height:1.3;color:#16161a">Reconcile Q2 vendor invoices</h2>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:12px"><span style="width:78px;font-size:12px;color:#97979f">Status</span><span style="display:inline-flex;align-items:center;gap:6px;padding:2px 8px 2px 6px;border-radius:6px;font:500 12px Inter,sans-serif;color:#9a6a12;background:#fbf2e0;border:1px solid #f0e2c4"><span style="width:6px;height:6px;border-radius:50%;background:#c8881f"></span>In Progress</span></div>
+              <div style="display:flex;align-items:center;gap:12px"><span style="width:78px;font-size:12px;color:#97979f">Priority</span><span style="font-size:13px;color:#b53b35;display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 12 12"><rect x="1" y="6.5" width="2.4" height="4" rx="0.6" fill="#cf4d47"/><rect x="4.8" y="3.5" width="2.4" height="7" rx="0.6" fill="#cf4d47"/><rect x="8.6" y="1" width="2.4" height="9.5" rx="0.6" fill="#cf4d47"/></svg>Urgent</span></div>
+              <div style="display:flex;align-items:center;gap:12px"><span style="width:78px;font-size:12px;color:#97979f">Assignee</span><span style="display:flex;align-items:center;gap:7px"><span style="width:20px;height:20px;border-radius:50%;background:#dceee2;color:#2f7544;font:600 9px Inter,sans-serif;display:flex;align-items:center;justify-content:center">DM</span><span style="font-size:13px;color:#16161a">Dev Maddox</span></span></div>
+              <div style="display:flex;align-items:center;gap:12px"><span style="width:78px;font-size:12px;color:#97979f">Due</span><span style="font-size:13px;color:#16161a;font-variant-numeric:tabular-nums">Jun 24, 2026</span></div>
+            </div>
+            <div style="height:1px;background:#f0f0f2"></div>
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#44444c">Match all 14 vendor invoices against the Q2 ledger. Flag any discrepancy over $500 for Aria's sign-off before close.</p>
+          </div>
+          <div style="margin-top:auto;border-top:1px solid #ebebee;padding:12px 16px;display:flex;gap:8px">
+            <button style="appearance:none;cursor:pointer;flex:1;border:1px solid #5151c4;background:#5b5bd6;color:#fff;font:600 13px Inter,sans-serif;padding:8px;border-radius:7px" style-hover="background:#5151c4">Mark for Review</button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #e6e6ea;background:#fff;color:#44444c;font:600 13px Inter,sans-serif;padding:8px 13px;border-radius:7px" style-hover="background:#f6f6f7">Comment</button>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- ============ APP SHELL — DARK ============ -->
+  <div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:18px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:#97979f">App shell — Dark</span>
+    <div data-screen-label="App Shell — Dark" style="position:relative;height:620px;border:1px solid #2a2a2e;border-radius:12px;overflow:hidden;display:flex;background:#0d0d0f;font-size:13px">
+
+      <!-- SIDEBAR -->
+      <div style="width:228px;flex-shrink:0;background:#121214;border-right:1px solid #222226;display:flex;flex-direction:column">
+        <div style="padding:14px 14px 10px;display:flex;align-items:center;gap:9px">
+          <div style="width:22px;height:22px;border-radius:6px;background:#7575df;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">W</div>
+          <span style="font-size:13.5px;font-weight:600;color:#ededef">Wexley Partners</span>
+          <span style="margin-left:auto;color:#55555d;font-size:13px">⌄</span>
+        </div>
+        <div style="padding:4px 10px 10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #2a2a2e;border-radius:7px;background:#1a1a1c">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#66666e" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg>
+            <span style="font-size:13px;color:#66666e;flex:1">Search</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #303036;border-radius:4px">⌘K</span>
+          </div>
+        </div>
+        <nav style="padding:2px 10px;display:flex;flex-direction:column;gap:1px">
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px" style-hover="background:#1c1c1f;color:#ededef">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="2.6" rx="1"/><rect x="2" y="6.7" width="12" height="2.6" rx="1"/><rect x="2" y="10.9" width="8" height="2.6" rx="1"/></svg>
+            Backlog<span style="margin-left:auto;font-size:11px;font-weight:500;color:#66666e;font-variant-numeric:tabular-nums">31</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px" style-hover="background:#1c1c1f;color:#ededef">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M3.5 8.5l3 3 6-6.5"/></svg>
+            Approvals<span style="margin-left:auto;display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:16px;padding:0 5px;font:600 10.5px/1 Inter,sans-serif;color:#d9a23c;background:#2a2114;border:1px solid #3d3018;border-radius:5px">4</span>
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;background:#1f1f31;color:#9d9df0;font-weight:600;font-size:13px">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#8181e6" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12"/></svg>
+            Finance
+          </a>
+          <a style="display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;text-decoration:none;color:#b4b4bc;font-weight:500;font-size:13px" style-hover="background:#1c1c1f;color:#ededef">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#9a9aa2" stroke-width="1.5"><path d="M4 2.5h6l2.5 2.5v9H4z"/><path d="M9.5 2.5V5H12"/></svg>
+            Docs
+          </a>
+        </nav>
+        <div style="margin-top:auto;border-top:1px solid #222226;padding:10px;display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:50%;background:#26263f;color:#9d9df0;font:600 11px Inter,sans-serif;display:flex;align-items:center;justify-content:center">AK</span>
+          <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:12.5px;font-weight:600;color:#ededef">Aria Kessler</span><span style="font-size:11px;color:#66666e">Partner</span></div>
+          <span style="margin-left:auto;color:#55555d;font-size:13px">⋯</span>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+        <div style="height:46px;flex-shrink:0;border-bottom:1px solid #222226;background:#0d0d0f;display:flex;align-items:center;padding:0 16px;gap:10px">
+          <span style="font-size:13px;color:#66666e">Finance</span>
+          <span style="color:#3a3a40;font-size:12px">/</span>
+          <span style="font-size:13px;color:#ededef;font-weight:600">Accounts</span>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+            <button style="appearance:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:5px 9px;border:1px solid #2a2a2e;border-radius:7px;background:#1a1a1c;color:#66666e;font:400 12.5px Inter,sans-serif" style-hover="background:#222226">Jump to…<span style="display:inline-flex;align-items:center;justify-content:center;height:17px;padding:0 5px;font:500 10.5px/1 ui-monospace,monospace;color:#9a9aa2;background:#232327;border:1px solid #303036;border-radius:4px">⌘K</span></button>
+            <button style="appearance:none;cursor:pointer;border:1px solid #7474da;background:#7575df;color:#fff;font:600 12.5px Inter,sans-serif;padding:6px 11px;border-radius:7px;display:flex;align-items:center;gap:7px" style-hover="background:#8181e6">New entry<span style="display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;font:600 10.5px/1 ui-monospace,monospace;color:#e3e3fb;background:rgba(255,255,255,0.18);border-radius:3px">C</span></button>
+          </div>
+        </div>
+
+        <!-- summary strip -->
+        <div style="flex-shrink:0;border-bottom:1px solid #222226;background:#0d0d0f;display:flex">
+          <div style="flex:1;padding:13px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;color:#66666e">Operating</span><span style="font-size:18px;font-weight:600;color:#ededef;font-variant-numeric:tabular-nums;letter-spacing:-0.01em">$1,284,902</span></div>
+          <div style="flex:1;padding:13px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;color:#66666e">Tax reserve</span><span style="font-size:18px;font-weight:600;color:#ededef;font-variant-numeric:tabular-nums;letter-spacing:-0.01em">$312,500</span></div>
+          <div style="flex:1;padding:13px 16px;border-right:1px solid #1a1a1c;display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;color:#66666e">Net this month</span><span style="font-size:18px;font-weight:600;color:#5cbd78;font-variant-numeric:tabular-nums;letter-spacing:-0.01em">+$48,210</span></div>
+          <div style="flex:1;padding:13px 16px;display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;color:#66666e">Burn (30d)</span><span style="font-size:18px;font-weight:600;color:#e87b76;font-variant-numeric:tabular-nums;letter-spacing:-0.01em">−$36,940</span></div>
+        </div>
+
+        <!-- column header -->
+        <div style="height:28px;flex-shrink:0;display:flex;align-items:center;gap:12px;padding:0 16px;background:#121214;border-bottom:1px solid #222226;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#55555d"><span style="width:78px">Date</span><span style="flex:1">Description</span><span style="width:110px">Account</span><span style="width:96px;text-align:right">Amount</span><span style="width:84px">Status</span></div>
+        <div style="flex:1;overflow:hidden;background:#0d0d0f">
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #161618" style-hover="background:#141416"><span style="width:78px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 16</span><span style="flex:1;font-size:13px;color:#ededef">Stripe payout — Acme Corp</span><span style="width:110px;font-size:12px;color:#9a9aa2">Operating</span><span style="width:96px;text-align:right;font-size:13px;color:#5cbd78;font-variant-numeric:tabular-nums;font-weight:500">+$24,500.00</span><span style="width:84px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5cbd78"><span style="width:6px;height:6px;border-radius:50%;background:#4cae68"></span>Cleared</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #161618" style-hover="background:#141416"><span style="width:78px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 15</span><span style="flex:1;font-size:13px;color:#ededef">AWS — infrastructure</span><span style="width:110px;font-size:12px;color:#9a9aa2">Operating</span><span style="width:96px;text-align:right;font-size:13px;color:#e87b76;font-variant-numeric:tabular-nums;font-weight:500">−$4,182.66</span><span style="width:84px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5cbd78"><span style="width:6px;height:6px;border-radius:50%;background:#4cae68"></span>Cleared</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #161618;background:#15152099" style-hover="background:#1a1a2a"><span style="width:78px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 15</span><span style="flex:1;font-size:13px;color:#ededef;font-weight:500">Quarterly tax transfer</span><span style="width:110px;font-size:12px;color:#9a9aa2">→ Tax reserve</span><span style="width:96px;text-align:right;font-size:13px;color:#9a9aa2;font-variant-numeric:tabular-nums;font-weight:500">−$62,000.00</span><span style="width:84px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#d9a23c"><span style="width:6px;height:6px;border-radius:50%;background:#d9a23c"></span>Pending</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #161618" style-hover="background:#141416"><span style="width:78px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 13</span><span style="flex:1;font-size:13px;color:#ededef">Contractor — Lena Voss</span><span style="width:110px;font-size:12px;color:#9a9aa2">Operating</span><span style="width:96px;text-align:right;font-size:13px;color:#e87b76;font-variant-numeric:tabular-nums;font-weight:500">−$8,750.00</span><span style="width:84px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5cbd78"><span style="width:6px;height:6px;border-radius:50%;background:#4cae68"></span>Cleared</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #161618" style-hover="background:#141416"><span style="width:78px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 12</span><span style="flex:1;font-size:13px;color:#ededef">Invoice — Halcyon Labs</span><span style="width:110px;font-size:12px;color:#9a9aa2">Receivable</span><span style="width:96px;text-align:right;font-size:13px;color:#5cbd78;font-variant-numeric:tabular-nums;font-weight:500">+$31,200.00</span><span style="width:84px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#9d9df0"><span style="width:6px;height:6px;border-radius:50%;background:#8181e6"></span>Sent</span></span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:0 16px;height:36px;border-bottom:1px solid #161618" style-hover="background:#141416"><span style="width:78px;font-size:12px;color:#66666e;font-variant-numeric:tabular-nums">Jun 11</span><span style="flex:1;font-size:13px;color:#ededef">Office lease — June</span><span style="width:110px;font-size:12px;color:#9a9aa2">Operating</span><span style="width:96px;text-align:right;font-size:13px;color:#e87b76;font-variant-numeric:tabular-nums;font-weight:500">−$6,400.00</span><span style="width:84px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#5cbd78"><span style="width:6px;height:6px;border-radius:50%;background:#4cae68"></span>Cleared</span></span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="height:8px"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { paletteOpen: false, slideOpen: false, tab: 'Active', nav: 'Backlog' };
+
+  renderVals() {
+    const active = '#5b5bd6';
+    const tab = this.state.tab;
+    const tabStyleOn = 'appearance:none;border:none;background:none;cursor:pointer;padding:0 2px 9px;font:600 13px Inter,sans-serif;color:#16161a;border-bottom:2px solid ' + active + ';margin-bottom:-1px';
+    const tabStyleOff = 'appearance:none;border:none;background:none;cursor:pointer;padding:0 2px 9px;font:500 13px Inter,sans-serif;color:#97979f;border-bottom:2px solid transparent;margin-bottom:-1px';
+    return {
+      paletteOpen: this.state.paletteOpen,
+      slideOpen: this.state.slideOpen,
+      openPalette: () => this.setState({ paletteOpen: true }),
+      closePalette: () => this.setState({ paletteOpen: false }),
+      openSlide: () => this.setState({ slideOpen: true }),
+      closeSlide: () => this.setState({ slideOpen: false }),
+      tabActiveShown: tab === 'Active',
+      tabBacklogShown: tab === 'Backlog',
+      tabDoneShown: tab === 'Done',
+      styleTabActive: tab === 'Active' ? tabStyleOn : tabStyleOff,
+      styleTabBacklog: tab === 'Backlog' ? tabStyleOn : tabStyleOff,
+      styleTabDone: tab === 'Done' ? tabStyleOn : tabStyleOff,
+      setTabActive: () => this.setState({ tab: 'Active' }),
+      setTabBacklog: () => this.setState({ tab: 'Backlog' }),
+      setTabDone: () => this.setState({ tab: 'Done' }),
+    };
+  }
+}
+</script>
+</body>
+</html>
