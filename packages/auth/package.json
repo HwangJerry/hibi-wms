@@ -13,11 +13,15 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run src --passWithNoTests",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "@hibi/config": "workspace:*"
+  },
+  "dependencies": {
+    "@hibi/db": "workspace:*",
+    "argon2": "^0.44.0"
   }
 }
