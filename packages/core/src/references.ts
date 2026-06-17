@@ -27,15 +27,15 @@ export type ListReferencesInput =
   | { from: ReferenceEndpoint; to?: never }
   | { from?: never; to: ReferenceEndpoint };
 
-export type ReferenceClient = {
+export type ReferenceTransaction = {
   reference: ReferenceDelegate;
 };
 
 export async function createReference(
-  client: ReferenceClient,
+  tx: ReferenceTransaction,
   input: CreateReferenceInput,
-) {
-  return await client.reference.create({
+): Promise<Prisma.ReferenceGetPayload<object>> {
+  return tx.reference.create({
     data: {
       fromType: input.from.type,
       fromId: input.from.id,
@@ -47,9 +47,9 @@ export async function createReference(
 }
 
 export async function listReferences(
-  client: ReferenceClient,
+  tx: ReferenceTransaction,
   input: ListReferencesInput,
-) {
+): Promise<Array<Prisma.ReferenceGetPayload<object>>> {
   const where = (() => {
     if (input.from) {
       return {
@@ -64,7 +64,7 @@ export async function listReferences(
     };
   })() satisfies Prisma.ReferenceWhereInput;
 
-  return await client.reference.findMany({
+  return await tx.reference.findMany({
     where,
     orderBy: { createdAt: "desc" },
   });

@@ -16,21 +16,21 @@ describe("reference helpers", () => {
       relation: "spec",
       createdAt: new Date("2026-01-01T00:00:00.000Z"),
     };
-    const client = {
+    const tx = {
       reference: {
         create: vi.fn().mockResolvedValue(reference),
         findMany: vi.fn(),
       },
     };
 
-    const result = await createReference(client, {
+    const result = await createReference(tx, {
       from: { type: "TASK", id: "task-id" },
       to: { type: "PAGE", id: "page-id" },
       relation: "spec",
     });
 
     expect(result).toBe(reference);
-    expect(client.reference.create).toHaveBeenCalledWith({
+    expect(tx.reference.create).toHaveBeenCalledWith({
       data: {
         fromType: "TASK",
         fromId: "task-id",
@@ -51,19 +51,19 @@ describe("reference helpers", () => {
       relation: UNLABELED_REFERENCE_RELATION,
       createdAt: new Date("2026-01-01T00:00:00.000Z"),
     };
-    const client = {
+    const tx = {
       reference: {
         create: vi.fn().mockResolvedValue(reference),
         findMany: vi.fn(),
       },
     };
 
-    await createReference(client, {
+    await createReference(tx, {
       from: { type: "TASK", id: "task-id" },
       to: { type: "ATTACHMENT", id: "attachment-id" },
     });
 
-    expect(client.reference.create).toHaveBeenCalledWith({
+    expect(tx.reference.create).toHaveBeenCalledWith({
       data: {
         fromType: "TASK",
         fromId: "task-id",
@@ -86,19 +86,19 @@ describe("reference helpers", () => {
         createdAt: new Date("2026-01-01T00:00:00.000Z"),
       },
     ];
-    const client = {
+    const tx = {
       reference: {
         create: vi.fn(),
         findMany: vi.fn().mockResolvedValue(references),
       },
     };
 
-    const result = await listReferences(client, {
+    const result = await listReferences(tx, {
       from: { type: "TASK", id: "task-id" },
     });
 
     expect(result).toBe(references);
-    expect(client.reference.findMany).toHaveBeenCalledWith({
+    expect(tx.reference.findMany).toHaveBeenCalledWith({
       where: {
         fromType: "TASK",
         fromId: "task-id",
@@ -108,18 +108,18 @@ describe("reference helpers", () => {
   });
 
   it("lists references by target endpoint", async () => {
-    const client = {
+    const tx = {
       reference: {
         create: vi.fn(),
         findMany: vi.fn().mockResolvedValue([]),
       },
     };
 
-    await listReferences(client, {
+    await listReferences(tx, {
       to: { type: "PAGE", id: "page-id" },
     });
 
-    expect(client.reference.findMany).toHaveBeenCalledWith({
+    expect(tx.reference.findMany).toHaveBeenCalledWith({
       where: {
         toType: "PAGE",
         toId: "page-id",
