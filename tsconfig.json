@@ -1,0 +1,13 @@
+{
+  "extends": "./packages/config/tsconfig/base.json",
+  "files": [],
+  "references": [
+    { "path": "./apps/web" },
+    { "path": "./apps/realtime" },
+    { "path": "./packages/api" },
+    { "path": "./packages/auth" },
+    { "path": "./packages/core" },
+    { "path": "./packages/db" },
+    { "path": "./packages/config" }
+  ]
+}
