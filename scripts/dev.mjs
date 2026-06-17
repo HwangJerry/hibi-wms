@@ -8,6 +8,7 @@ const DEFAULT_REALTIME_PORT = 3001;
 const DEFAULT_POSTGRES_USER = "hibi";
 const DEFAULT_POSTGRES_DB = "hibi_portal";
 const DEFAULT_POSTGRES_PORT = "5432";
+const DEV_PACKAGES = ["@hibi/api", "@hibi/realtime", "@hibi/web"];
 
 function readLocalEnv() {
   const envPath = resolve(".env");
@@ -139,4 +140,11 @@ if (useComposePostgres) {
 
 await runCommand("pnpm", ["--filter", "@hibi/db", "db:generate"], env);
 await runCommand("pnpm", ["build"], env);
-await runCommand("pnpm", ["exec", "turbo", "run", "dev"], env);
+await runCommand("pnpm", [
+  "exec",
+  "turbo",
+  "run",
+  "dev",
+  "--parallel",
+  ...DEV_PACKAGES.flatMap((pkg) => ["--filter", pkg]),
+], env);

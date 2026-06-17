@@ -2,9 +2,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const TOKENS_PATH = "packages/ui/tokens/tokens.json";
-const CSS_OUT_PATH = "packages/ui/tokens/tokens.css";
-const TAILWIND_OUT_PATH = "packages/ui/tokens/tailwind-preset.ts";
+const TOKENS_PATH = path.join(process.cwd(), "packages/ui/tokens/tokens.json");
+const CSS_OUT_PATH = path.join(process.cwd(), "packages/ui/tokens/tokens.css");
+const TAILWIND_OUT_PATH = path.join(process.cwd(), "packages/ui/tokens/tailwind-preset.ts");
 
 function readTokens() {
   return JSON.parse(fs.readFileSync(TOKENS_PATH, "utf8"));

@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-06-17T12:33:41.219Z",
+  "sourceFiles": [
+    "WMS Approval Detail.dc.html",
+    "WMS Approvals.dc.html",
+    "WMS Backlog Board.dc.html",
+    "WMS Backlog List.dc.html",
+    "WMS Docs.dc.html",
+    "WMS Finance Dashboard.dc.html",
+    "WMS Finance Transactions.dc.html",
+    "WMS Foundation.dc.html",
+    "WMS System Components.dc.html",
+    "WMS Task Detail.dc.html"
+  ],
+  "light": {},
+  "dark": {},
+  "report": {
+    "newTokens": [],
+    "changedTokens": [],
+    "nearDuplicates": [],
+    "crossMockupConflicts": []
+  }
+}
