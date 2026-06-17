@@ -10,6 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "./src"),
+      "@hibi/ui$": path.resolve(import.meta.dirname, "../../packages/ui/src/index.ts"),
     },
   },
   server: {

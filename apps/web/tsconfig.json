@@ -17,6 +17,7 @@
       "@hibi/auth": ["../../packages/auth/src/index.ts"],
       "@hibi/core": ["../../packages/core/src/index.ts"],
       "@hibi/db": ["../../packages/db/src/index.ts"],
+      "@hibi/ui": ["../../packages/ui/src/index.ts"],
       "@/*": ["src/*"]
     },
     "rootDir": "../..",

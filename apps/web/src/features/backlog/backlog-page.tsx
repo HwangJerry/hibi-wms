@@ -54,6 +54,7 @@ type TaskFormState = {
 
 type BacklogPageProps = {
   currentUserId: string;
+  searchTerm?: string;
 };
 
 const statusLabels: Record<TaskStatus, string> = {
@@ -77,7 +78,10 @@ const priorityRank: Record<TaskPriority, number> = {
   URGENT: 4,
 };
 
-export function BacklogPage({ currentUserId }: BacklogPageProps) {
+export function BacklogPage({
+  currentUserId,
+  searchTerm = "",
+}: BacklogPageProps) {
   const utils = trpc.useUtils();
   const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
   const [assigneeFilter, setAssigneeFilter] = useState<AssigneeFilter>("all");
@@ -119,12 +123,23 @@ export function BacklogPage({ currentUserId }: BacklogPageProps) {
     },
   });
 
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
   const tasks = useMemo(() => {
-    const items = tasksQuery.data?.pages.flatMap((page) => page.items) ?? [];
-    return [...items].sort((left, right) =>
+    const allItems = tasksQuery.data?.pages.flatMap((page) => page.items) ?? [];
+
+    const matchedItems =
+      normalizedSearchTerm.length === 0
+        ? allItems
+        : allItems.filter((task) => {
+            const searchableText = `${task.title} ${task.description ?? ""}`.toLowerCase();
+            return searchableText.includes(normalizedSearchTerm);
+          });
+
+    return [...matchedItems].sort((left, right) =>
       compareTasks(left, right, sortKey, sortDirection),
     );
-  }, [sortDirection, sortKey, tasksQuery.data?.pages]);
+  }, [normalizedSearchTerm, sortDirection, sortKey, tasksQuery.data?.pages]);
 
   const mutationError =
     createMutation.error?.message ??
