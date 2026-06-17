@@ -12,7 +12,10 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "db:migrate": "pnpm --filter @hibi/db db:migrate",
+    "db:studio": "pnpm --filter @hibi/db db:studio",
+    "db:seed": "pnpm --filter @hibi/db db:seed"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

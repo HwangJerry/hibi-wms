@@ -1,11 +1,8 @@
 import { existsSync } from "node:fs";
 import { dirname, join, parse } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { config as loadDotenv } from "dotenv";
-import { PrismaClient } from "./generated/prisma/client.js";
-
-export { Prisma, PrismaClient } from "./generated/prisma/client.js";
+import { defineConfig } from "prisma/config";
 
 const ENV_FILE_NAME = ".env";
 
@@ -27,28 +24,29 @@ function findNearestEnvFile() {
   }
 }
 
-function loadLocalEnv() {
-  if (process.env.DATABASE_URL) {
-    return;
-  }
-
-  const envFilePath = findNearestEnvFile();
-  if (envFilePath) {
-    loadDotenv({ path: envFilePath, quiet: true });
-  }
-}
-
 function getDatabaseUrl() {
+  if (!process.env.DATABASE_URL) {
+    const envFilePath = findNearestEnvFile();
+    if (envFilePath) {
+      loadDotenv({ path: envFilePath, quiet: true });
+    }
+  }
+
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
-    throw new Error("DATABASE_URL is required to initialize PrismaClient.");
+    throw new Error("DATABASE_URL is required for Prisma commands.");
   }
 
   return databaseUrl;
 }
 
-loadLocalEnv();
-
-const adapter = new PrismaPg({ connectionString: getDatabaseUrl() });
-
-export const prisma = new PrismaClient({ adapter });
+export default defineConfig({
+  schema: "prisma/schema.prisma",
+  migrations: {
+    path: "prisma/migrations",
+    seed: "tsx prisma/seed.ts",
+  },
+  datasource: {
+    url: getDatabaseUrl(),
+  },
+});
