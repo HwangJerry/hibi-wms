@@ -13,9 +13,13 @@
     "noEmit": true,
     "outDir": "dist",
     "paths": {
+      "@hibi/api": ["../../packages/api/src/routers/index.ts"],
+      "@hibi/auth": ["../../packages/auth/src/index.ts"],
+      "@hibi/core": ["../../packages/core/src/index.ts"],
+      "@hibi/db": ["../../packages/db/src/index.ts"],
       "@/*": ["src/*"]
     },
-    "rootDir": ".",
+    "rootDir": "../..",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "types": ["vite/client"]
   },
