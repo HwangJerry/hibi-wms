@@ -1,9 +1,21 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
+    "HOST",
+    "PORT",
+    "REALTIME_HOST",
+    "REALTIME_PORT",
+    "VITE_TRPC_URL"
+  ],
   "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", "src/generated/**"]
     },
     "test": {
       "dependsOn": ["^build"],
@@ -15,6 +27,10 @@
     },
     "typecheck": {
       "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@hibi/db#typecheck": {
+      "dependsOn": ["build"],
       "outputs": []
     }
   }
