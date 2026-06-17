@@ -19,7 +19,7 @@
     "db:generate": "prisma generate --config prisma.config.ts",
     "db:migrate": "prisma migrate dev --config prisma.config.ts",
     "db:studio": "prisma studio --config prisma.config.ts",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "pnpm db:generate && prisma migrate deploy --config prisma.config.ts && tsx prisma/seed.ts"
   },
   "devDependencies": {
     "@hibi/config": "workspace:*",

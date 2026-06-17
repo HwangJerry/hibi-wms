@@ -1,9 +1,23 @@
 {
   "extends": "../../packages/config/tsconfig/base.json",
   "compilerOptions": {
+    "allowImportingTsExtensions": false,
+    "baseUrl": ".",
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "jsx": "react-jsx",
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
     "outDir": "dist",
-    "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "rootDir": ".",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "types": ["vite/client"]
   },
-  "include": ["src"]
+  "include": ["src", "tailwind.config.ts", "vite.config.ts"]
 }

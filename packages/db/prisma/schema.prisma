@@ -6,3 +6,111 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  sessions     Session[]
+  tasks        Task[]
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+enum EntityType {
+  TASK
+  APPROVAL
+  TRANSACTION
+  PAGE
+  COMMENT
+  ATTACHMENT
+}
+
+model Reference {
+  id        String     @id @default(cuid())
+  fromType  EntityType
+  fromId    String
+  toType    EntityType
+  toId      String
+  relation  String     @default("__unlabeled__")
+  createdAt DateTime   @default(now())
+
+  @@unique([fromType, fromId, toType, toId, relation])
+  @@index([toType, toId])
+}
+
+model AuditLog {
+  id         String     @id @default(cuid())
+  actorId    String
+  action     String
+  entityType EntityType
+  entityId   String
+  data       Json
+  createdAt  DateTime   @default(now())
+
+  @@index([entityType, entityId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+}
+
+model Attachment {
+  id         String   @id @default(cuid())
+  uploaderId String
+  fileName   String
+  mimeType   String
+  sizeBytes  Int
+  r2Key      String
+  createdAt  DateTime @default(now())
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus @default(BACKLOG)
+  priority    Priority   @default(MEDIUM)
+  assigneeId  String?
+  parentId    String?
+  order       Float
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  assignee    User?      @relation(fields: [assigneeId], references: [id])
+  parent      Task?      @relation("TaskEpic", fields: [parentId], references: [id])
+  children    Task[]     @relation("TaskEpic")
+
+  @@index([status, order])
+  @@index([assigneeId])
+  @@index([parentId, order])
+  @@index([deletedAt])
+}

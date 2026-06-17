@@ -1,3 +1,8 @@
 import config from "@hibi/config/eslint";
 
-export default config;
+export default [
+  {
+    ignores: ["dist/**", "postcss.config.js"],
+  },
+  ...config,
+];
