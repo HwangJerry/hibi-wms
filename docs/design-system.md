@@ -14,6 +14,15 @@ accumulate dozens of near-duplicate colors and spacing values. The fix: mockups 
 Any UI work must follow this pipeline before it is consumed from `apps/web`. Do not
 skip straight from a mockup to app code.
 
+## Codex skill
+When turning any exported mockup into production UI, use the Codex
+`$mockup-to-design-system` skill as the execution checklist for mockup inspection,
+component boundary design, story coverage, raw-value auditing, and visual QA.
+
+This document, `packages/ui/tokens/README.md`, and the repository scripts remain
+authoritative. Always use this repo's `pnpm tokens:extract` and `pnpm tokens:build`
+commands before considering any helper scripts mentioned by the skill.
+
 ## Where things live
 ```
 design/mockups/*.html         # raw Claude Design exports — reference only, never shipped
@@ -31,6 +40,8 @@ apps/web/                      # consumes packages/ui only — no inline hex, no
 
 ## The pipeline, per screen
 1. **Design** the screen in Claude Design; export HTML.
+   Use `$mockup-to-design-system` to inspect the mockup's visual values, layout patterns,
+   component candidates, states, accessibility semantics, and responsive behavior.
 2. **Save** it to `design/mockups/<screen-name>.html` and commit. Plain text, small diff,
    easy to review.
 3. **Extract**: run `pnpm tokens:extract`. The script (`scripts/extract-tokens.js`) reads
@@ -51,10 +62,12 @@ apps/web/                      # consumes packages/ui only — no inline hex, no
    from `tokens.json`. Nothing downstream ever hand-edits generated files.
 6. **Implement**: build or extend the needed component(s) in `packages/ui`. Compose shadcn
    primitives with token-driven Tailwind classes — never a literal hex or arbitrary px value
-   in component code.
+   in component code. Use `$mockup-to-design-system` to choose reusable component
+   boundaries instead of transliterating the exported HTML.
 7. **Catalog**: add or update a Ladle story for the component, rendered in both light and
    dark. This is the verification surface — open the story next to the original mockup file
-   and compare directly.
+   and compare directly. Use the skill's story, state, accessibility, responsive, and
+   raw-value audit checklist before calling the component done.
 8. **Consume**: once the story matches the mockup, wire the component into the relevant
    `apps/web` screen. The app imports from `packages/ui` only.
 

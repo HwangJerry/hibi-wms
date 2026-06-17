@@ -8,3 +8,6 @@ Rules:
 - Never hand-edit them; if a screen changes, re-export and overwrite.
 - Keep them committed. They're the audit trail for "why does this token exist,"
   and the input to `scripts/extract-tokens.js`.
+- When converting a mockup into production UI, follow `docs/design-system.md`
+  and use the Codex `$mockup-to-design-system` skill as the implementation
+  checklist.
