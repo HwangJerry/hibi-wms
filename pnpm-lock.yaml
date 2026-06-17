@@ -207,6 +207,12 @@ importers:
         specifier: ^4.22.4
         version: 4.22.4
 
+  packages/ui:
+    devDependencies:
+      '@hibi/config':
+        specifier: workspace:*
+        version: link:../config
+
 packages:
 
   '@alloc/quick-lru@5.2.0':

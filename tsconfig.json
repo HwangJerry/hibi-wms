@@ -8,6 +8,7 @@
     { "path": "./packages/auth" },
     { "path": "./packages/core" },
     { "path": "./packages/db" },
-    { "path": "./packages/config" }
+    { "path": "./packages/config" },
+    { "path": "./packages/ui" }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "extends": "../config/tsconfig/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+  },
+  "include": ["src", "tokens/tailwind-preset.ts"]
+}

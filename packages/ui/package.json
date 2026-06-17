@@ -1,0 +1,29 @@
+{
+  "name": "@hibi/ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./tokens/tailwind-preset": {
+      "types": "./dist/tokens/tailwind-preset.d.ts",
+      "default": "./dist/tokens/tailwind-preset.js"
+    },
+    "./tokens/tokens.css": "./tokens/tokens.css",
+    "./tokens/tokens.json": "./tokens/tokens.json"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@hibi/config": "workspace:*"
+  }
+}

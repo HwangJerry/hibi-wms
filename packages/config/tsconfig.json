@@ -5,5 +5,5 @@
     "checkJs": true,
     "noEmit": true
   },
-  "include": ["eslint/**/*.mjs", "prettier/**/*.mjs"]
+  "include": ["eslint/**/*.mjs", "prettier/**/*.mjs", "tailwind/**/*.mjs"]
 }
