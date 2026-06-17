@@ -92,11 +92,16 @@ export function BacklogPage({ currentUserId }: BacklogPageProps) {
     currentUserId,
   });
 
-  const tasksQuery = trpc.backlog.list.useQuery({
-    status: statusFilter === "all" ? undefined : statusFilter,
-    assigneeId: assigneeIdFilter,
-    limit: LIST_LIMIT,
-  });
+  const tasksQuery = trpc.backlog.list.useInfiniteQuery(
+    {
+      status: statusFilter === "all" ? undefined : statusFilter,
+      assigneeId: assigneeIdFilter,
+      limit: LIST_LIMIT,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  );
 
   const createMutation = trpc.backlog.create.useMutation({
     onSuccess: async () => {
@@ -115,11 +120,11 @@ export function BacklogPage({ currentUserId }: BacklogPageProps) {
   });
 
   const tasks = useMemo(() => {
-    const items = tasksQuery.data?.items ?? [];
+    const items = tasksQuery.data?.pages.flatMap((page) => page.items) ?? [];
     return [...items].sort((left, right) =>
       compareTasks(left, right, sortKey, sortDirection),
     );
-  }, [sortDirection, sortKey, tasksQuery.data?.items]);
+  }, [sortDirection, sortKey, tasksQuery.data?.pages]);
 
   const mutationError =
     createMutation.error?.message ??
@@ -242,7 +247,10 @@ export function BacklogPage({ currentUserId }: BacklogPageProps) {
       ) : null}
 
       <TaskList
+        hasMoreTasks={tasksQuery.hasNextPage}
+        isFetchingMore={tasksQuery.isFetchingNextPage}
         isLoading={tasksQuery.isLoading}
+        onLoadMore={() => void tasksQuery.fetchNextPage()}
         onEditTask={(task) => setDialogMode({ type: "edit", task })}
         onStatusChange={(id, status) => setStatusMutation.mutate({ id, status })}
         pendingStatusTaskId={
@@ -296,13 +304,19 @@ export function BacklogPage({ currentUserId }: BacklogPageProps) {
 }
 
 function TaskList({
+  hasMoreTasks,
+  isFetchingMore,
   isLoading,
+  onLoadMore,
   onEditTask,
   onStatusChange,
   pendingStatusTaskId,
   tasks,
 }: {
+  hasMoreTasks: boolean;
+  isFetchingMore: boolean;
   isLoading: boolean;
+  onLoadMore: () => void;
   onEditTask: (task: BacklogTask) => void;
   onStatusChange: (id: string, status: TaskStatus) => void;
   pendingStatusTaskId: string | undefined;
@@ -327,80 +341,99 @@ function TaskList({
 
   return (
     <div className="overflow-hidden rounded-md border">
-      <div className="grid grid-cols-[minmax(220px,1fr)_150px_130px_160px_150px_56px] border-b bg-muted/40 px-4 py-2 text-xs font-semibold uppercase text-muted-foreground">
-        <span>Task</span>
-        <span>Status</span>
-        <span>Priority</span>
-        <span>Assignee</span>
-        <span>Updated</span>
-        <span className="text-right">Edit</span>
+      <div className="overflow-x-auto">
+        <div className="min-w-[900px]">
+          <div className="grid grid-cols-[minmax(220px,1fr)_150px_130px_160px_150px_56px] border-b bg-muted/40 px-4 py-2 text-xs font-semibold uppercase text-muted-foreground">
+            <span>Task</span>
+            <span>Status</span>
+            <span>Priority</span>
+            <span>Assignee</span>
+            <span>Updated</span>
+            <span className="text-right">Edit</span>
+          </div>
+          <ul className="divide-y">
+            {tasks.map((task) => {
+              const isStatusPending = pendingStatusTaskId === task.id;
+
+              return (
+                <li
+                  className="grid grid-cols-[minmax(220px,1fr)_150px_130px_160px_150px_56px] items-center gap-3 px-4 py-3"
+                  key={task.id}
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{task.title}</p>
+                    {task.description ? (
+                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">
+                        {task.description}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <label className="relative">
+                    <span className="sr-only">Task status</span>
+                    <select
+                      className={cn(controlClassName, "w-full pr-8")}
+                      disabled={isStatusPending}
+                      onChange={(event) =>
+                        onStatusChange(task.id, event.target.value as TaskStatus)
+                      }
+                      value={task.status}
+                    >
+                      {TASK_STATUSES.map((status) => (
+                        <option key={status} value={status}>
+                          {statusLabels[status]}
+                        </option>
+                      ))}
+                    </select>
+                    {isStatusPending ? (
+                      <Loader2
+                        className="pointer-events-none absolute right-2 top-2.5 h-4 w-4 animate-spin text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                    ) : null}
+                  </label>
+
+                  <span className={priorityBadgeClassName(task.priority)}>
+                    {priorityLabels[task.priority]}
+                  </span>
+                  <span className="truncate text-sm text-muted-foreground">
+                    {task.assigneeId ?? "Unassigned"}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {formatDate(task.updatedAt)}
+                  </span>
+                  <div className="flex justify-end">
+                    <Button
+                      aria-label={`Edit ${task.title}`}
+                      onClick={() => onEditTask(task)}
+                      size="icon"
+                      type="button"
+                      variant="ghost"
+                    >
+                      <Edit className="h-4 w-4" aria-hidden="true" />
+                    </Button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
-      <ul className="divide-y">
-        {tasks.map((task) => {
-          const isStatusPending = pendingStatusTaskId === task.id;
-
-          return (
-            <li
-              className="grid grid-cols-[minmax(220px,1fr)_150px_130px_160px_150px_56px] items-center gap-3 px-4 py-3"
-              key={task.id}
-            >
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{task.title}</p>
-                {task.description ? (
-                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">
-                    {task.description}
-                  </p>
-                ) : null}
-              </div>
-
-              <label className="relative">
-                <span className="sr-only">Task status</span>
-                <select
-                  className={cn(controlClassName, "w-full pr-8")}
-                  disabled={isStatusPending}
-                  onChange={(event) =>
-                    onStatusChange(task.id, event.target.value as TaskStatus)
-                  }
-                  value={task.status}
-                >
-                  {TASK_STATUSES.map((status) => (
-                    <option key={status} value={status}>
-                      {statusLabels[status]}
-                    </option>
-                  ))}
-                </select>
-                {isStatusPending ? (
-                  <Loader2
-                    className="pointer-events-none absolute right-2 top-2.5 h-4 w-4 animate-spin text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                ) : null}
-              </label>
-
-              <span className={priorityBadgeClassName(task.priority)}>
-                {priorityLabels[task.priority]}
-              </span>
-              <span className="truncate text-sm text-muted-foreground">
-                {task.assigneeId ?? "Unassigned"}
-              </span>
-              <span className="text-sm text-muted-foreground">
-                {formatDate(task.updatedAt)}
-              </span>
-              <div className="flex justify-end">
-                <Button
-                  aria-label={`Edit ${task.title}`}
-                  onClick={() => onEditTask(task)}
-                  size="icon"
-                  type="button"
-                  variant="ghost"
-                >
-                  <Edit className="h-4 w-4" aria-hidden="true" />
-                </Button>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      {hasMoreTasks ? (
+        <div className="flex justify-center border-t bg-muted/20 px-4 py-3">
+          <Button
+            disabled={isFetchingMore}
+            onClick={onLoadMore}
+            type="button"
+            variant="outline"
+          >
+            {isFetchingMore ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            ) : null}
+            Load more
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }
