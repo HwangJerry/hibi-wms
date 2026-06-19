@@ -1,0 +1,10 @@
+.git
+.turbo
+node_modules
+**/node_modules
+**/dist
+**/.ladle/build
+test-results
+coverage
+.env
+.env.*

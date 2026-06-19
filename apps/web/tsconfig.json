@@ -21,8 +21,7 @@
       "@/*": ["src/*"]
     },
     "rootDir": "../..",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "types": ["vite/client"]
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
   },
   "include": ["src", "tailwind.config.ts", "vite.config.ts"]
 }
