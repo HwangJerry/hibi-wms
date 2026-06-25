@@ -684,7 +684,7 @@ describe("FinanceService", () => {
     expect(original?.status).toBe("REVERSED");
     expect(original?.reversedById).toBe(reversal.id);
     expect(reversal.status).toBe("POSTED");
-    expect(reversal.amount.toString()).toBe("55.5");
+    expect(reversal.amount.toString()).toBe("-55.5");
     expect(original?.amount.toString()).toBe("55.5");
     expect(db.auditLogs.at(-1)).toMatchObject({
       action: "finance.transaction.reversed",

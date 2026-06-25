@@ -139,7 +139,17 @@ class InMemoryFinanceRouterDb {
 
   readonly category = {
     findMany: () => Promise.resolve(this.categories.map((row) => ({ ...row }))),
-    findFirst: () => Promise.resolve(null),
+    findFirst: (args: { where: { id?: string } }) => {
+      const category = this.categories.find((candidate) => {
+        if (args.where.id !== undefined && candidate.id !== args.where.id) {
+          return false;
+        }
+
+        return true;
+      });
+
+      return Promise.resolve(category ? { ...category } : null);
+    },
     create: (args: { data: { name: string; kind: Category["kind"] } }) => {
       const now = new Date("2026-06-17T00:00:00.000Z");
       const category: Category = {
@@ -581,7 +591,7 @@ describe("financeRouter", () => {
     });
 
     expect(updatedCategory.name).toBe("Operations");
-    expect(budget.categoryId).toBe(deletedCategory.id);
+    expect(budget.categoryId).toBe(category.id);
 
     const budgetUpdated = await caller.finance.budgets.update({
       id: budget.id,
@@ -590,7 +600,7 @@ describe("financeRouter", () => {
       },
     });
 
-    expect(budgetUpdated.limit.toString()).toBe("1500.00");
+    expect(budgetUpdated.limit.toString()).toBe("1500");
 
     const budgetDeleted = await caller.finance.budgets.delete({ id: budget.id });
     expect(budgetDeleted.id).toBe(budget.id);

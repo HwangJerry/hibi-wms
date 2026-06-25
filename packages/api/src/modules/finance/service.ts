@@ -102,7 +102,7 @@ type FinanceAuditPayload = {
   operation: string;
   resourceType: FinanceAuditResource;
   resourceId: string;
-  details: Record<string, unknown>;
+  details: Prisma.InputJsonObject;
 };
 
 type BaseFindArgs = {
@@ -898,7 +898,7 @@ function createFinanceAuditPayload(
   action: string,
   resourceType: FinanceAuditResource,
   resourceId: string,
-  details: Record<string, unknown>,
+  details: Prisma.InputJsonObject,
 ): FinanceAuditPayload {
   return {
     version: FINANCE_AUDIT_VERSION,
@@ -918,7 +918,7 @@ async function writeStandardFinanceAuditLog(
     entityType: EntityType;
     entityId: string;
     resourceType: FinanceAuditResource;
-    details: Record<string, unknown>;
+    details: Prisma.InputJsonObject;
   },
 ) {
   await writeAuditLog(tx, {

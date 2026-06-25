@@ -640,7 +640,6 @@ export function TransactionsPage() {
   const reverseErrorMessage = reverseTransactionMutation.error?.message
     ? `Failed to reverse transaction: ${reverseTransactionMutation.error.message}`
     : null;
-  const mutationError = createErrorMessage ?? reverseErrorMessage;
 
   const isDataLoading =
     accountsQuery.isLoading ||
@@ -658,10 +657,10 @@ export function TransactionsPage() {
     (transactionsQuery.data?.items?.length ?? 0) === 0;
 
   const handleRetryRead = () => {
-    accountsQuery.refetch();
-    categoriesQuery.refetch();
-    transactionsQuery.refetch();
-    budgetReportQuery.refetch();
+    void accountsQuery.refetch();
+    void categoriesQuery.refetch();
+    void transactionsQuery.refetch();
+    void budgetReportQuery.refetch();
   };
 
   return (
