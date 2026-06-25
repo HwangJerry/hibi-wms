@@ -1,14 +1,20 @@
 import { badRequest, notFound, writeAuditLog } from "@hibi/core";
 import type { AuditLogTransaction } from "@hibi/core";
 import { EntityType, Priority } from "@hibi/db";
-import type { Prisma, Task, TaskStatus } from "@hibi/db";
+import type { Prisma, PrismaClient, Task, TaskStatus } from "@hibi/db";
+import {
+  createNotification,
+  NOTIFICATION_TYPES,
+} from "../notifications/service.js";
 
 const INITIAL_ORDER = 1024;
 const MIN_ORDER_GAP = 0.000001;
+const MENTION_PATTERN = /@([a-z0-9._-]+)/gi;
 
 type TaskDelegate = {
   findMany(args: Prisma.TaskFindManyArgs): Promise<Task[]>;
   findFirst(args: Prisma.TaskFindFirstArgs): Promise<Task | null>;
+  count(args: Prisma.TaskCountArgs): Promise<number>;
   create(args: { data: Prisma.TaskUncheckedCreateInput }): Promise<Task>;
   update(args: {
     where: Prisma.TaskWhereUniqueInput;
@@ -16,8 +22,33 @@ type TaskDelegate = {
   }): Promise<Task>;
 };
 
+type UserRecord = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+type UserDelegate = {
+  findMany(args: {
+    where?: {
+      id?: {
+        in: string[];
+      };
+    };
+    select: {
+      id: true;
+      name: true;
+      email: true;
+    };
+  }): Promise<Array<UserRecord>>;
+};
+
 type BacklogTransaction = {
   task: TaskDelegate;
+  user?: UserDelegate;
+  notification?: {
+    create(args: { data: Prisma.NotificationCreateInput }): Promise<Prisma.NotificationGetPayload<object>>;
+  };
 } & AuditLogTransaction;
 
 type TaskReader = {
@@ -27,6 +58,7 @@ type TaskReader = {
 export type BacklogServiceDb = {
   $transaction<T>(fn: (tx: BacklogTransaction) => Promise<T>): Promise<T>;
   task: TaskDelegate;
+  user?: UserDelegate;
 };
 
 export type ListTasksInput = {
@@ -51,6 +83,7 @@ export type CreateTaskInput = {
 };
 
 export type UpdateTaskInput = {
+  actorId: string;
   id: string;
   patch: {
     title?: string;
@@ -97,12 +130,44 @@ export class BacklogService {
       take,
     });
     const items = tasks.slice(0, input.limit);
+    const assigneeIds = [
+      ...new Set(items.map((task) => task.assigneeId).filter((id) => id !== null)),
+    ];
+    const assignees =
+      this.db.user && assigneeIds.length > 0
+        ? await this.db.user.findMany({
+            where: {
+              id: {
+                in: assigneeIds,
+              },
+            },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          })
+        : [];
+    const assigneeNameById = new Map(
+      assignees.map((assignee) => [assignee.id, assignee.name]),
+    );
     const nextCursor = tasks.length > input.limit ? items.at(-1)?.id : undefined;
 
     return {
-      items,
+      items: items.map((task) => ({
+        ...task,
+        assigneeName: task.assigneeId ? assigneeNameById.get(task.assigneeId) ?? null : null,
+      })),
       nextCursor,
     };
+  }
+
+  async countActive() {
+    return await this.db.task.count({
+      where: {
+        deletedAt: null,
+      },
+    });
   }
 
   async get(input: GetTaskInput) {
@@ -137,19 +202,35 @@ export class BacklogService {
         },
       });
 
+      await createMentionAndAssignmentNotifications(tx, {
+        actorId: input.actorId,
+        task,
+        previousAssigneeId: null,
+      });
+
       return task;
     });
   }
 
   async update(input: UpdateTaskInput) {
     return await this.db.$transaction(async (tx) => {
-      await getActiveTaskOrThrow(tx, input.id);
+      const before = await getActiveTaskOrThrow(tx, input.id);
       await ensureParentPatchIsValid(tx, input.id, input.patch.parentId);
 
-      return await tx.task.update({
+      const updated = await tx.task.update({
         where: { id: input.id },
         data: input.patch,
       });
+
+      await createMentionAndAssignmentNotifications(tx, {
+        actorId: input.actorId,
+        task: updated,
+        previousAssigneeId: before.assigneeId,
+        previousDescription: before.description,
+        previousTitle: before.title,
+      });
+
+      return updated;
     });
   }
 
@@ -214,8 +295,8 @@ export class BacklogService {
   }
 }
 
-export function createBacklogService(db: BacklogServiceDb) {
-  return new BacklogService(db);
+export function createBacklogService(db: BacklogServiceDb | PrismaClient) {
+  return new BacklogService(db as BacklogServiceDb);
 }
 
 async function getActiveTaskOrThrow(tx: TaskReader, id: string) {
@@ -231,6 +312,144 @@ async function getActiveTaskOrThrow(tx: TaskReader, id: string) {
   }
 
   return task;
+}
+
+type MentionNotificationInput = {
+  actorId: string;
+  task: Task;
+  previousAssigneeId: string | null;
+  previousTitle?: string;
+  previousDescription?: string | null;
+};
+
+async function createMentionAndAssignmentNotifications(
+  tx: BacklogTransaction,
+  input: MentionNotificationInput,
+) {
+  const mentionedUserIds = await getMentionedUserIds(tx, {
+    text: `${input.task.title} ${input.task.description ?? ""}`,
+  });
+
+  const previousMentionedUserIds = input.previousTitle === undefined
+    ? new Set<string>()
+    : await getMentionedUserIds(tx, {
+      text: `${input.previousTitle ?? ""} ${input.previousDescription ?? ""}`,
+    });
+
+  const assignedUserId = input.task.assigneeId;
+  const isAssigneeChanged =
+    assignedUserId !== null && assignedUserId !== input.previousAssigneeId;
+
+  const recipients = new Set<string>([
+    ...mentionedUserIds,
+    ...(isAssigneeChanged ? [assignedUserId] : []),
+  ]);
+
+  for (const recipientId of recipients) {
+    if (recipientId === input.actorId) {
+      continue;
+    }
+
+    if (recipientId === assignedUserId && !isAssigneeChanged) {
+      continue;
+    }
+
+    if (recipientId === assignedUserId) {
+      await createNotification(tx, {
+        actorId: input.actorId,
+        recipientId,
+        type: NOTIFICATION_TYPES.TASK_ASSIGNED,
+        entityType: EntityType.TASK,
+        entityId: input.task.id,
+        title: "Task assigned",
+        message: `You were assigned to ${input.task.title}`,
+        targetPath: "/backlog",
+      });
+      continue;
+    }
+
+    if (previousMentionedUserIds.has(recipientId)) {
+      continue;
+    }
+
+    await createNotification(tx, {
+      actorId: input.actorId,
+      recipientId,
+      type: NOTIFICATION_TYPES.TASK_MENTION,
+      entityType: EntityType.TASK,
+      entityId: input.task.id,
+      title: "Task mention",
+      message: `${input.actorId} mentioned you in ${input.task.title}`,
+      targetPath: "/backlog",
+    });
+  }
+}
+
+async function getMentionedUserIds(
+  tx: BacklogTransaction,
+  input: {
+    text: string;
+  },
+) {
+  if (!tx.user) {
+    return new Set<string>();
+  }
+
+  const candidates = extractMentionCandidates(input.text);
+  if (candidates.length === 0) {
+    return new Set<string>();
+  }
+
+  const users = await tx.user.findMany({
+    where: {},
+    select: {
+      id: true,
+      name: true,
+      email: true,
+    },
+  });
+
+  const matched = new Set<string>();
+
+  for (const user of users) {
+    const aliases = buildMentionAliases(user);
+    if (aliases.some((alias) => candidates.includes(alias))) {
+      matched.add(user.id);
+    }
+  }
+
+  return matched;
+}
+
+function extractMentionCandidates(input: string) {
+  const all = input.matchAll(MENTION_PATTERN);
+  const candidates: string[] = [];
+
+  for (const match of all) {
+    const candidate = match[1];
+    if (candidate) {
+      candidates.push(normalizeMention(candidate));
+    }
+  }
+
+  return candidates;
+}
+
+function buildMentionAliases(user: UserRecord) {
+  const localPart = user.email.split("@")[0] ?? "";
+  const firstName = user.name.split(/\s+/)[0] ?? "";
+  const displayName = user.name.replace(/\s+/g, "");
+
+  return [
+    normalizeMention(user.id),
+    normalizeMention(localPart),
+    normalizeMention(firstName),
+    normalizeMention(displayName),
+  ];
+}
+
+function normalizeMention(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
 async function getNeighbour(tx: BacklogTransaction, id: string | undefined) {
@@ -302,6 +521,10 @@ async function getReorderOrder(
     after: OrderNeighbour | undefined;
   },
 ) {
+  if (input.before === undefined && input.after === undefined) {
+    return await getNextOrder(tx, input.parentId, input.taskId);
+  }
+
   const order = getFractionalOrder(input.before?.order, input.after?.order);
 
   if (order !== undefined && hasUsableOrderGap(input.before?.order, input.after?.order)) {
@@ -340,10 +563,6 @@ async function getReorderOrder(
 }
 
 function getFractionalOrder(beforeOrder: number | undefined, afterOrder: number | undefined) {
-  if (beforeOrder === undefined && afterOrder === undefined) {
-    return INITIAL_ORDER;
-  }
-
   if (beforeOrder === undefined) {
     return afterOrder === undefined ? INITIAL_ORDER : afterOrder / 2;
   }
@@ -357,17 +576,28 @@ function getFractionalOrder(beforeOrder: number | undefined, afterOrder: number 
 
 function hasUsableOrderGap(beforeOrder: number | undefined, afterOrder: number | undefined) {
   if (beforeOrder === undefined || afterOrder === undefined) {
-    return true;
+    return beforeOrder === undefined && afterOrder !== undefined
+      ? afterOrder > MIN_ORDER_GAP
+      : true;
   }
 
   return afterOrder - beforeOrder > MIN_ORDER_GAP;
 }
 
-async function getNextOrder(tx: BacklogTransaction, parentId: string | null) {
+async function getNextOrder(
+  tx: BacklogTransaction,
+  parentId: string | null,
+  excludingTaskId?: string,
+) {
+  const excludeTaskFilter = excludingTaskId
+    ? { not: excludingTaskId }
+    : undefined;
+
   const lastTask = await tx.task.findFirst({
     where: {
       parentId,
       deletedAt: null,
+      id: excludeTaskFilter,
     },
     orderBy: { order: "desc" },
   });

@@ -24,7 +24,7 @@ export type CreateReferenceInput = {
 };
 
 export type ListReferencesInput =
-  | { from: ReferenceEndpoint; to?: never }
+  | { from: ReferenceEndpoint; to?: ReferenceEndpoint }
   | { from?: never; to: ReferenceEndpoint };
 
 export type ReferenceTransaction = {
@@ -51,6 +51,15 @@ export async function listReferences(
   input: ListReferencesInput,
 ): Promise<Array<Prisma.ReferenceGetPayload<object>>> {
   const where = (() => {
+    if (input.from && input.to) {
+      return {
+        fromType: input.from.type,
+        fromId: input.from.id,
+        toType: input.to.type,
+        toId: input.to.id,
+      };
+    }
+
     if (input.from) {
       return {
         fromType: input.from.type,

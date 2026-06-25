@@ -13,5 +13,13 @@
   "devDependencies": {
     "@hibi/config": "workspace:*",
     "tsx": "^4.22.4"
+  },
+  "dependencies": {
+    "@hocuspocus/common": "^4.2.0",
+    "@hocuspocus/extension-database": "^4.2.0",
+    "@hocuspocus/server": "^4.2.0",
+    "@hibi/auth": "workspace:*",
+    "@hibi/db": "workspace:*",
+    "yjs": "^13.6.27"
   }
 }

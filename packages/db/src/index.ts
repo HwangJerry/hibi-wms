@@ -5,14 +5,8 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { config as loadDotenv } from "dotenv";
 import { PrismaClient } from "./generated/prisma/client.js";
 
-export {
-  EntityType,
-  Prisma,
-  PrismaClient,
-  Priority,
-  TaskStatus,
-} from "./generated/prisma/client.js";
-export type { Task } from "./generated/prisma/client.js";
+export * from "./generated/prisma/client.js";
+export type { PrismaClient } from "./generated/prisma/client.js";
 
 const ENV_FILE_NAME = ".env";
 

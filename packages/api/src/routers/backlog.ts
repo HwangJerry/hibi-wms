@@ -61,6 +61,10 @@ const softDeleteTaskInputSchema = z.object({
 });
 
 export const backlogRouter = router({
+  count: protectedProcedure.query(async ({ ctx }) => {
+    return await createBacklogService(ctx.db).countActive();
+  }),
+
   list: protectedProcedure.input(listTasksInputSchema).query(async ({ ctx, input }) => {
     return await createBacklogService(ctx.db).list(input);
   }),
@@ -77,7 +81,10 @@ export const backlogRouter = router({
   }),
 
   update: protectedProcedure.input(updateTaskInputSchema).mutation(async ({ ctx, input }) => {
-    return await createBacklogService(ctx.db).update(input);
+    return await createBacklogService(ctx.db).update({
+      ...input,
+      actorId: ctx.user.id,
+    });
   }),
 
   reorder: protectedProcedure.input(reorderTaskInputSchema).mutation(async ({ ctx, input }) => {

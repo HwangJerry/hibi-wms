@@ -11,6 +11,7 @@ type TaskUpdateArgs = {
   where: Prisma.TaskWhereUniqueInput;
   data: Prisma.TaskUncheckedUpdateInput;
 };
+type TaskCountArgs = Prisma.TaskCountArgs;
 
 type AuditLogEntry = {
   id: string;
@@ -40,6 +41,9 @@ class InMemoryRouterDb {
     findFirst: (args: TaskFindFirstArgs) => {
       const task = this.findTasks(args).at(0);
       return Promise.resolve(task ? copyTask(task) : null);
+    },
+    count: (args: TaskCountArgs) => {
+      return Promise.resolve(this.findTasks(args).length);
     },
     create: (args: TaskCreateArgs) => {
       const now = new Date("2026-06-17T00:00:00.000Z");
@@ -74,6 +78,29 @@ class InMemoryRouterDb {
       return Promise.resolve(copyTask(task));
     },
   };
+
+  addTask(input: {
+    id: string;
+    title?: string;
+    deletedAt?: Date | null;
+    order?: number;
+  }) {
+    const now = new Date("2026-06-17T00:00:00.000Z");
+    this.tasks.push({
+      id: input.id,
+      title: input.title ?? input.id,
+      description: null,
+      status: TaskStatus.BACKLOG,
+      priority: Priority.MEDIUM,
+      assigneeId: null,
+      parentId: null,
+      order: input.order ?? this.nextTaskNumber * 1024,
+      deletedAt: input.deletedAt ?? null,
+      createdAt: now,
+      updatedAt: now,
+    });
+    this.nextTaskNumber += 1;
+  }
 
   readonly auditLog = {
     create: (args: AuditLogCreateArgs) => {
@@ -234,5 +261,15 @@ describe("backlogRouter", () => {
         entityId: createdTask.id,
       },
     ]);
+  });
+
+  it("counts active tasks for sidebar badges", async () => {
+    const db = new InMemoryRouterDb();
+    db.addTask({ id: "active-1" });
+    db.addTask({ id: "active-2" });
+    db.addTask({ id: "deleted", deletedAt: new Date("2026-06-17T00:00:00.000Z") });
+    const caller = appRouter.createCaller(createAuthenticatedContext(db));
+
+    await expect(caller.backlog.count()).resolves.toBe(2);
   });
 });

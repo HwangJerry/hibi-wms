@@ -16,6 +16,7 @@ model User {
   updatedAt    DateTime  @updatedAt
   sessions     Session[]
   tasks        Task[]
+  pageVersions PageVersion[]
 }
 
 model Session {
@@ -35,6 +36,33 @@ enum EntityType {
   PAGE
   COMMENT
   ATTACHMENT
+}
+
+enum NotificationType {
+  APPROVAL_PENDING
+  TASK_ASSIGNED
+  TASK_MENTION
+}
+
+enum ApprovalType {
+  FINANCIAL
+  WORK
+}
+
+enum ApprovalState {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum ApprovalActionKind {
+  SUBMIT
+  APPROVE
+  REJECT
+  CANCEL
+  COMMENT
 }
 
 model Reference {
@@ -79,10 +107,135 @@ model Attachment {
   createdAt  DateTime @default(now())
 }
 
+model ApprovalRequest {
+  id          String         @id @default(cuid())
+  type        ApprovalType
+  title       String
+  description String?
+  requesterId String
+  approverId  String
+  state       ApprovalState  @default(PENDING)
+  decidedAt   DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  actions     ApprovalAction[]
+  transactions Transaction[] @relation("ApprovalTransactions")
+}
+
+model ApprovalAction {
+  id        String              @id @default(cuid())
+  requestId String
+  actorId   String
+  action    ApprovalActionKind
+  note      String?
+  createdAt DateTime            @default(now())
+  request   ApprovalRequest     @relation(fields: [requestId], references: [id])
+}
+
+enum AccountKind {
+  CASH
+  BANK
+  CARD
+  OTHER
+}
+
+enum CategoryKind {
+  INCOME
+  EXPENSE
+}
+
+enum TxStatus {
+  PENDING
+  POSTED
+  REVERSED
+}
+
+model Account {
+  id        String     @id @default(cuid())
+  name      String
+  kind      AccountKind
+  currency  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  transactions Transaction[]
+}
+
+model Category {
+  id        String       @id @default(cuid())
+  name      String
+  kind      CategoryKind
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  transactions Transaction[]
+  budgets    Budget[]
+}
+
+model Transaction {
+  id           String     @id @default(cuid())
+  accountId    String
+  categoryId   String?
+  amount       Decimal    @db.Decimal(18, 2)
+  currency     String
+  description  String?
+  status       TxStatus   @default(PENDING)
+  approvalId   String?
+  occurredAt   DateTime
+  postedAt     DateTime?
+  reversedById String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  account      Account    @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  category     Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  approval     ApprovalRequest? @relation("ApprovalTransactions", fields: [approvalId], references: [id], onDelete: SetNull)
+  reversedBy   Transaction? @relation("TransactionReversal", fields: [reversedById], references: [id], onDelete: SetNull)
+  reversed     Transaction[] @relation("TransactionReversal")
+
+  @@index([accountId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([approvalId])
+  @@index([reversedById])
+  @@index([occurredAt])
+}
+
+model Notification {
+  id         String           @id @default(cuid())
+  recipientId String
+  actorId    String
+  type       NotificationType
+  entityType EntityType
+  entityId   String
+  title      String
+  message    String?
+  targetPath String?
+  isRead     Boolean          @default(false)
+  readAt     DateTime?
+  createdAt  DateTime         @default(now())
+
+  @@index([recipientId, createdAt])
+  @@index([recipientId, isRead])
+}
+
+model Budget {
+  id          String    @id @default(cuid())
+  categoryId  String
+  periodStart DateTime
+  periodEnd   DateTime
+  limit       Decimal   @db.Decimal(18, 2)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([categoryId])
+  @@index([periodStart, periodEnd])
+}
+
 enum TaskStatus {
   BACKLOG
   TODO
   IN_PROGRESS
+  IN_REVIEW
+  BLOCKED
   DONE
 }
 
@@ -113,4 +266,49 @@ model Task {
   @@index([assigneeId])
   @@index([parentId, order])
   @@index([deletedAt])
+}
+
+model Space {
+  id         String     @id @default(cuid())
+  name       String
+  deletedAt  DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  pages      Page[]
+}
+
+model Page {
+  id         String     @id @default(cuid())
+  spaceId    String
+  parentId   String?
+  title      String
+  yDoc       Bytes
+  textProjection String  @default("")
+  order      Float
+  deletedAt  DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  space      Space      @relation(fields: [spaceId], references: [id])
+  parent     Page?      @relation("PageTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children   Page[]     @relation("PageTree")
+  versions   PageVersion[]
+
+  @@index([spaceId])
+  @@index([parentId, order])
+  @@index([deletedAt])
+}
+
+model PageVersion {
+  id        String   @id @default(cuid())
+  pageId    String
+  yDoc      Bytes
+  authorId  String
+  label     String?
+  createdAt DateTime @default(now())
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id])
+
+  @@index([pageId])
+  @@index([authorId])
+  @@index([createdAt])
 }

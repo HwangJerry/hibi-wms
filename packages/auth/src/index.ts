@@ -18,9 +18,10 @@ const SESSION_DURATION_IN_DAYS = 30;
 const HASH_MEMORY_COST_KIB = 19_456;
 const HASH_TIME_COST = 2;
 const HASH_PARALLELISM = 1;
+const SESSION_COOKIE_SECURE = process.env.SESSION_COOKIE_SECURE !== "false";
 const SESSION_COOKIE_ATTRIBUTES = {
   httpOnly: true,
-  secure: true,
+  secure: SESSION_COOKIE_SECURE,
   sameSite: "lax" as const,
   path: "/",
 };
@@ -170,8 +171,10 @@ class AuthSessionAdapter implements Adapter {
   }
 }
 
-function createLuciaAuth(db: AuthDatabase): Lucia<{}, AuthUserAttributes> {
-  return new Lucia<{}, AuthUserAttributes>(new AuthSessionAdapter(db), {
+type EmptySessionAttributes = Record<string, never>;
+
+function createLuciaAuth(db: AuthDatabase): Lucia<EmptySessionAttributes, AuthUserAttributes> {
+  return new Lucia<EmptySessionAttributes, AuthUserAttributes>(new AuthSessionAdapter(db), {
     sessionExpiresIn: EXPIRES_IN,
     sessionCookie: {
       name: SESSION_COOKIE_NAME,
@@ -186,19 +189,20 @@ function createLuciaAuth(db: AuthDatabase): Lucia<{}, AuthUserAttributes> {
   });
 }
 
-const cookieAuth = new Lucia<{}, AuthUserAttributes>(
+const cookieAuth = new Lucia<EmptySessionAttributes, AuthUserAttributes>(
   {
-    getSessionAndUser: async () => [null, null],
-    getUserSessions: async () => [],
-    setSession: async () => {},
-    updateSessionExpiration: async () => {},
-    deleteSession: async () => {},
-    deleteUserSessions: async () => {},
-    deleteExpiredSessions: async () => {},
+    getSessionAndUser: () => Promise.resolve([null, null]),
+    getUserSessions: () => Promise.resolve([]),
+    setSession: () => Promise.resolve(),
+    updateSessionExpiration: () => Promise.resolve(),
+    deleteSession: () => Promise.resolve(),
+    deleteUserSessions: () => Promise.resolve(),
+    deleteExpiredSessions: () => Promise.resolve(),
   },
   {
     sessionCookie: {
       name: SESSION_COOKIE_NAME,
+      attributes: SESSION_COOKIE_ATTRIBUTES,
     },
   },
 );

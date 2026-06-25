@@ -81,6 +81,9 @@ class InMemoryBacklogDb {
     findMany: (args: TaskFindArgs) => {
       return Promise.resolve(this.findTasks(args).map((task) => copyTask(task)));
     },
+    count: (args: TaskFindArgs) => {
+      return Promise.resolve(this.findTasks(args).length);
+    },
     create: (args: TaskCreateArgs) => {
       const now = new Date("2026-06-17T00:00:00.000Z");
       const task: Task = {
@@ -198,6 +201,19 @@ function createService() {
 }
 
 describe("BacklogService", () => {
+  it("counts active tasks", async () => {
+    const { db, service } = createService();
+    db.addTask({ id: "active-1", order: 1024 });
+    db.addTask({ id: "active-2", order: 2048 });
+    db.addTask({
+      id: "deleted",
+      order: 3072,
+      deletedAt: new Date("2026-06-17T00:00:00.000Z"),
+    });
+
+    await expect(service.countActive()).resolves.toBe(2);
+  });
+
   it("creates tasks at the end of the parent list and writes a create audit log", async () => {
     const { db, service } = createService();
     db.addTask({ id: "existing", order: 1024 });
@@ -228,12 +244,22 @@ describe("BacklogService", () => {
       id: "task",
       status: TaskStatus.IN_PROGRESS,
     });
+    const inReview = await service.setStatus({
+      id: "task",
+      status: TaskStatus.IN_REVIEW,
+    });
+    const blocked = await service.setStatus({
+      id: "task",
+      status: TaskStatus.BLOCKED,
+    });
     const done = await service.setStatus({
       id: "task",
       status: TaskStatus.DONE,
     });
 
     expect(inProgress.status).toBe(TaskStatus.IN_PROGRESS);
+    expect(inReview.status).toBe(TaskStatus.IN_REVIEW);
+    expect(blocked.status).toBe(TaskStatus.BLOCKED);
     expect(done.status).toBe(TaskStatus.DONE);
     expect(db.auditLogs).toHaveLength(0);
   });
@@ -243,6 +269,7 @@ describe("BacklogService", () => {
     db.addTask({ id: "task", order: 1024 });
 
     const task = await service.update({
+      actorId: "user-1",
       id: "task",
       patch: {
         title: "Renamed",
@@ -323,6 +350,21 @@ describe("BacklogService", () => {
     expect(task.order).toBe(3072);
   });
 
+  it("reorders a task to the end when no neighbours are provided", async () => {
+    const { db, service } = createService();
+    db.addTask({ id: "before", order: 1024 });
+    db.addTask({ id: "moving", order: 1536 });
+    db.addTask({ id: "after", order: 3072 });
+
+    const task = await service.reorder({
+      id: "moving",
+    });
+
+    expect(task.order).toBe(4096);
+    expect(db.tasks.find((candidate) => candidate.id === "after")?.order).toBe(3072);
+    expect(db.tasks.find((candidate) => candidate.id === "before")?.order).toBe(1024);
+  });
+
   it("moves a task under the neighbours' epic", async () => {
     const { db, service } = createService();
     db.addTask({ id: "epic", order: 1024 });
@@ -357,6 +399,63 @@ describe("BacklogService", () => {
     expect(db.tasks.find((candidate) => candidate.id === "before")?.order).toBe(1024);
     expect(db.tasks.find((candidate) => candidate.id === "after")?.order).toBe(2048);
     expect(task.order).toBe(1536);
+  });
+
+  it("rebalances when prepending to a very small leading gap", async () => {
+    const { db, service } = createService();
+    db.addTask({ id: "moving", order: 2 });
+    db.addTask({ id: "after", order: 0.0000005 });
+
+    const task = await service.reorder({
+      id: "moving",
+      afterId: "after",
+    });
+
+    expect(task.order).toBe(512);
+    expect(db.tasks.find((candidate) => candidate.id === "after")?.order).toBe(1024);
+  });
+
+  it("supports status transitions through all backlog states", async () => {
+    const { db, service } = createService();
+    db.addTask({ id: "task", order: 1024 });
+
+    const backlog = await service.setStatus({
+      id: "task",
+      status: TaskStatus.BACKLOG,
+    });
+    const todo = await service.setStatus({
+      id: "task",
+      status: TaskStatus.TODO,
+    });
+    const inProgress = await service.setStatus({
+      id: "task",
+      status: TaskStatus.IN_PROGRESS,
+    });
+    const inReview = await service.setStatus({
+      id: "task",
+      status: TaskStatus.IN_REVIEW,
+    });
+    const blocked = await service.setStatus({
+      id: "task",
+      status: TaskStatus.BLOCKED,
+    });
+    const done = await service.setStatus({
+      id: "task",
+      status: TaskStatus.DONE,
+    });
+    const reopened = await service.setStatus({
+      id: "task",
+      status: TaskStatus.BACKLOG,
+    });
+
+    expect(backlog.status).toBe(TaskStatus.BACKLOG);
+    expect(todo.status).toBe(TaskStatus.TODO);
+    expect(inProgress.status).toBe(TaskStatus.IN_PROGRESS);
+    expect(inReview.status).toBe(TaskStatus.IN_REVIEW);
+    expect(blocked.status).toBe(TaskStatus.BLOCKED);
+    expect(done.status).toBe(TaskStatus.DONE);
+    expect(reopened.status).toBe(TaskStatus.BACKLOG);
+    expect(db.auditLogs).toHaveLength(0);
   });
 
   it("rejects reorder neighbours from different parents", async () => {
@@ -439,6 +538,7 @@ describe("BacklogService", () => {
 
     await expect(
       service.update({
+        actorId: "user-1",
         id: "task",
         patch: { parentId: "child" },
       }),

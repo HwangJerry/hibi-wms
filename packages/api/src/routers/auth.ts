@@ -10,7 +10,7 @@ import { z } from "zod";
 import { protectedProcedure, publicProcedure, router } from "../trpc.js";
 
 const loginInputSchema = z.object({
-  email: z.string().trim().email(),
+  email: z.string().trim().min(1),
   password: z.string().min(1),
 });
 
