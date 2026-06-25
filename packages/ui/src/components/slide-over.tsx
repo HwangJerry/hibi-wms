@@ -1,4 +1,5 @@
 import { type HTMLAttributes, type ReactNode } from "react";
+import { X } from "lucide-react";
 import { cx } from "../primitives/classnames";
 
 export interface SlideOverProps extends HTMLAttributes<HTMLDivElement> {
@@ -57,7 +58,7 @@ export function SlideOver({
             className="ml-auto inline-flex h-6 w-6 items-center justify-center rounded border border-border text-text-secondary hover:bg-surface-2"
             aria-label="Close"
           >
-            ✕
+            <X className="h-3.5 w-3.5" aria-hidden="true" />
           </button>
         </div>
         <div className="flex-1 overflow-auto px-4 py-4">{children}</div>

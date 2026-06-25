@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { cx } from "../primitives/classnames";
 
 export type StatusTone =
@@ -17,6 +17,7 @@ export interface StatusPillProps extends HTMLAttributes<HTMLSpanElement> {
   status: StatusTone;
   label: string;
   dot?: boolean;
+  leftSlot?: ReactNode;
   statusColor?: string;
   backgroundColor?: string;
   borderColor?: string;
@@ -53,14 +54,14 @@ const PRESET_BY_STATUS: Record<
   active: {
     dotColor: "var(--status-pending)",
     textColor: "var(--status-pending)",
-    backgroundColor: "color-mix(in srgb, var(--status-pending) 14%, transparent)",
-    borderColor: "color-mix(in srgb, var(--status-pending) 32%, transparent)",
+    backgroundColor: "var(--status-pending-bg)",
+    borderColor: "var(--status-pending-border)",
   },
   "in-progress": {
     dotColor: "var(--status-pending)",
     textColor: "var(--status-pending)",
-    backgroundColor: "color-mix(in srgb, var(--status-pending) 14%, transparent)",
-    borderColor: "color-mix(in srgb, var(--status-pending) 32%, transparent)",
+    backgroundColor: "var(--status-pending-bg)",
+    borderColor: "var(--status-pending-border)",
   },
   review: {
     dotColor: "var(--accent)",
@@ -98,6 +99,7 @@ export function StatusPill({
   status,
   label,
   dot = true,
+  leftSlot,
   statusColor,
   backgroundColor,
   borderColor,
@@ -127,6 +129,7 @@ export function StatusPill({
       }}
       {...props}
     >
+      {leftSlot}
       {dot ? <span className="h-1.5 w-1.5 rounded-full" style={{ background: resolved.dotColor }} />
       : null}
       <span>{label}</span>

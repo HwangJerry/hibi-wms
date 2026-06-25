@@ -1,5 +1,5 @@
-import "../tokens/tokens.css";
-import { CommandPalette } from "../src";
+import "../../tokens/tokens.css";
+import { CommandPalette } from "../../src";
 
 const items = [
   {

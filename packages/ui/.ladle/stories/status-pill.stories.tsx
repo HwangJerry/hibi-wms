@@ -1,5 +1,5 @@
-import "../tokens/tokens.css";
-import { StatusPill } from "../src";
+import "../../tokens/tokens.css";
+import { StatusPill } from "../../src";
 
 export const StatusPillLight = () => (
   <div className="min-h-screen bg-surface-1 p-8 text-text-primary">

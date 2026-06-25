@@ -1,5 +1,5 @@
-import "../tokens/tokens.css";
-import { KpiTile } from "../src";
+import "../../tokens/tokens.css";
+import { KpiTile } from "../../src";
 
 export const KpiTileLight = () => (
   <div className="min-h-screen bg-surface-1 p-8 text-text-primary">

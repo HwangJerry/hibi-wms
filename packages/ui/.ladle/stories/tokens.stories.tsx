@@ -1,4 +1,4 @@
-import "../tokens/tokens.css";
+import "../../tokens/tokens.css";
 
 export const SurfaceTokens = () => {
   return (

@@ -1,5 +1,5 @@
-import "../tokens/tokens.css";
-import { DenseTable, StatusPill } from "../src";
+import "../../tokens/tokens.css";
+import { DenseTable, StatusPill } from "../../src";
 
 interface TaskRow {
   id: string;

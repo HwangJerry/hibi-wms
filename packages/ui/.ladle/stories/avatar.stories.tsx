@@ -1,5 +1,5 @@
-import "../tokens/tokens.css";
-import { Avatar } from "../src";
+import "../../tokens/tokens.css";
+import { Avatar } from "../../src";
 
 export const AvatarLight = () => (
   <div className="min-h-screen bg-surface-1 p-8 text-text-primary">

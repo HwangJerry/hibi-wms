@@ -1,5 +1,5 @@
-import "../tokens/tokens.css";
-import { DenseTextarea, Input } from "../src";
+import "../../tokens/tokens.css";
+import { DenseTextarea, Input } from "../../src";
 
 export const InputLight = () => (
   <div className="min-h-screen bg-surface-1 p-8 text-text-primary">

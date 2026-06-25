@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../tokens/tokens.css";
-import { Button, SlideOver } from "../src";
+import "../../tokens/tokens.css";
+import { Button, SlideOver } from "../../src";
 
 function SlideOverDemo({ dark = false }: { dark?: boolean }) {
   const [open, setOpen] = useState(false);

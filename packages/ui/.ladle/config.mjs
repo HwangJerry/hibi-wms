@@ -1,3 +1,3 @@
 export default {
-  stories: "stories/**/*.stories.tsx",
+  stories: ".ladle/stories/**/*.stories.tsx",
 };

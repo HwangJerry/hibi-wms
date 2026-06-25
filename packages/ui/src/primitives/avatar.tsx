@@ -16,14 +16,6 @@ const AVATAR_SIZE_CLASS: Record<AvatarSize, string> = {
   lg: "h-9 w-9 text-sm",
 };
 
-function normalizeHue(value: string): number {
-  let hash = 0;
-  for (let i = 0; i < value.length; i++) {
-    hash = (hash + value.charCodeAt(i) * (i + 17)) % 360;
-  }
-  return hash;
-}
-
 export function Avatar({
   name,
   size = "md",
@@ -32,19 +24,17 @@ export function Avatar({
   ...props
 }: AvatarProps) {
   const label = fallback ?? name.slice(0, 2).toUpperCase();
-  const hue = normalizeHue(name);
+  const isAccentAvatar = label.startsWith("A");
   return (
     <span
       className={cx(
         "inline-flex shrink-0 items-center justify-center rounded-full font-semibold tracking-tight",
-        "border border-border",
+        isAccentAvatar
+          ? "bg-accent-subtle text-accent"
+          : "bg-status-done/15 text-status-done",
         AVATAR_SIZE_CLASS[size],
         className,
       )}
-      style={{
-        backgroundColor: `hsl(${hue}, 50%, 34%)`,
-        color: "hsl(0, 0%, 98%)",
-      }}
       aria-label={name}
       {...props}
     >

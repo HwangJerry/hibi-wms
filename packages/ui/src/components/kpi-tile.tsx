@@ -6,6 +6,8 @@ export interface KpiTileProps {
   trend?: string;
   trendDirection?: "up" | "down" | "flat";
   className?: string;
+  valueClassName?: string;
+  trendClassName?: string;
 }
 
 const TREND_STYLES: Record<
@@ -39,18 +41,22 @@ export function KpiTile({
   trend,
   trendDirection = "flat",
   className,
+  valueClassName,
+  trendClassName,
 }: KpiTileProps) {
   const tone = TREND_STYLES[trendDirection];
 
   return (
     <article className={cx("rounded-md border border-border bg-surface-2 p-3.5", className)}>
       <p className="text-[11px] font-semibold uppercase tracking-wide text-text-secondary">{label}</p>
-      <p className="mt-2 text-[28px] font-semibold leading-tight tracking-tight text-text-primary">
+      <p
+        className={cx("mt-2 text-[28px] font-semibold leading-tight tracking-tight text-text-primary tabular-nums", valueClassName)}
+      >
         {value}
       </p>
       {trend ? (
         <p
-          className="mt-1.5 text-xs"
+          className={cx("mt-1.5 text-xs", trendClassName)}
           style={{ color: tone.textColor }}
         >
           <span className="inline-flex items-center gap-1.5">

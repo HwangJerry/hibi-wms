@@ -19,6 +19,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "catalog:build": "ladle build --config .ladle",
+    "catalog:dev": "ladle serve --config .ladle --host 127.0.0.1",
     "test": "vitest run --passWithNoTests",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.json --noEmit"
@@ -36,10 +38,15 @@
     }
   },
   "devDependencies": {
+    "@hibi/config": "workspace:*",
+    "@ladle/react": "^5.1.1",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
+    "autoprefixer": "^10.5.0",
+    "lucide-react": "^1.20.0",
+    "postcss": "^8.5.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@hibi/config": "workspace:*"
+    "tailwindcss": "^3.4.19"
   }
 }

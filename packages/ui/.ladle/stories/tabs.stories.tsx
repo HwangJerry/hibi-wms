@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../tokens/tokens.css";
-import { Tabs, type TabItem } from "../src";
+import "../../tokens/tokens.css";
+import { Tabs, type TabItem } from "../../src";
 
 const TAB_ITEMS: readonly TabItem<string>[] = [
   { value: "active", label: "Active" },

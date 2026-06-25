@@ -1,5 +1,5 @@
-import "../tokens/tokens.css";
-import { Button } from "../src";
+import "../../tokens/tokens.css";
+import { Button } from "../../src";
 
 export const ButtonLight = () => (
   <div className="min-h-screen bg-surface-1 p-8 text-text-primary">
