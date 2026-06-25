@@ -1,11 +1,27 @@
 node_modules/
 dist/
+build/
 coverage/
+test-results/
 .turbo/
+.cache/
+.vite/
 *.tsbuildinfo
+*.log
 .DS_Store
 .env
 .env.*
 !.env.example
 !.env.*.example
+
+# Local Codex/agent workspace state
+.codex/
+
+# Playwright artifacts
+playwright-report/
+blob-report/
+
+# Generated reports
+docs/visual-parity-report.md
+
 packages/db/src/generated/

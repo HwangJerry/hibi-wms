@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hibi-api-migrate
+  namespace: hibi-portal
+  labels:
+    app.kubernetes.io/name: hibi-api-migrate
+    app.kubernetes.io/part-of: hibi-portal
+spec:
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: hibi-api-migrate
+        app.kubernetes.io/part-of: hibi-portal
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: prisma-migrate
+          image: server-main:30500/hibi-wms-api:main
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+            - packages/db/node_modules/.bin/prisma migrate deploy --config packages/db/prisma.config.ts
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: DATABASE_URL

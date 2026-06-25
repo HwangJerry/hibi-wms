@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hibi-db-backup
+  namespace: hibi-portal
+  labels:
+    app.kubernetes.io/name: hibi-db-backup
+    app.kubernetes.io/part-of: hibi-portal
+spec:
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 86400
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: pg-backup
+              image: python:3.12-slim
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+                  apt-get update
+                  apt-get install -y --no-install-recommends postgresql-client awscli
+                  apt-get clean
+                  rm -rf /var/lib/apt/lists/*
+
+                  TIMESTAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+                  PREFIX="${R2_BACKUP_PREFIX:-postgres-backups}"
+                  RETENTION_COUNT="${BACKUP_RETENTION_COUNT:-168}"
+                  TMP_FILE="/tmp/${PREFIX##*/}-${TIMESTAMP}.sql.gz"
+
+                  pg_dump "$DATABASE_URL" | gzip > "$TMP_FILE"
+                  aws s3 cp "$TMP_FILE" "s3://${R2_BUCKET_NAME}/${PREFIX}/hibi-${TIMESTAMP}.sql.gz" --endpoint-url "$R2_ENDPOINT"
+
+                  TOTAL="$(aws s3 ls "s3://${R2_BUCKET_NAME}/${PREFIX}/" --endpoint-url "$R2_ENDPOINT" | awk '{print $4}' | sort | wc -l)"
+                  if [ "$TOTAL" -gt "$RETENTION_COUNT" ]; then
+                    aws s3 ls "s3://${R2_BUCKET_NAME}/${PREFIX}/" --endpoint-url "$R2_ENDPOINT" \
+                      | awk '{print $4}' \
+                      | sort \
+                      | head -n "$((TOTAL - RETENTION_COUNT))" \
+                      | xargs -r -I{} aws s3 rm "s3://${R2_BUCKET_NAME}/{}" --endpoint-url "$R2_ENDPOINT"
+                  fi
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: hibi-app-secrets
+                      key: DATABASE_URL
+                - name: R2_BUCKET_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: hibi-app-secrets
+                      key: R2_BUCKET_NAME
+                - name: R2_ENDPOINT
+                  valueFrom:
+                    secretKeyRef:
+                      name: hibi-app-secrets
+                      key: R2_ENDPOINT
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: hibi-app-secrets
+                      key: R2_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: hibi-app-secrets
+                      key: R2_SECRET_ACCESS_KEY
+                - name: AWS_DEFAULT_REGION
+                  value: auto
+                - name: R2_BACKUP_PREFIX
+                  value: postgres-backups
+                - name: BACKUP_RETENTION_COUNT
+                  value: "168"

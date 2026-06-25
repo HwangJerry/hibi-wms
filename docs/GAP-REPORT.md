@@ -72,10 +72,10 @@ and the roadmap in `docs/product.md`.
 | Local Postgres | Done | `docker-compose.yml` runs PostgreSQL 16 for local development. |
 | k3s Postgres | Partial | `infra/k8s/postgres.yaml` defines a namespace, services, and single-replica StatefulSet with local-path PVC and node affinity. |
 | Cloudflare Tunnel | Missing | `infra/cloudflared` is empty; no tunnel Deployment, config, or secret templates exist. |
-| App workloads | Missing | No Kubernetes manifests or Dockerfiles exist for `web`, `api`, or `realtime`. |
+| App workloads | Partial | `packages/api/Dockerfile`, `apps/realtime/Dockerfile`, and `apps/web/Dockerfile` exist, but Kubernetes manifests are still missing. |
 | Realtime single replica manifest | Missing | No realtime Deployment exists, so the single-replica Hocuspocus constraint is not represented. |
 | Backups to R2 | Missing | `infra/scripts` is empty; no `pg_dump` CronJob or restore script exists. |
-| CI/image publishing | Missing | No GitHub Actions or image build/push workflow was found. |
+| CI/image publishing | Done | `ci` workflow now runs `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm tokens:build`, then builds and pushes `api`, `realtime`, and `web` images to GHCR with `github.sha` and `:main` tags. |
 
 ## Conflicts and Risks Against Docs
 

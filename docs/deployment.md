@@ -3,7 +3,14 @@
 ## Images
 - One image each for `api`, `realtime`, and `web` (web can be static files served by a
   tiny server or by Traefik). Multi-stage Dockerfiles; non-root user; pinned base images.
-- Push to **GHCR** (free private registry). Tag with git sha + a moving `:main`.
+- Push to the configured private registry.
+  Example used in this project: `100.74.225.115:30500`.
+  Tag with git sha + a moving `:main`.
+- Platform note: when building on arm64 hosts, build images for `linux/amd64` to match the cluster nodes:
+
+  - `docker build --platform linux/amd64 -f packages/api/Dockerfile -t 100.74.225.115:30500/hibi-wms-api:main .`
+  - `docker build --platform linux/amd64 -f apps/web/Dockerfile -t 100.74.225.115:30500/hibi-wms-web:main .`
+  - `docker build --platform linux/amd64 -f apps/realtime/Dockerfile -t 100.74.225.115:30500/hibi-wms-realtime:main .`
 
 ## Manifests
 - Keep manifests in `infra/` (Helm chart or Kustomize — pick one, document it).

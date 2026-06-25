@@ -20,24 +20,6 @@ spec:
   selector:
     app.kubernetes.io/name: hibi-postgres
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: hibi-postgres-nodeport
-  namespace: hibi-portal
-  labels:
-    app.kubernetes.io/name: hibi-postgres
-    app.kubernetes.io/part-of: hibi-portal
-spec:
-  type: NodePort
-  ports:
-    - name: postgres
-      port: 5432
-      targetPort: postgres
-      nodePort: 30432
-  selector:
-    app.kubernetes.io/name: hibi-postgres
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:

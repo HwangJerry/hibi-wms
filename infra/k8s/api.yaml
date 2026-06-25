@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hibi-api
+  namespace: hibi-portal
+  labels:
+    app.kubernetes.io/name: hibi-api
+    app.kubernetes.io/part-of: hibi-portal
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: hibi-api
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hibi-api
+  namespace: hibi-portal
+  labels:
+    app.kubernetes.io/name: hibi-api
+    app.kubernetes.io/part-of: hibi-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hibi-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: hibi-api
+        app.kubernetes.io/part-of: hibi-portal
+    spec:
+      initContainers:
+        - name: migrate
+          image: server-main:30500/hibi-wms-api:main
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+            - packages/db/node_modules/.bin/prisma migrate deploy --config packages/db/prisma.config.ts
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: DATABASE_URL
+      containers:
+        - name: api
+          image: server-main:30500/hibi-wms-api:main
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: NODE_ENV
+              value: "production"
+            - name: SESSION_COOKIE_SECURE
+              value: "false"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: DATABASE_URL
+            - name: SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: SESSION_SECRET
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

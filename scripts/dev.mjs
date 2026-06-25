@@ -93,15 +93,31 @@ async function createDevEnv() {
     useComposePostgres = true;
   }
 
-  if (!env.PORT) {
-    const realtimePort = Number.parseInt(env.REALTIME_PORT, 10);
-    const reservedPorts = Number.isNaN(realtimePort) ? new Set() : new Set([realtimePort]);
-    const apiPort = await findAvailablePort(DEFAULT_API_PORT, reservedPorts);
-    env.PORT = String(apiPort);
+  const requestedApiPort = Number.parseInt(env.PORT ?? String(DEFAULT_API_PORT), 10);
+  const realtimePort = Number.parseInt(env.REALTIME_PORT, 10);
+  const reservedPorts = Number.isNaN(realtimePort) ? new Set() : new Set([realtimePort]);
+  const shouldFindApiPort =
+    Number.isNaN(requestedApiPort) ||
+    reservedPorts.has(requestedApiPort) ||
+    !(await checkPortAvailable(requestedApiPort));
 
-    if (apiPort !== DEFAULT_API_PORT) {
-      console.log(`API port ${DEFAULT_API_PORT} is unavailable; using ${apiPort}.`);
+  if (shouldFindApiPort) {
+    const unavailableApiPort = Number.isNaN(requestedApiPort)
+      ? DEFAULT_API_PORT
+      : requestedApiPort;
+    const apiPort = await findAvailablePort(
+      unavailableApiPort,
+      reservedPorts,
+    );
+    env.PORT = String(apiPort);
+    env.API_PROXY_PORT = String(apiPort);
+
+    if (apiPort !== unavailableApiPort) {
+      console.log(`API port ${unavailableApiPort} is unavailable; using ${apiPort}.`);
     }
+  } else {
+    env.PORT = String(requestedApiPort);
+    env.API_PROXY_PORT = String(requestedApiPort);
   }
 
   return { env, useComposePostgres };
