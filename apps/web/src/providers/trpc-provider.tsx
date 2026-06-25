@@ -1,6 +1,6 @@
 import type { AppRouter } from "@hibi/api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/client";
+import { httpLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export function TrpcProvider({ children }: { children: ReactNode }) {
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
-        httpBatchLink({
+        httpLink({
           url: getTrpcUrl(),
           fetch: (url, init) =>
             fetch(url, {

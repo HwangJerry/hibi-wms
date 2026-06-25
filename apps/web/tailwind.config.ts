@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 import animate from "tailwindcss-animate";
-import uiTokenPreset from "../packages/ui/tokens/tailwind-preset.ts";
+import uiTokenPreset from "../../packages/ui/tokens/tailwind-preset";
 
 const uiTokenColors = uiTokenPreset.theme?.extend?.colors ?? {};
 
@@ -10,7 +10,7 @@ const config: Config = {
   content: [
     "./index.html",
     "./src/**/*.{ts,tsx}",
-    "../packages/ui/src/**/*.{ts,tsx}",
+    "../../packages/ui/src/**/*.{ts,tsx}",
   ],
   theme: {
     extend: {

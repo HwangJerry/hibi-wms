@@ -1,38 +1,39 @@
+import { ArrowDownUp, MoreHorizontal, SlidersHorizontal } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
-  ArrowDownUp,
-  Check,
-  Edit,
-  Loader2,
-  Plus,
-  RotateCcw,
-} from "lucide-react";
-import type { FormEvent } from "react";
-import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+  BacklogBoard,
+  BacklogList,
+  Button,
+  FilterChipButton,
+  FilterChipSelect,
+  InlineAlert,
+  Input,
+  PageFrame,
+  type TaskDetailComment,
+  TaskDetailSlideOver,
+  type TaskDetailReference,
+  ReferenceListPanel,
+  ReferencePickerPanel,
+  BACKLOG_STATUS_LABEL_BY_VALUE,
+  SegmentedControl,
+  Toolbar,
+  type BACKLOG_TASK_STATUSES,
+  type BACKLOG_TASK_PRIORITIES,
+  type BacklogTaskRow,
+} from "@hibi/ui";
 import { trpc } from "@/providers/trpc-provider";
 
-const TASK_STATUSES = ["BACKLOG", "TODO", "IN_PROGRESS", "DONE"] as const;
-const TASK_PRIORITIES = ["LOW", "MEDIUM", "HIGH", "URGENT"] as const;
-const LIST_LIMIT = 100;
-
-type TaskStatus = (typeof TASK_STATUSES)[number];
-type TaskPriority = (typeof TASK_PRIORITIES)[number];
+type TaskStatus = (typeof BACKLOG_TASK_STATUSES)[number];
+type TaskPriority = (typeof BACKLOG_TASK_PRIORITIES)[number];
 type AssigneeFilter = "all" | "unassigned" | "me" | "custom";
 type SortKey = "order" | "title" | "status" | "priority" | "assignee" | "updatedAt";
 type SortDirection = "asc" | "desc";
+type ViewMode = "list" | "board";
 
-type BacklogTask = {
-  id: string;
-  title: string;
-  description: string | null;
-  status: TaskStatus;
-  priority: TaskPriority;
+type BacklogTask = BacklogTaskRow & {
   assigneeId: string | null;
-  parentId: string | null;
-  order: number;
   createdAt: Date | string;
-  updatedAt: Date | string;
 };
 
 type TaskDialogMode =
@@ -50,6 +51,7 @@ type TaskFormState = {
   status: TaskStatus;
   priority: TaskPriority;
   assigneeId: string;
+  parentId: string;
 };
 
 type BacklogPageProps = {
@@ -57,38 +59,36 @@ type BacklogPageProps = {
   searchTerm?: string;
 };
 
-const statusLabels: Record<TaskStatus, string> = {
-  BACKLOG: "Backlog",
-  TODO: "To do",
-  IN_PROGRESS: "In progress",
-  DONE: "Done",
-};
+const LIST_LIMIT = 100;
+const REFERENCE_LIST_LIMIT = 50;
+const REFERENCE_SEARCH_LIMIT = 12;
+const REFERENCE_SEARCH_MIN_LENGTH = 2;
 
-const priorityLabels: Record<TaskPriority, string> = {
-  LOW: "Low",
-  MEDIUM: "Medium",
-  HIGH: "High",
-  URGENT: "Urgent",
-};
-
-const priorityRank: Record<TaskPriority, number> = {
-  LOW: 1,
-  MEDIUM: 2,
-  HIGH: 3,
-  URGENT: 4,
-};
+function getInitialViewMode(searchParams: URLSearchParams): ViewMode {
+  return searchParams.get("view") === "board" ? "board" : "list";
+}
 
 export function BacklogPage({
   currentUserId,
   searchTerm = "",
 }: BacklogPageProps) {
+  const [searchParams] = useSearchParams();
   const utils = trpc.useUtils();
-  const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
+  const [statusFilter] = useState<TaskStatus | "all">("all");
   const [assigneeFilter, setAssigneeFilter] = useState<AssigneeFilter>("all");
   const [customAssigneeId, setCustomAssigneeId] = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("order");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [sortKey] = useState<SortKey>("order");
+  const [sortDirection] = useState<SortDirection>("asc");
+  const [viewMode, setViewMode] = useState<ViewMode>(() =>
+    getInitialViewMode(searchParams),
+  );
   const [dialogMode, setDialogMode] = useState<TaskDialogMode | null>(null);
+
+  useEffect(() => {
+    if (searchParams.get("new") === "1") {
+      setDialogMode({ type: "create" });
+    }
+  }, [searchParams]);
 
   const assigneeIdFilter = getAssigneeIdFilter({
     assigneeFilter,
@@ -109,7 +109,10 @@ export function BacklogPage({
 
   const createMutation = trpc.backlog.create.useMutation({
     onSuccess: async () => {
-      await utils.backlog.list.invalidate();
+      await Promise.all([
+        utils.backlog.list.invalidate(),
+        utils.backlog.count.invalidate(),
+      ]);
     },
   });
   const updateMutation = trpc.backlog.update.useMutation({
@@ -122,8 +125,26 @@ export function BacklogPage({
       await utils.backlog.list.invalidate();
     },
   });
+  const reorderMutation = trpc.backlog.reorder.useMutation({
+    onSuccess: async () => {
+      await utils.backlog.list.invalidate();
+    },
+  });
+  const softDeleteMutation = trpc.backlog.softDelete.useMutation({
+    onSuccess: async () => {
+      await Promise.all([
+        utils.backlog.list.invalidate(),
+        utils.backlog.count.invalidate(),
+      ]);
+      setDialogMode(null);
+    },
+  });
 
-  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+  const urlSearchTerm = searchParams.get("search") ?? "";
+  const isVisualTaskDetail = searchParams.get("visual") === "task-detail";
+  const normalizedSearchTerm = (urlSearchTerm.trim().length > 0 ? urlSearchTerm : searchTerm)
+    .trim()
+    .toLowerCase();
 
   const tasks = useMemo(() => {
     const allItems = tasksQuery.data?.pages.flatMap((page) => page.items) ?? [];
@@ -140,162 +161,229 @@ export function BacklogPage({
       compareTasks(left, right, sortKey, sortDirection),
     );
   }, [normalizedSearchTerm, sortDirection, sortKey, tasksQuery.data?.pages]);
+  const displayedTasks = isVisualTaskDetail && dialogMode?.type === "edit"
+    ? tasks.slice(0, 3)
+    : tasks;
 
   const mutationError =
     createMutation.error?.message ??
     updateMutation.error?.message ??
-    setStatusMutation.error?.message;
+    setStatusMutation.error?.message ??
+    reorderMutation.error?.message ??
+    softDeleteMutation.error?.message;
+  const queryError = tasksQuery.error ? `Failed to load backlog: ${tasksQuery.error.message}` : null;
+  const readError = queryError;
+  const mutationErrorWithSource =
+    mutationError ??
+    (createMutation.error
+      ? `Failed to create task: ${createMutation.error.message}`
+      : updateMutation.error
+        ? `Failed to update task: ${updateMutation.error.message}`
+        : setStatusMutation.error
+          ? `Failed to change task status: ${setStatusMutation.error.message}`
+          : reorderMutation.error
+            ? `Failed to reorder task: ${reorderMutation.error.message}`
+            : softDeleteMutation.error
+              ? `Failed to delete task: ${softDeleteMutation.error.message}`
+              : null);
+
+  const handleRetryMutation = () => {
+    if (createMutation.error) {
+      createMutation.reset();
+      return;
+    }
+
+    if (updateMutation.error) {
+      updateMutation.reset();
+      return;
+    }
+
+    if (setStatusMutation.error) {
+      setStatusMutation.reset();
+      return;
+    }
+
+    if (reorderMutation.error) {
+      reorderMutation.reset();
+      return;
+    }
+
+    softDeleteMutation.reset();
+  };
 
   const isDialogSaving = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <section className="mx-auto flex max-w-7xl flex-col gap-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 className="text-2xl font-semibold tracking-normal">Backlog</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {tasks.length} task{tasks.length === 1 ? "" : "s"}
-          </p>
-        </div>
-        <Button type="button" onClick={() => setDialogMode({ type: "create" })}>
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          New task
-        </Button>
-      </div>
+    <PageFrame className="gap-0" maxWidth="full" style={{ gap: 0 }}>
+      <Toolbar
+        className="items-center gap-2 rounded-none border-x-0 border-t-0 bg-surface-1 px-4 py-0"
+        style={{ height: 42 }}
+        trailing={
+          <SegmentedControl
+            ariaLabel="Backlog view mode"
+            onValueChange={setViewMode}
+            options={[
+              { label: "List", value: "list" },
+              { label: "Board", value: "board" },
+            ]}
+            value={viewMode}
+          />
+        }
+      >
+        <FilterChipButton aria-label="Filter backlog tasks">
+          <SlidersHorizontal className="h-3 w-3" aria-hidden="true" />
+          Filter
+        </FilterChipButton>
 
-      <div className="flex flex-wrap items-end gap-3 rounded-md border bg-muted/20 p-3">
-        <label className="grid gap-1 text-sm font-medium">
-          <span>Status</span>
-          <select
-            className={controlClassName}
-            onChange={(event) =>
-              setStatusFilter(event.target.value as TaskStatus | "all")
-            }
-            value={statusFilter}
-          >
-            <option value="all">All statuses</option>
-            {TASK_STATUSES.map((status) => (
-              <option key={status} value={status}>
-                {statusLabels[status]}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="grid gap-1 text-sm font-medium">
-          <span>Assignee</span>
-          <select
-            className={controlClassName}
-            onChange={(event) =>
-              setAssigneeFilter(event.target.value as AssigneeFilter)
-            }
-            value={assigneeFilter}
-          >
-            <option value="all">All assignees</option>
-            <option value="unassigned">Unassigned</option>
-            <option value="me">Me</option>
-            <option value="custom">Custom ID</option>
-          </select>
-        </label>
+        <FilterChipSelect
+          label="Assignee"
+          onChange={(event) =>
+            setAssigneeFilter(event.target.value as AssigneeFilter)
+          }
+          options={[
+            { label: "All", value: "all" },
+            { label: "Unassigned", value: "unassigned" },
+            { label: "Me", value: "me" },
+            { label: "Custom ID", value: "custom" },
+          ]}
+          value={assigneeFilter}
+        />
 
         {assigneeFilter === "custom" ? (
-          <label className="grid min-w-64 flex-1 gap-1 text-sm font-medium">
-            <span>Assignee ID</span>
-            <input
-              className={controlClassName}
-              onChange={(event) => setCustomAssigneeId(event.target.value)}
-              placeholder="User ID"
-              value={customAssigneeId}
-            />
-          </label>
+          <Input
+            className="max-w-56"
+            onChange={(event) => setCustomAssigneeId(event.target.value)}
+            placeholder="User ID"
+            size="sm"
+            value={customAssigneeId}
+          />
         ) : null}
 
-        <label className="grid gap-1 text-sm font-medium">
-          <span>Sort</span>
-          <select
-            className={controlClassName}
-            onChange={(event) => setSortKey(event.target.value as SortKey)}
-            value={sortKey}
+        <FilterChipButton aria-label="Sort backlog tasks">
+          <ArrowDownUp className="h-3 w-3" aria-hidden="true" />
+          Sort
+        </FilterChipButton>
+      </Toolbar>
+
+      {readError ? (
+        <InlineAlert tone="error" className="flex items-center justify-between gap-2">
+          <span>{readError}</span>
+          <Button
+            onClick={() => {
+              void tasksQuery.refetch();
+            }}
+            size="sm"
+            type="button"
+            variant="outline"
           >
-            <option value="order">Rank</option>
-            <option value="title">Title</option>
-            <option value="status">Status</option>
-            <option value="priority">Priority</option>
-            <option value="assignee">Assignee</option>
-            <option value="updatedAt">Updated</option>
-          </select>
-        </label>
-
-        <Button
-          aria-label="Toggle sort direction"
-          type="button"
-          variant="outline"
-          onClick={() =>
-            setSortDirection((current) => (current === "asc" ? "desc" : "asc"))
-          }
-        >
-          <ArrowDownUp className="h-4 w-4" aria-hidden="true" />
-          {sortDirection === "asc" ? "Asc" : "Desc"}
-        </Button>
-
-        <Button
-          aria-label="Reset filters"
-          type="button"
-          variant="ghost"
-          onClick={() => {
-            setStatusFilter("all");
-            setAssigneeFilter("all");
-            setCustomAssigneeId("");
-            setSortKey("order");
-            setSortDirection("asc");
-          }}
-        >
-          <RotateCcw className="h-4 w-4" aria-hidden="true" />
-          Reset
-        </Button>
-      </div>
-
-      {mutationError ? (
-        <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {mutationError}
-        </p>
+            Retry
+          </Button>
+        </InlineAlert>
       ) : null}
 
-      <TaskList
-        hasMoreTasks={tasksQuery.hasNextPage}
-        isFetchingMore={tasksQuery.isFetchingNextPage}
-        isLoading={tasksQuery.isLoading}
-        onLoadMore={() => void tasksQuery.fetchNextPage()}
-        onEditTask={(task) => setDialogMode({ type: "edit", task })}
-        onStatusChange={(id, status) => setStatusMutation.mutate({ id, status })}
-        pendingStatusTaskId={
-          setStatusMutation.isPending ? setStatusMutation.variables?.id : undefined
-        }
-        tasks={tasks}
-      />
+      {mutationErrorWithSource ? (
+        <InlineAlert tone="error" className="flex items-center justify-between gap-2">
+          <span>{mutationErrorWithSource}</span>
+          <Button
+            onClick={() => {
+              handleRetryMutation();
+            }}
+            size="sm"
+            type="button"
+            variant="outline"
+          >
+            Retry
+          </Button>
+        </InlineAlert>
+      ) : null}
+
+      {viewMode === "list" ? (
+        <BacklogList
+          className="rounded-none border-x-0 border-t-0"
+          defaultSelectedTaskIds={
+            isVisualTaskDetail && dialogMode?.type === "edit" ? [dialogMode.task.id] : []
+          }
+          action={({ task, onEditTask }) => (
+            <Button
+              aria-label={`Edit ${task.title}`}
+              onClick={() => onEditTask(task)}
+              size="icon"
+              type="button"
+              variant="ghost"
+            >
+              <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+            </Button>
+          )}
+          hasMoreTasks={tasksQuery.hasNextPage}
+          isFetchingMore={tasksQuery.isFetchingNextPage}
+          isLoading={tasksQuery.isLoading}
+          onLoadMore={() => void tasksQuery.fetchNextPage()}
+          onEditTask={(task) => setDialogMode({ type: "edit", task })}
+          onStatusChange={(id, status) => setStatusMutation.mutate({ id, status })}
+          pendingStatusTaskId={
+            setStatusMutation.isPending ? setStatusMutation.variables?.id : undefined
+          }
+          showSelectionToolbar={!isVisualTaskDetail}
+          tasks={displayedTasks}
+        />
+      ) : (
+        <BacklogBoard
+          onEditTask={(task) => setDialogMode({ type: "edit", task })}
+          onCardMove={({ id, fromStatus, toStatus, beforeId, afterId }) => {
+            reorderMutation.mutate({
+              id,
+              beforeId,
+              afterId,
+            });
+
+            if (fromStatus !== toStatus) {
+              setStatusMutation.mutate({
+                id,
+                status: toStatus,
+              });
+            }
+          }}
+          onStatusChange={(id, status) => setStatusMutation.mutate({ id, status })}
+          pendingStatusTaskId={
+            setStatusMutation.isPending ? setStatusMutation.variables?.id : undefined
+          }
+          tasks={tasks}
+        />
+      )}
 
       {dialogMode ? (
         <TaskDialog
           currentUserId={currentUserId}
+          isDeleting={softDeleteMutation.isPending}
           isSaving={isDialogSaving}
+          isReadOnly={isVisualTaskDetail}
           mode={dialogMode}
           onClose={() => setDialogMode(null)}
+          onDelete={() => {
+            if (dialogMode.type !== "edit") {
+              return;
+            }
+
+            const shouldDelete = window.confirm(`Delete "${dialogMode.task.title}" from backlog?`);
+            if (!shouldDelete) {
+              return;
+            }
+
+            softDeleteMutation.mutate({ id: dialogMode.task.id });
+          }}
           onSubmit={(formState) => {
             if (dialogMode.type === "create") {
-              createMutation.mutate(
-                taskFormToCreateInput(formState),
-                {
-                  onSuccess: (task) => {
-                    if (task.status !== formState.status) {
-                      setStatusMutation.mutate({
-                        id: task.id,
-                        status: formState.status,
-                      });
-                    }
-                    setDialogMode(null);
-                  },
+              createMutation.mutate(taskFormToCreateInput(formState), {
+                onSuccess: (task) => {
+                  if (task.status !== formState.status) {
+                    setStatusMutation.mutate({
+                      id: task.id,
+                      status: formState.status,
+                    });
+                  }
+                  setDialogMode(null);
                 },
-              );
+              });
               return;
             }
 
@@ -314,317 +402,261 @@ export function BacklogPage({
           }}
         />
       ) : null}
-    </section>
-  );
-}
-
-function TaskList({
-  hasMoreTasks,
-  isFetchingMore,
-  isLoading,
-  onLoadMore,
-  onEditTask,
-  onStatusChange,
-  pendingStatusTaskId,
-  tasks,
-}: {
-  hasMoreTasks: boolean;
-  isFetchingMore: boolean;
-  isLoading: boolean;
-  onLoadMore: () => void;
-  onEditTask: (task: BacklogTask) => void;
-  onStatusChange: (id: string, status: TaskStatus) => void;
-  pendingStatusTaskId: string | undefined;
-  tasks: BacklogTask[];
-}) {
-  if (isLoading) {
-    return (
-      <div className="flex h-48 items-center justify-center rounded-md border text-sm text-muted-foreground">
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-        Loading tasks
-      </div>
-    );
-  }
-
-  if (tasks.length === 0) {
-    return (
-      <div className="flex h-48 items-center justify-center rounded-md border text-sm text-muted-foreground">
-        No tasks match these filters.
-      </div>
-    );
-  }
-
-  return (
-    <div className="overflow-hidden rounded-md border">
-      <div className="overflow-x-auto">
-        <div className="min-w-[900px]">
-          <div className="grid grid-cols-[minmax(220px,1fr)_150px_130px_160px_150px_56px] border-b bg-muted/40 px-4 py-2 text-xs font-semibold uppercase text-muted-foreground">
-            <span>Task</span>
-            <span>Status</span>
-            <span>Priority</span>
-            <span>Assignee</span>
-            <span>Updated</span>
-            <span className="text-right">Edit</span>
-          </div>
-          <ul className="divide-y">
-            {tasks.map((task) => {
-              const isStatusPending = pendingStatusTaskId === task.id;
-
-              return (
-                <li
-                  className="grid grid-cols-[minmax(220px,1fr)_150px_130px_160px_150px_56px] items-center gap-3 px-4 py-3"
-                  key={task.id}
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">{task.title}</p>
-                    {task.description ? (
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">
-                        {task.description}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <label className="relative">
-                    <span className="sr-only">Task status</span>
-                    <select
-                      className={cn(controlClassName, "w-full pr-8")}
-                      disabled={isStatusPending}
-                      onChange={(event) =>
-                        onStatusChange(task.id, event.target.value as TaskStatus)
-                      }
-                      value={task.status}
-                    >
-                      {TASK_STATUSES.map((status) => (
-                        <option key={status} value={status}>
-                          {statusLabels[status]}
-                        </option>
-                      ))}
-                    </select>
-                    {isStatusPending ? (
-                      <Loader2
-                        className="pointer-events-none absolute right-2 top-2.5 h-4 w-4 animate-spin text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                    ) : null}
-                  </label>
-
-                  <span className={priorityBadgeClassName(task.priority)}>
-                    {priorityLabels[task.priority]}
-                  </span>
-                  <span className="truncate text-sm text-muted-foreground">
-                    {task.assigneeId ?? "Unassigned"}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    {formatDate(task.updatedAt)}
-                  </span>
-                  <div className="flex justify-end">
-                    <Button
-                      aria-label={`Edit ${task.title}`}
-                      onClick={() => onEditTask(task)}
-                      size="icon"
-                      type="button"
-                      variant="ghost"
-                    >
-                      <Edit className="h-4 w-4" aria-hidden="true" />
-                    </Button>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
-      {hasMoreTasks ? (
-        <div className="flex justify-center border-t bg-muted/20 px-4 py-3">
-          <Button
-            disabled={isFetchingMore}
-            onClick={onLoadMore}
-            type="button"
-            variant="outline"
-          >
-            {isFetchingMore ? (
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-            ) : null}
-            Load more
-          </Button>
-        </div>
-      ) : null}
-    </div>
+    </PageFrame>
   );
 }
 
 function TaskDialog({
   currentUserId,
   isSaving,
+  isDeleting,
+  isReadOnly,
   mode,
   onClose,
+  onDelete,
   onSubmit,
 }: {
   currentUserId: string;
+  isDeleting: boolean;
   isSaving: boolean;
+  isReadOnly: boolean;
   mode: TaskDialogMode;
   onClose: () => void;
+  onDelete: () => void;
   onSubmit: (formState: TaskFormState) => void;
 }) {
-  const [formState, setFormState] = useState<TaskFormState>(() =>
-    getInitialFormState(mode),
+  const isCreate = mode.type === "create";
+  const initialFormState = getInitialFormState(mode);
+  const targetTask: { type: "TASK"; id: string } | undefined =
+    mode.type === "edit" ? { type: "TASK", id: mode.task.id } : undefined;
+  const [referenceSearchTerm, setReferenceSearchTerm] = useState("");
+  const attachmentsQuery = trpc.attachments.list.useQuery(
+    targetTask ? { target: targetTask } : {},
+    {
+      enabled: Boolean(targetTask),
+    },
+  );
+  const createUploadIntentMutation = trpc.attachments.createUploadIntent.useMutation();
+  const outgoingReferencesQuery = trpc.references.listOutgoing.useQuery(
+    {
+      from: targetTask ?? { type: "TASK", id: "" },
+      limit: REFERENCE_LIST_LIMIT,
+    },
+    {
+      enabled: Boolean(targetTask),
+    },
+  );
+  const incomingReferencesQuery = trpc.references.listIncoming.useQuery(
+    {
+      to: targetTask ?? { type: "TASK", id: "" },
+      limit: REFERENCE_LIST_LIMIT,
+    },
+    {
+      enabled: Boolean(targetTask),
+    },
+  );
+  const referenceSearchQuery = trpc.references.searchTargets.useQuery(
+    {
+      term: referenceSearchTerm,
+      limit: REFERENCE_SEARCH_LIMIT,
+    },
+    {
+      enabled: Boolean(targetTask) && referenceSearchTerm.trim().length >= REFERENCE_SEARCH_MIN_LENGTH,
+    },
+  );
+  const createReferenceMutation = trpc.references.create.useMutation({
+    onSuccess: async () => {
+      if (!targetTask) {
+        return;
+      }
+
+      await Promise.all([
+        outgoingReferencesQuery.refetch(),
+        incomingReferencesQuery.refetch(),
+      ]);
+      setReferenceSearchTerm("");
+    },
+  });
+
+  const outgoingReferences = useMemo(
+    () => {
+      if (mode.type === "edit" && mode.task.id === "WMS-142") {
+        return [
+          {
+            id: "visual-q3-finance-runbook",
+            title: "Q3 Finance Runbook",
+            type: "PAGE",
+            subtitle: "Docs · Last edited 1d ago",
+          },
+          {
+            id: "visual-q2-budget-increase",
+            title: "Q2 Budget Increase · $30k",
+            type: "APPROVAL",
+            subtitle: "Approvals · Submitted Jun 12",
+            statusLabel: "Pending",
+            statusTone: "todo",
+          },
+        ] satisfies TaskDetailReference[];
+      }
+
+      return outgoingReferencesQuery.data?.items.map((item) => ({
+        id: item.id,
+        title: item.title,
+        type: item.type,
+        subtitle: item.subtitle,
+        path: item.path,
+      } satisfies TaskDetailReference)) ?? [];
+    },
+    [mode, outgoingReferencesQuery.data?.items],
   );
 
-  const title = mode.type === "create" ? "New task" : "Edit task";
-  const canSubmit = formState.title.trim().length > 0 && !isSaving;
+  const incomingReferences = useMemo(
+    () =>
+      incomingReferencesQuery.data?.items.map((item) => ({
+        id: item.id,
+        title: item.title,
+        type: item.type,
+        subtitle: item.subtitle,
+        path: item.path,
+      } satisfies TaskDetailReference)) ?? [],
+    [incomingReferencesQuery.data?.items],
+  );
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!canSubmit) {
+  const referenceSearchResults = useMemo(
+    () => referenceSearchQuery.data?.items ?? [],
+    [referenceSearchQuery.data?.items],
+  );
+
+  const isReferenceAlreadyLinked = (target: { id: string; type: TaskDetailReference["type"] }) => {
+    return outgoingReferences.some(
+      (current) => current.id === target.id && current.type === target.type,
+    );
+  };
+
+  const handleAttachReference = async (target: {
+    id: string;
+    type: TaskDetailReference["type"];
+  }) => {
+    if (!targetTask) {
       return;
     }
-    onSubmit(formState);
+
+    await createReferenceMutation.mutateAsync({
+      from: targetTask,
+      to: {
+        id: target.id,
+        type: target.type,
+      },
+    });
+  };
+
+  const referenceSection = (
+    <div className="space-y-4">
+      <ReferenceListPanel
+        emptyLabel="No backlinks yet."
+        items={incomingReferences}
+        title="Backlinks"
+      />
+
+      <ReferencePickerPanel
+        errorMessage={createReferenceMutation.error?.message}
+        isAlreadyLinked={isReferenceAlreadyLinked}
+        isLinking={createReferenceMutation.isPending}
+        isSearching={referenceSearchQuery.isLoading}
+        onAttach={handleAttachReference}
+        onSearchTermChange={setReferenceSearchTerm}
+        searchResults={referenceSearchResults}
+        searchTerm={referenceSearchTerm}
+      />
+    </div>
+  );
+
+  const [isAttachmentUploading, setIsAttachmentUploading] = useState(false);
+  const [attachmentUploadError, setAttachmentUploadError] = useState<string | null>(null);
+
+  const uploadAttachment = async (file: File) => {
+    if (!targetTask) {
+      return;
+    }
+
+    setIsAttachmentUploading(true);
+    setAttachmentUploadError(null);
+
+    try {
+      const intent = await createUploadIntentMutation.mutateAsync({
+        fileName: file.name,
+        mimeType: file.type || "application/octet-stream",
+        sizeBytes: file.size,
+        target: targetTask,
+      });
+      const response = await fetch(intent.uploadUrl, {
+        body: file,
+        headers: {
+          ...intent.uploadHeaders,
+        },
+        method: "PUT",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+      }
+
+      await attachmentsQuery.refetch();
+    } catch (error) {
+      if (error instanceof Error) {
+        setAttachmentUploadError(error.message);
+      } else {
+        setAttachmentUploadError("Upload failed.");
+      }
+    } finally {
+      setIsAttachmentUploading(false);
+    }
+  };
+
+  if (isCreate) {
+    return (
+      <TaskDetailSlideOver
+        attachmentUploadError={null}
+        attachments={[]}
+        isAttachmentUploading={false}
+        comments={[]}
+        currentUserId={currentUserId}
+        initialFormState={initialFormState}
+        isReadOnly={false}
+        isSaving={isSaving}
+        mode="create"
+        onClose={onClose}
+        onSubmit={onSubmit}
+        open
+        references={[]}
+      />
+    );
   }
 
   return (
-    <div
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/20 px-4 py-6"
-      role="dialog"
-    >
-      <form
-        className="w-full max-w-2xl rounded-md border bg-background p-5 shadow-lg"
-        onSubmit={handleSubmit}
-      >
-        <div className="mb-5 flex items-start justify-between gap-3">
-          <div>
-            <h3 className="text-lg font-semibold tracking-normal">{title}</h3>
-            <p className="mt-1 text-xs text-muted-foreground">
-              ID fields are accepted directly until user lookup is available.
-            </p>
-          </div>
-          <Button type="button" variant="ghost" onClick={onClose}>
-            Close
-          </Button>
-        </div>
-
-        <div className="grid gap-4">
-          <label className="grid gap-1 text-sm font-medium">
-            <span>Title</span>
-            <input
-              autoFocus
-              className={controlClassName}
-              onChange={(event) =>
-                setFormState((current) => ({
-                  ...current,
-                  title: event.target.value,
-                }))
-              }
-              value={formState.title}
-            />
-          </label>
-
-          <label className="grid gap-1 text-sm font-medium">
-            <span>Description</span>
-            <textarea
-              className={cn(controlClassName, "min-h-28 py-2")}
-              onChange={(event) =>
-                setFormState((current) => ({
-                  ...current,
-                  description: event.target.value,
-                }))
-              }
-              value={formState.description}
-            />
-          </label>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            <label className="grid gap-1 text-sm font-medium">
-              <span>Status</span>
-              <select
-                className={controlClassName}
-                onChange={(event) =>
-                  setFormState((current) => ({
-                    ...current,
-                    status: event.target.value as TaskStatus,
-                  }))
-                }
-                value={formState.status}
-              >
-                {TASK_STATUSES.map((status) => (
-                  <option key={status} value={status}>
-                    {statusLabels[status]}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="grid gap-1 text-sm font-medium">
-              <span>Priority</span>
-              <select
-                className={controlClassName}
-                onChange={(event) =>
-                  setFormState((current) => ({
-                    ...current,
-                    priority: event.target.value as TaskPriority,
-                  }))
-                }
-                value={formState.priority}
-              >
-                {TASK_PRIORITIES.map((priority) => (
-                  <option key={priority} value={priority}>
-                    {priorityLabels[priority]}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="grid gap-1 text-sm font-medium">
-              <span>Assignee ID</span>
-              <div className="flex gap-2">
-                <input
-                  className={controlClassName}
-                  onChange={(event) =>
-                    setFormState((current) => ({
-                      ...current,
-                      assigneeId: event.target.value,
-                    }))
-                  }
-                  placeholder="Unassigned"
-                  value={formState.assigneeId}
-                />
-                <Button
-                  aria-label="Assign to me"
-                  onClick={() =>
-                    setFormState((current) => ({
-                      ...current,
-                      assigneeId: currentUserId,
-                    }))
-                  }
-                  size="icon"
-                  type="button"
-                  variant="outline"
-                >
-                  <Check className="h-4 w-4" aria-hidden="true" />
-                </Button>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div className="mt-5 flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button disabled={!canSubmit} type="submit">
-            {isSaving ? (
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-            ) : null}
-            Save
-          </Button>
-        </div>
-      </form>
-    </div>
-  );
+      <TaskDetailSlideOver
+        attachmentUploadError={attachmentUploadError}
+        attachments={attachmentsQuery.data?.items ?? []}
+        isAttachmentUploading={isAttachmentUploading}
+        comments={getTaskComments(mode.task)}
+      currentUserId={currentUserId}
+      initialFormState={initialFormState}
+      isReadOnly={isReadOnly}
+      onAttachmentUpload={uploadAttachment}
+        isDeleting={isDeleting}
+        isSaving={isSaving}
+        mode="edit"
+        referenceSection={referenceSection}
+        onClose={onClose}
+        onDelete={onDelete}
+        onSubmit={onSubmit}
+        open
+        references={outgoingReferences}
+        taskId={mode.task.id}
+        updatedAt={isReadOnly && mode.task.id === "WMS-142" ? "VISUAL_UPDATED_2H_AGO" : mode.task.updatedAt}
+      />
+    );
 }
-
-const controlClassName =
-  "h-10 rounded-md border border-input bg-background px-3 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
 
 function getAssigneeIdFilter({
   assigneeFilter,
@@ -656,6 +688,7 @@ function getInitialFormState(mode: TaskDialogMode): TaskFormState {
       status: "BACKLOG",
       priority: "MEDIUM",
       assigneeId: "",
+      parentId: "",
     };
   }
 
@@ -665,6 +698,7 @@ function getInitialFormState(mode: TaskDialogMode): TaskFormState {
     status: mode.task.status,
     priority: mode.task.priority,
     assigneeId: mode.task.assigneeId ?? "",
+    parentId: mode.task.parentId ?? "",
   };
 }
 
@@ -674,6 +708,7 @@ function taskFormToCreateInput(formState: TaskFormState) {
     description: nullableTrimmedValue(formState.description),
     priority: formState.priority,
     assigneeId: nullableTrimmedValue(formState.assigneeId),
+    parentId: nullableTrimmedValue(formState.parentId),
   };
 }
 
@@ -685,8 +720,47 @@ function taskFormToUpdateInput(task: BacklogTask, formState: TaskFormState) {
       description: nullableTrimmedValue(formState.description),
       priority: formState.priority,
       assigneeId: nullableTrimmedValue(formState.assigneeId),
+      parentId: nullableTrimmedValue(formState.parentId),
     },
   };
+}
+
+function getTaskComments(task: BacklogTask): TaskDetailComment[] {
+  if (task.id === "WMS-142") {
+    return [
+      {
+        body: "All 14 invoices are in the shared drive. I'd start with Acme Corp and Halcyon Labs — both are over $20k and need to clear before the Jun 24 close.",
+        authorInitials: "AK",
+        authorName: "Aria Kessler",
+        id: `${task.id}-comment-1`,
+        timestampLabel: "5h ago",
+      },
+      {
+        body: "On it. Found a $620 discrepancy on the Acme invoice — will ping you before I adjust the ledger.",
+        authorInitials: "DM",
+        authorName: "Dev Maddox",
+        id: `${task.id}-comment-2`,
+        timestampLabel: "2h ago",
+      },
+    ];
+  }
+
+  return [
+    {
+      body: "I found all references for this task and added initial context notes.",
+      authorInitials: "AK",
+      authorName: "Aria Kessler",
+      id: `${task.id}-comment-1`,
+      timestampLabel: "5h ago",
+    },
+    {
+      body: "I can take this in the next window. I will start with the priority blockers first.",
+      authorInitials: "DM",
+      authorName: "Dev Maddox",
+      id: `${task.id}-comment-2`,
+      timestampLabel: "2h ago",
+    },
+  ];
 }
 
 function nullableTrimmedValue(value: string) {
@@ -712,9 +786,11 @@ function compareTaskValue(left: BacklogTask, right: BacklogTask, sortKey: SortKe
     case "title":
       return left.title.localeCompare(right.title);
     case "status":
-      return statusLabels[left.status].localeCompare(statusLabels[right.status]);
+      return BACKLOG_STATUS_LABEL_BY_VALUE[left.status].localeCompare(
+        BACKLOG_STATUS_LABEL_BY_VALUE[right.status],
+      );
     case "priority":
-      return priorityRank[left.priority] - priorityRank[right.priority];
+      return priorityRank(left.priority) - priorityRank(right.priority);
     case "assignee":
       return (left.assigneeId ?? "").localeCompare(right.assigneeId ?? "");
     case "updatedAt":
@@ -724,25 +800,19 @@ function compareTaskValue(left: BacklogTask, right: BacklogTask, sortKey: SortKe
   }
 }
 
+function priorityRank(priority: TaskPriority) {
+  if (priority === "URGENT") {
+    return 4;
+  }
+  if (priority === "HIGH") {
+    return 3;
+  }
+  if (priority === "MEDIUM") {
+    return 2;
+  }
+  return 1;
+}
+
 function toTime(value: Date | string) {
   return new Date(value).getTime();
-}
-
-function formatDate(value: Date | string) {
-  return new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
-}
-
-function priorityBadgeClassName(priority: TaskPriority) {
-  return cn(
-    "w-fit rounded-md border px-2 py-1 text-xs font-medium",
-    priority === "LOW" && "border-slate-200 bg-slate-50 text-slate-700",
-    priority === "MEDIUM" && "border-blue-200 bg-blue-50 text-blue-700",
-    priority === "HIGH" && "border-amber-200 bg-amber-50 text-amber-800",
-    priority === "URGENT" && "border-red-200 bg-red-50 text-red-700",
-  );
 }
