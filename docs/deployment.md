@@ -30,10 +30,46 @@
 - Run `prisma migrate deploy` as a **Job** (or initContainer) on release, before the new
   `api` rolls out. Migrations are forward-only; never edit a shipped migration.
 
-## CI (lightweight)
-- On push: `pnpm install`, `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`,
-  then build + push images. Deploy can be `kubectl`/`helm` from CI or a manual step —
-  GitOps (Argo/Flux) is optional and likely overkill for two people.
+## CI/CD model
+- CI can stay lightweight in GitHub Actions: `pnpm install`, `pnpm typecheck`,
+  `pnpm lint`, `pnpm test`, and `pnpm build`.
+- CD is intentionally operated from this host through the project Codex skill, because this
+  host already has the trusted `kubectl` context, private registry access, and tailnet reachability.
+- Do not put kubeconfig, cluster-admin credentials, or deployment secrets into GitHub Actions
+  unless the team explicitly decides to move deployment control out of this host.
+
+## Codex-operated deployment
+Use the project deployment skill as the release pipeline:
+
+```bash
+.codex/skills/deploy-k3s-portal/scripts/deploy_k3s_portal.sh
+```
+
+The script performs preflight checks, builds `linux/amd64` API/web/realtime images,
+pushes immutable git-sha tags plus the moving `:main` tag, applies k3s manifests,
+runs the Prisma migration job, waits for rollouts, checks service endpoints, probes API
+`/health`, probes the Traefik tailnet web route, and writes a release log under
+`deployments/`.
+
+Useful overrides:
+
+```bash
+IMAGE_TAG=<tag> K8S_CONTEXT=<context> REGISTRY=<host:port> \
+WEB_HOST=web.hibi.internal TAILNET_PROBE_IP=100.74.225.115 \
+.codex/skills/deploy-k3s-portal/scripts/deploy_k3s_portal.sh
+```
+
+Verification only:
+
+```bash
+.codex/skills/deploy-k3s-portal/scripts/deploy_k3s_portal.sh --verify-only
+```
+
+Disable the moving `:main` tag when a fully immutable-only release is desired:
+
+```bash
+PUSH_MOVING_TAG=0 .codex/skills/deploy-k3s-portal/scripts/deploy_k3s_portal.sh
+```
 
 ## Local dev
 - `pnpm dev` runs web + api + realtime + a local Postgres (Docker). Seed with

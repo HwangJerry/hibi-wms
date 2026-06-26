@@ -4,7 +4,7 @@ set -euo pipefail
 
 NAMESPACE="hibi-portal"
 IMAGE_TAG="${IMAGE_TAG:-main}"
-REGISTRY="${REGISTRY:-server-main:30500}"
+REGISTRY="${REGISTRY:-100.74.225.115:30500}"
 CONTEXT="${K8S_CONTEXT:-}"
 
 if ! command -v kubectl > /dev/null 2>&1; then
