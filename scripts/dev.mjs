@@ -80,6 +80,7 @@ async function createDevEnv() {
   env.POSTGRES_DB ??= DEFAULT_POSTGRES_DB;
   env.POSTGRES_PORT ??= DEFAULT_POSTGRES_PORT;
   env.REALTIME_PORT ??= String(DEFAULT_REALTIME_PORT);
+  env.SESSION_COOKIE_SECURE ??= "false";
 
   if (!env.DATABASE_URL && !env.POSTGRES_PASSWORD) {
     throw new Error(
