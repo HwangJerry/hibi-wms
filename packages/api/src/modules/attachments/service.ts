@@ -179,11 +179,18 @@ export class AttachmentsService {
 
   async list(input: AttachmentListInput): Promise<AttachmentListResult> {
     const limit = normalizeAttachmentListInput(input.limit);
-    const config = getR2BucketConfigFromEnv();
     const attachmentRows = input.target
       ? await this.listByTarget({ target: input.target, cursor: input.cursor, limit })
       : await this.listByUploader({ ...input, limit });
 
+    if (attachmentRows.items.length === 0) {
+      return {
+        items: [],
+        nextCursor: attachmentRows.nextCursor,
+      };
+    }
+
+    const config = getR2BucketConfigFromEnv();
     const items = await Promise.all(
       attachmentRows.items.map(async (attachment) => {
         const signedDownload = await createPresignedDownloadIntent({

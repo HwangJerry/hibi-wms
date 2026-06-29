@@ -72,6 +72,31 @@ spec:
                 secretKeyRef:
                   name: hibi-app-secrets
                   key: SESSION_SECRET
+            - name: R2_ACCOUNT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: R2_ACCOUNT_ID
+            - name: R2_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: R2_ACCESS_KEY_ID
+            - name: R2_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: R2_SECRET_ACCESS_KEY
+            - name: R2_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: R2_BUCKET_NAME
+            - name: R2_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: hibi-app-secrets
+                  key: R2_ENDPOINT
           readinessProbe:
             httpGet:
               path: /health
